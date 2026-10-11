@@ -22,7 +22,7 @@ def snapshot(version: str):
     prefix = folder / f"{version}-source-{stamp}"
     paths = subprocess.check_output(["git", "-c", "core.quotepath=false", "ls-files", "-c", "-o", "--exclude-standard", "-z"], cwd=ROOT).decode("utf-8").split("\0")
     required = {f"agent_{version}/__init__.py",f"agent_{version}/__main__.py"}
-    if version=='v3':required.update({'agent_v3/browser_worker.cjs','agent_v3/windows_ocr.ps1'})
+    if version=='v3':required.update({'agent_v3/browser_worker.cjs','agent_v3/page_reader.cjs','agent_v3/windows_ocr.ps1'})
     missing = required-set(paths)
     if missing:
         raise ValueError("Package entry points excluded from source snapshot: "+", ".join(sorted(missing)))

@@ -37,16 +37,7 @@ async function main(input){
   await page.waitForTimeout(1800);await safe(page.url());
   await page.addStyleTag({content:'video,audio{visibility:hidden!important}'});
   await page.evaluate(()=>document.querySelectorAll('video,audio').forEach(v=>v.pause()));
-  const data=await page.evaluate(()=>{
-   const videoRegions=location.hostname.endsWith('bilibili.com')?Array.from(document.querySelectorAll('.video-info-container,.video-desc-container')):[];
-   const region=document.querySelector('article,#artibody,#articleContent,.article-content,.content-detail,main');
-   const selected=videoRegions.length?videoRegions:[region||document.body];
-   const bodies=selected.map(node=>{const clone=node.cloneNode(true);clone.querySelectorAll('script,style,nav,footer,header,form,aside').forEach(n=>n.remove());return clone.innerText||clone.textContent||'';});
-   const meta=document.querySelector('meta[property="article:published_time"],meta[name="pubdate"],meta[itemprop="datePublished"]');
-   return {title:document.title,body:bodies.join('\n'),reading_region:videoRegions.length?'video_title_and_description':region?'article_or_main':'visible_page_with_navigation',published_at:meta?.content||null,
-    links:Array.from(document.querySelectorAll('#b_results .b_algo h2 a,.result h3 a')).slice(0,8).map(a=>({title:a.innerText,url:a.href})),
-    height:document.documentElement.scrollHeight};
-  });
+  const data=await page.evaluate(require('./page_reader.cjs'));
   const denied=response&&[401,403,429].includes(response.status())||BLOCK.test(data.body.slice(0,1600));
   const captures=[];const count=input.visual?3:1;
   let comment_region={status:'not_requested'},comment_cards=[];
@@ -71,7 +62,7 @@ async function main(input){
   if(region&&!comment_cards.length){const text=await region.innerText().catch(()=>'');comment_region.status=/登录.*评论|登录后|请先登录/.test(text)?'login_required':'empty_or_unrecognized';}
   return {status:denied?'blocked':'ok',http_status:response?.status(),requested_url:input.url,resolved_url:page.url(),
    title:data.title,body:denied?'':data.body.replace(/\s+\n/g,'\n').slice(0,12000),body_truncated:data.body.length>12000,reading_region:data.reading_region,video_played:false,
-   published_at:data.published_at,links:denied?[]:data.links,captures,comment_region,comment_cards:comment_cards.slice(0,12),network_requests:requests,blocked_requests:blocked,
+   published_at:data.published_at,text_extraction_version:data.text_extraction_version,links:denied?[]:data.links,captures,comment_region,comment_cards:comment_cards.slice(0,12),network_requests:requests,blocked_requests:blocked,
    note:denied?'访问限制页面，截图仅供核查，不能作为事件正文':'有限滚动可见区域，未读完整站点或全部评论'};
  }finally{await browser.close();}
 }

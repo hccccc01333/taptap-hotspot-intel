@@ -2,7 +2,7 @@
 
 **持续追踪全网热点，自动研究与积累游戏情报、可用素材，从中识别并产出 TapTap 增长创意的 AI Agent 系统。**
 
-[![版本](https://img.shields.io/badge/version-3.0.0--alpha.23-087f8c)](docs/版本记录.md)
+[![版本](https://img.shields.io/badge/version-3.0.0--alpha.24-087f8c)](docs/版本记录.md)
 [![CI](https://github.com/hccccc01333/taptap-hotspot-intel/actions/workflows/ci.yml/badge.svg)](https://github.com/hccccc01333/taptap-hotspot-intel/actions/workflows/ci.yml)
 [![网站部署](https://github.com/hccccc01333/taptap-hotspot-intel/actions/workflows/pages.yml/badge.svg)](https://github.com/hccccc01333/taptap-hotspot-intel/actions/workflows/pages.yml)
 
@@ -15,6 +15,12 @@
 <sub>2026-10-08 线上真实成果页。截图中的数量属于当时的运行快照，以网站最近同步时间为准。</sub>
 
 初次了解项目，可以先看[交付内容](#系统交付什么)和[Agent 分工](#agent-如何工作)；想了解实现，可以继续看[技术栈](#实际技术栈)、[V3 数据链路](#v3-的数据如何变成成果)、[GraphRAG 的实现](#graphrag-思想在-v3-中怎么落地)和[LangGraph 的使用范围](#langgraph-在项目中怎么用)。启动步骤见[本地运行](#本地运行)。
+
+## Alpha24：正文时间与异常溯源
+
+修复浏览器正文中作者名与相对时间黏连的问题，按可见DOM保留字段、段落边界，并收紧机核正文区域。时间线日期必须有该节点的引文支持；报道元数据只能用于报道日期，失败交由模型限额重新交付，两次失败不写无效解读。模型请求记录安全的连接/读取超时等类别，异常用量继续标注未知，不泄露接口正文或私有推理。[实现、验证与限制](docs/V3-Alpha24-正文时间与异常溯源.md)。
+
+517项工程回归与独立备份恢复通过，真实浏览器与旧案例网页读取已验证。提示词加强断言与对应引文要求，但未通过新模型对照验证，不能据此宣称语义引用或准确率已改善。原正式实验、失败和未知项保留，P3仍未完成；生产额度暂停保持生效。
 
 ## Alpha23：修复业务JSON并公开核验
 

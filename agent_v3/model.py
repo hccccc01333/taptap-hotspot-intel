@@ -213,7 +213,9 @@ def request_failure(store,run_id,stage,error,started):
             'seconds':round(time.monotonic()-started,3),'error_type':type(error).__name__,
             'request_sent':False})
         return
+    from .provider_adapter import safe_failure_category
     store.step(run_id,'model_task',{'stage':stage,'agent_role':ROLES[stage],
         'usage':{},'seconds':round(time.monotonic()-started,3),
         'delivery_status':'request_failed','error_type':type(error).__name__,
+        'error_category':safe_failure_category(error),
         'cost_status':'unknown_after_exception'})

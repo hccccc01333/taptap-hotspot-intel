@@ -379,7 +379,8 @@ class RecordedModel:
         except Exception as error:
             from L4_intelligence.intelligence.llm import LLMUnavailable
             code=re.match(r'^HTTP ([0-9]{3}):',str(error)) if isinstance(error,LLMUnavailable) else None
-            failure={'type':type(error).__name__,'category':'http_'+code[1] if code else 'request_or_delivery_failure'}
+            from .provider_adapter import safe_failure_category
+            failure={'type':type(error).__name__,'category':'http_'+code[1] if code else safe_failure_category(error)}
             self.last_failure=failure
             raise
         finally:

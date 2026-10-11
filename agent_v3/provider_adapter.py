@@ -15,6 +15,13 @@ from .opencode_zen import StructuredDeliveryError
 from .deepseek import STAGE_TOKENS
 from . import providers
 
+FAILURE_CATEGORIES={'connect_timeout','read_timeout','connection_error','request_exception','response_json_invalid'}
+
+
+def safe_failure_category(error):
+    category=getattr(error,'failure_category',None)
+    return category if isinstance(category,str) and category in FAILURE_CATEGORIES else 'request_or_delivery_failure'
+
 
 def request_body(p, stage, packet, schema, system):
     budget = min(p['output_limit'], STAGE_TOKENS.get(stage, 8192))
@@ -182,10 +189,15 @@ class ProfileModel:
                         if len(data) > 2000000:
                             raise LLMUnavailable('模型响应超过大小预算')
                     raw = json.loads(data)
-        except requests.RequestException:
-            raise LLMUnavailable('模型连接超时或中断，任务保留') from None
+        except requests.RequestException as cause:
+            error=LLMUnavailable('模型连接超时或中断，任务保留')
+            error.failure_category=('connect_timeout' if isinstance(cause,requests.ConnectTimeout) else
+                'read_timeout' if isinstance(cause,requests.ReadTimeout) else
+                'connection_error' if isinstance(cause,requests.ConnectionError) else 'request_exception')
+            raise error from None
         except (ValueError, TypeError):
-            raise LLMUnavailable('模型接口未返回有效 JSON') from None
+            error=LLMUnavailable('模型接口未返回有效 JSON');error.failure_category='response_json_invalid'
+            raise error from None
         try:
             if anthropic:
                 parts = claude_parts(raw)
