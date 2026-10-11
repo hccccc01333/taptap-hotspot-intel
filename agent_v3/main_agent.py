@@ -25,11 +25,13 @@ PLAN_SYSTEM = '''你是服务 TapTap 的业务主 Agent，负责游戏情报、�
 BUSINESS_SYSTEM = '''你是同一个 TapTap 业务主 Agent，已收到研究子 Agent 的热点解读、真实来源及缺口。
 你的职责是整理游戏情报、提炼或改编可用素材、决定增长机会。研究返回并不代表其判断一定正确，你要核对来源和局限。
 game_signals 只记录对游戏、玩家、TapTap 有意义的具体变化（风吹草动），写 observed_change、game_context、why_it_matters、next_watch；事实与影响假设分开，没有变化可为空。
+业务JSON硬约束：game_signals最多3项，每项basis_refs最多3个、不重复；fact_refs最多4个、不重复。每条情报只描述一个具体变化，通常选1至2个最直接引文。若一条描述需要4个以上引用才能成立，应重新选择关键证据并收窄该条的断言范围，不能把4个引用照抄回来，也不能把多个变化堆在同一条。game_context和影响假设不需要穷举背景引用；相关不等于直接支持。提交前逐项数引用，禁止新增输出Schema以外的字段。
 仅“系统采集/重新观察到旧内容”不算游戏情报；若没有新的玩法、需求、社区问题或有依据的传播变化，game_signals 为空，旧内容仍可提炼素材。
 patterns 只保存可用于游戏内容创作的表达；每项须有 game_application（具体玩家场景）、usage_example（实际可编辑用法），不能只有链接、社会摘要或“适合营销”。可没有情报但有可用素材，也可反之。
 source_quote 逐字复制所引来源；expression_pattern 为模式推断，game_adaptation 为原创改编草案；后两者不能冒充网友说过的话。
 summary 描述你的业务判断，不重复抄事件摘要。emotions/needs 等仅从实际样本提炼，评论样本不能外推总体，缺失则为空。
 opportunity 只有在具备具体人群需求、TapTap 价值桥梁和用户动作时才为 opportunity；否则 watch/archive，并保留有效成果。
+基本交付优先为有依据的中性游戏情报：包括负面事件的风险监测，负面不意味着禁止情报。素材和创意是条件分支，不以有营销价值为保存情报的前提。已保存解读只做必要事实核对，缺口写research_questions，不重新全篇分析。
 游戏情报、素材和增长机会是三个独立判断。可直接从充分、近期的热点识别增长机会，即使 game_signals 与 patterns 都为空；不得为了生成创意凑情报或素材。
 机会必须写 hypothesis、validation_plan 和 prerequisites，效果尚未验证。不虚构已上线的活动、入口、奖励、游戏能力或用户需求。
 fact_refs/basis_refs 选输入 quote_candidates 的整数 ref；至少一个直接事件来源。不创造引用、来源编号或采集量。背景搜索命中不是已核实事实。
@@ -57,9 +59,13 @@ def task(store, run_id, model, stage, packet, schema, system, timeout_seconds=18
         store.heartbeat(run_id)
         remaining=timeout_seconds-(time.monotonic()-started)
         if remaining<5:raise TimeoutError('主 Agent 任务预算用完')
-        invalid=None
+        invalid=None;request_started=time.monotonic()
         try:response=run_task(model,stage,packet,schema,system,timeout_seconds=remaining)
         except StructuredDeliveryError as error:response=error.response;invalid=error
+        except Exception as error:
+            from .model import request_failure
+            request_failure(store,run_id,stage,error,request_started)
+            raise
         store.step(run_id,'model_task',{**task_metadata(response),'stage':stage,
             'agent_role':response['agent_role']})
         for key,value in response.get('usage',{}).items():
@@ -75,7 +81,13 @@ def task(store, run_id, model, stage, packet, schema, system, timeout_seconds=18
             message=error.safe_feedback if isinstance(error,SemanticDeliveryError) else '结构化交付未通过校验'+('：'+path if path else '')
             from .contracts import safe_schema_errors
             errors=safe_schema_errors(response.get('schema_errors'))
-            if errors:message+='；'+ '；'.join(e['path']+' / '+e['constraint'] for e in errors)
+            if errors:
+                message+='；'+ '；'.join(e['path']+' / '+e['constraint']+
+                    (' 实际数量='+str(e['actual_count']) if 'actual_count' in e else '')+
+                    (' 允许上限='+str(e['allowed_max']) if 'allowed_max' in e else '')+
+                    (' 允许下限='+str(e['allowed_min']) if 'allowed_min' in e else '')+
+                    (' 去重数量='+str(e['distinct_count']) if 'distinct_count' in e else '') for e in errors)
+                message+='。按上述字段重新选择最直接的证据，遵守上限且不重复；不返回原先超限数组。'
             store.step(run_id,'validation_error',{'name':stage,'error':message})
             packet['validation_errors']=[message]
             if attempt:
@@ -226,7 +238,8 @@ def business_schema(packet):
     schema=copy.deepcopy(intelligence_schema(packet));n=len(packet['quote_candidates'])
     signal=object_schema({**{k:TEXT for k in ('title','game_context','observed_change','why_it_matters','next_watch')},
         'basis_refs':references(n,minimum=1,maximum=3),'hypothesis':{'type':'string','maxLength':1200}})
-    schema['properties']['game_signals']={'type':'array','items':signal,'maxItems':3}
+    schema['properties']['game_signals']={'type':'array','items':signal,'maxItems':3,
+        'description':'最多3条具体变化，每条最多3个引用。一次变化一个断言，不堆积无关功能。'}
     signal['properties']['category']={'enum':['release_update','player_need','community_creation','market_movement','risk_monitoring']}
     signal['properties']['platform']={'enum':['mobile','pc','cross_platform','unknown']}
     schema['properties']['research_questions']=TEXTS
@@ -273,6 +286,13 @@ def analyze(store,run_id,job,model):
     attach(store,packet,job['topic_id'])
     from .runtime_guard import basis
     expected=basis(store,job['topic_id'],job['fingerprint'],packet=packet)
+    from .task_packets import business_packet
+    before_bytes=len(dump(packet).encode('utf-8'))
+    packet=business_packet(packet)
+    store.step(run_id,'business_input',{'packet_version':'business-packet-v3.23',
+        'full_bytes':before_bytes,'compact_bytes':len(dump(packet).encode('utf-8')),
+        'sources':len(packet['evidence']),'quote_candidates':len(packet['quote_candidates']),
+        'note':'字节数不是token；实际用量由model_task记录。全文仍在来源档案，缺口交由研究补查。'})
     from .risk import PROMPT,grounded,combine,save as save_risk,verdict,POLICY_VERSION,policy
     prior_safety=policy(store,job['topic_id'],job['fingerprint'])
     known=combine(interpretation['payload'].get('risk_assessment'),prior_safety if prior_safety.get('policy_version')==POLICY_VERSION else None)

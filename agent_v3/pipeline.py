@@ -14,9 +14,16 @@ def process(store,run_id,*,topic_id=None,model=None,selected_topics=None):
     from .runtime_guard import LeaseLost
     own_lease=store.active_owner()!=run_id
     if not store.acquire(run_id,ttl=1200):raise LeaseLost('自动处理运行租约不可用')
+    error_type=None
     try:return _process(store,run_id,topic_id=topic_id,model=model,selected_topics=selected_topics)
+    except Exception as error:
+        error_type=type(error).__name__;raise
     finally:
-        if own_lease:store.release(run_id)
+        try:
+            from .delivery_audit import funnel
+            store.step(run_id,'delivery_funnel',funnel(store,run_id,topic_id,error_type=error_type))
+        finally:
+            if own_lease:store.release(run_id)
 
 
 def _process(store,run_id,*,topic_id=None,model=None,selected_topics=None):

@@ -348,15 +348,18 @@ class RecordedModel:
         from .provider_adapter import request_body
         from .opencode_zen import StructuredDeliveryError
         if self.stopped:
-            raise BudgetExceeded('此运行已停止，不能通过业务重试继续花费')
+            error = BudgetExceeded('此运行已停止，不能通过业务重试继续花费')
+            error.request_not_sent = True
+            raise error
         body, limit = request_body(self.profile, stage, packet, schema, system)
         # UTF-8 byte count plus framing allowance is a deliberately loose input bound.
         # Authorized adapter is text-only DeepSeek BPE, not multimodal or a gateway.
         input_bound = len(dump(body).encode('utf-8')) + 4096
         try:
             call_id = self.ledger.reserve(self.trial, self.phase, stage, input_bound, limit)
-        except BudgetExceeded:
+        except BudgetExceeded as error:
             self.stopped = True
+            error.request_not_sent = True
             raise
         self.current = call_id
         write_new(self.directory / (call_id + '.input.json'),
@@ -590,7 +593,7 @@ def run_phase(root, phase):
             from .providers import save as save_profile
             save_profile(store,profile)
             outcome, report, status, model = {}, None, 'failed', None
-            run_id = None
+            run_id = None; tid = None
             started = time.monotonic()
             try:
                 seed = cases[trial['case_id']]['seed']
@@ -618,6 +621,8 @@ def run_phase(root, phase):
                 write_new(directory / 'sources.json', source_snapshot(store))
                 if run_id:
                     write_new(directory / 'execution.json', store.get_run(run_id))
+                    from .delivery_audit import funnel
+                    write_new(directory / 'funnel.json', funnel(store,run_id,tid,error_type=outcome.get('error_type')))
                 write_new(directory / 'result.json', {'trial_id': trial_id, 'case_id': trial['case_id'],
                           'arm': arm, 'status': status, 'report': report, 'outcome': outcome,
                           'seconds': round(time.monotonic() - started, 3),

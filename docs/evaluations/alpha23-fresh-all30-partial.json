@@ -1,0 +1,2379 @@
+{
+  "version": "alpha23-fresh-partial",
+  "manifest_hash": "4594ad954d17df9d6818c748c63f08fdb33dcdd24462ce8feb81aa58eb052709",
+  "project_version": "3.0.0-alpha.23",
+  "model": null,
+  "selection": {
+    "selected_before_model_results": true,
+    "reviewed_at": "2026-10-11 Asia/Shanghai",
+    "rules": "240条只读候选快照，排除既有实验URL/标题与已诊断的同一事件；覆盖游戏为主、跨领域、负面、旧文与标题缺失。没有按模型结果挑选。网页支持只按媒体/作者表述，不宣称独立官方证实。旧帖不同检索视图日期/播放量不一致，未知保留。",
+    "cases": [
+      {
+        "case_id": "case-da9168010263",
+        "category": "new_event",
+        "selection_reason": "游戏联动新公告；区分宣布与实际上线",
+        "reference_facts": [
+          {
+            "text": "报道宣布铁拳8的丽奈作为饿狼传说群狼之城第3季第6弹DLC角色参战；不是新游戏名。",
+            "quote": "作为第3季第6弹DLC角色上线《铁拳8》的人气角色“丽奈”。",
+            "url": "https://www.gcores.com/articles/220732"
+          },
+          {
+            "text": "计划12月加入战斗，非10月10日已经可玩。",
+            "quote": "丽奈即将在12月加入战斗。",
+            "url": "https://www.gcores.com/articles/220732"
+          }
+        ]
+      },
+      {
+        "case_id": "case-a4df049baa80",
+        "category": "new_event",
+        "selection_reason": "PC独立游戏已发售与产品形态；不能杜撰TapTap可下载",
+        "reference_facts": [
+          {
+            "text": "报道明确幻想放置远征队2026年10月9日Steam发售。",
+            "quote": "于 2026 年10月9日 在 Steam 平台正式发售。",
+            "url": "https://www.gcores.com/articles/220714"
+          },
+          {
+            "text": "报道称完整版为7大主职业衍生91细分职业；不是91游戏或手游。",
+            "quote": "游戏完整版包含 7 大主职业，并一路衍生出多达 91 个细分职业",
+            "url": "https://www.gcores.com/articles/220714"
+          }
+        ]
+      },
+      {
+        "case_id": "case-f2200d46ad87",
+        "category": "new_event",
+        "selection_reason": "未来档期公告与当前新事件分开",
+        "reference_facts": [
+          {
+            "text": "报道称蜘蛛间谍特工8号计划2027年2月11日发售，而非已发售。",
+            "quote": "《蜘蛛间谍：特工8号》将于2027年2月11日发售。",
+            "url": "https://www.gcores.com/articles/220713"
+          },
+          {
+            "text": "角色是微型机器蜘蛛间谍8号，背景为复古未来70年代。",
+            "quote": "在间谍世界中扮演最袖珍、最可爱的机器蜘蛛超级间谍8号特工。",
+            "url": "https://www.gcores.com/articles/220713"
+          }
+        ]
+      },
+      {
+        "case_id": "case-645aa91f4213",
+        "category": "new_event",
+        "selection_reason": "游戏IP影视跨领域事件；公告不等于电影已上映",
+        "reference_facts": [
+          {
+            "text": "报道为CDPR与派拉蒙拟推出赛博朋克2077IP真人电影。",
+            "quote": "CDPR 与派拉蒙影业日前宣布将推出基于《赛博朋克2077》IP 的真人电影。",
+            "url": "https://www.gcores.com/articles/220712"
+          },
+          {
+            "text": "合作开发涉及制片人洛伦佐迪博纳文图拉；不是新增游戏发售。",
+            "quote": "派拉蒙影业将与知名制片人洛伦佐·迪·博纳文图拉合作开发该片。",
+            "url": "https://www.gcores.com/articles/220712"
+          }
+        ]
+      },
+      {
+        "case_id": "case-c29532efebad",
+        "category": "negative_or_disputed",
+        "selection_reason": "市场负面，保留中性风险情报、不生成推广；这是硬件市场事件不是Garrison",
+        "reference_facts": [
+          {
+            "text": "销量说法是Circana分析师对美国截至8月市场的报道，Xbox同比下降33%，不外推全球。",
+            "quote": "今年截至8月，美国市场的 Xbox 硬件销量同比下降33%",
+            "url": "https://www.gcores.com/articles/220740"
+          },
+          {
+            "text": "同期PlayStation硬件销量下降25%，不能拿来庆祝竞争对手衰退。",
+            "quote": "同期 PlayStation 硬件销量下降25%",
+            "url": "https://www.gcores.com/articles/220740"
+          }
+        ]
+      },
+      {
+        "case_id": "case-07f357478152",
+        "category": "new_event",
+        "selection_reason": "模拟游戏更新与合作需求，未来上线不能当已完成",
+        "reference_facts": [
+          {
+            "text": "报道称护林员之路将2026年11月17日结束PC抢先体验并推出可选双人模式。",
+            "quote": "将于2026年11月17日结束PC抢先体验，并同步推出可选的双人合作模式。",
+            "url": "https://www.gcores.com/articles/220680"
+          },
+          {
+            "text": "报道称支持跨平台联机，非仅本地双人。",
+            "quote": "游戏同时支持跨平台联机",
+            "url": "https://www.gcores.com/articles/220680"
+          }
+        ]
+      },
+      {
+        "case_id": "case-ad9ad2da3f45",
+        "category": "new_event",
+        "selection_reason": "艺术与游戏交叉采访，试玩不是用户总体评价",
+        "reference_facts": [
+          {
+            "text": "采访游戏为Happynet发行的失落美术馆绘灵拾遗录，以名画美术馆为主题冒险。",
+            "quote": "由Happynet发行的《失落美术馆 -绘灵拾遗录-》是一款以美术馆与名画为主题的冒险游戏。",
+            "url": "https://www.gcores.com/articles/220673"
+          },
+          {
+            "text": "作者在TGS2026试玩序章；不能当整部游戏正式通关/玩家共识。",
+            "quote": "在今年的TGS2026现场，我试玩了《失落美术馆》的序章。",
+            "url": "https://www.gcores.com/articles/220673"
+          }
+        ]
+      },
+      {
+        "case_id": "case-3f011c7701ba",
+        "category": "old_or_revival",
+        "selection_reason": "候选元数据9月19日；网页修改日期不同检索视图可能不一致，不能凭新抓取推定翻红",
+        "reference_facts": [
+          {
+            "text": "这是逐鹿十三州个体排位攻略，不是新版本发布或总体玩家态度。",
+            "quote": "分享一把7分钟排位速通局",
+            "url": "https://www.taptap.cn/moment/850393929739145148"
+          },
+          {
+            "text": "作者推荐东北方向因城池密集，须同时保留遭遇屯兵需放慢防守的条件。",
+            "quote": "快速发展的路线主要是东北方向，那里城池多且密集",
+            "url": "https://www.taptap.cn/moment/850393929739145148"
+          }
+        ]
+      },
+      {
+        "case_id": "case-0f0cc6cd133d",
+        "category": "new_event",
+        "selection_reason": "非游戏生活方式对照；不能把医疗建议变成诱导熬夜玩游戏",
+        "reference_facts": [
+          {
+            "text": "这是10月10日节后作息报道，报道将晚上难睡早上难起与社会时差联系；不认定所有玩家有失眠。",
+            "quote": "国庆假期已经结束，不少人返岗几日，作息却还没调回来",
+            "url": "https://www.chinanews.com.cn/life/2026/10-10/10710003.shtml"
+          },
+          {
+            "text": "采访对象党超为中山大学附属第一医院神经科副主任医师，而非游戏玩家评论。",
+            "quote": "中山大学附属第一医院神经科副主任医师党超",
+            "url": "https://www.chinanews.com.cn/life/2026/10-10/10710003.shtml"
+          }
+        ]
+      },
+      {
+        "case_id": "case-aafd45690a31",
+        "category": "incomplete",
+        "selection_reason": "原候选只有标题且缺日期；须补正文，并区分爆料可能搁置和官方确认取消",
+        "reference_facts": [
+          {
+            "text": "报道称星空Switch2开发问题来自爆料人NateTheHate，不是Bethesda官方取消公告。",
+            "quote": "《星空》被搁置的消息来自知名爆料人NateTheHate。",
+            "url": "https://www.3dmgame.com/news/202610/3956014.html"
+          },
+          {
+            "text": "爆料人未明确取消，不能把可能写成已取消。",
+            "quote": "NateTheHate并未明确表示该项目已经取消",
+            "url": "https://www.3dmgame.com/news/202610/3956014.html"
+          }
+        ]
+      }
+    ]
+  },
+  "freeze": {
+    "order_seed": 20261011,
+    "frozen_at": "2026-10-10T16:33:25+00:00",
+    "code_inventory": {
+      "L1_data_source/adapters/__init__.py": "78cc250fe062501abf354e3ccb80823817ddcb3c43073a5bc8e07e35a6b3ad79",
+      "L1_data_source/adapters/agent_search.py": "ce1448a54c024666d757bc29c153ed826736bfb404e3b39e0828f04dc7ba026e",
+      "L1_data_source/adapters/baidu_hot.py": "833eec05400212efae6af6a0faf9a727eb29268d4e0aee532699a8f8b244bb2f",
+      "L1_data_source/adapters/base.py": "14db2e8d857440323da35499700d74cf5461bc17635888f36919966959db2afe",
+      "L1_data_source/adapters/bilibili.py": "d951f68882042fef6a43779069500708de80898b79f8823ef6f34e836fa1505d",
+      "L1_data_source/adapters/douyin.py": "fc5e46bf2cea0361f2822744fd6b48cefafd7a0a732c7b154ed540414fefca15",
+      "L1_data_source/adapters/taptap.py": "1898d48b82666eb4bfda0d0ae1aebc65e07acf24d3ec6216f62c0de38d30bc3c",
+      "L1_data_source/adapters/weibo.py": "9d4042e699c46cac2a7dd1451bf26f7ed3d5b04041a7edb5775c9a4acd0d71f0",
+      "L1_data_source/adapters/weibo_hot.py": "28bf456e783b06b78b9e3f7d89db7915f5d29f27fb9f3ef9f863230fd41956b7",
+      "L1_data_source/analytics.py": "accaee08e33b1055eae12254f35130817b82ee0f78ed8615bef9cc44c29fc5bd",
+      "L1_data_source/bus/event_bus.py": "dbfcd3239cf777a0bf88913ccdbef3e3eebaec64d9fa073d7d1ea55a2f07ad6a",
+      "L1_data_source/collectors/agent/hotspot_search_agent.py": "95080e838eec211ebaf555286d0804ebb78024c57fc9036aa07b8cad01227782",
+      "L1_data_source/collectors/baidu/crawl_baidu_hot.py": "5f1ed9a9c4400c4aa018cd156cad32d8494c96e61815d2392df4be0ddacbccd2",
+      "L1_data_source/collectors/bilibili/crawl_bili_comments.py": "4aa4b8ee2bf72b65f941da8477a91a64f53a8bf2cf1cca0bf6e081a85260a7c6",
+      "L1_data_source/collectors/bilibili/crawl_bili_game_hot.py": "6809feb806eea74c43511cc33ef910b877ec26300640e9a20c651a6cd0158770",
+      "L1_data_source/collectors/build_char_terms.py": "fa310820b91269b134c4ddb4d220e6d24860dc033eb3ef2fb19bed2fd297e522",
+      "L1_data_source/collectors/douyin/crawl_douyin_comments.py": "cfbb8a51b1baf8118194bb945b18fd808ad69033c821165415f911868cae6328",
+      "L1_data_source/collectors/game_terms.py": "528711e419c34aa0389570f3ae0dde4a1602b432dae9d27700e88162e9187eb6",
+      "L1_data_source/collectors/gamemedia/crawl_gamemedia.py": "dac083d51c36f7771c1cffb68e97a59406b9850c03423d516366978ba416406c",
+      "L1_data_source/collectors/robust_watch.py": "3ae21fc2dd07ab6f14c34295ef9fc8cdf40e67c5bc8eed123dd0aa1f6561f8eb",
+      "L1_data_source/collectors/taptap/build_game_terms.py": "03ba163f558f17da8657240771212122aba2ffcb258bb0c6d6e9de5e2b019be5",
+      "L1_data_source/collectors/taptap/crawl_taptap_community.py": "246c2accb368f1e53b4ff3037267872cb387442d2f99d0b5f8c477204b592266",
+      "L1_data_source/collectors/taptap/crawl_taptap_discovery.py": "4d65e0d0ec67fe321e8dcb046fabf6b21eeb17027e9ee25e987e4ecde405d1db",
+      "L1_data_source/collectors/taptap/crawl_taptap_reviews.py": "46a4c1c39aabd79485c5a659d3a8780183f01de0e2e97508853cd8bfe94385ac",
+      "L1_data_source/collectors/taptap/crawl_taptap_user.py": "80dfce39a9fbf26fd0c1c348b1b12f4f0a559078feb9cdb507b07d0122d80182",
+      "L1_data_source/collectors/taptap/enum_app_ids.py": "56528feb624207082aa3661862f9f4a5ae7c39b38498d6b59db25a1b163b0e79",
+      "L1_data_source/collectors/tieba/crawl_tieba_forum.py": "6d94102feead8078c16d33c96526cfa8bd8791e1b1772b56c9e7603c225b0094",
+      "L1_data_source/collectors/tieba/crawl_tieba_hot.py": "2cdcfaac5b6b6e5d4c947a85001adefbabf5667039902baaf117a8109ec59365",
+      "L1_data_source/collectors/weibo/crawl_weibo_hot.py": "50b49fab45cc578172722ae423fa6fa977e68a873a23b1b860ae83c303474006",
+      "L1_data_source/collectors/weibo/crawl_weibo_posts.py": "a436d78d97ddb4c42aca0d9ca9201a464bc85353d931b42dfba120c354f4a5c8",
+      "L1_data_source/collectors/weibo/crawl_weibotop.py": "cb2e392e9b28de6b766fba7d8d43e71e9d97b49b1ff04952322172ad9f039263",
+      "L1_data_source/connectors/api_web.py": "f4f0d05a6e1889865d30a4361f803ecf499af43d2482af0fecb60881cbceb8cf",
+      "L1_data_source/connectors/base.py": "4aeafe847afd63e1ed13905050650f70a97f864625ac173174fd82d24511bec4",
+      "L1_data_source/connectors/internal.py": "2553830e95bddd8f76410ece051fc2eef60170a313261cdb8f7686266b1a263d",
+      "L1_data_source/connectors/runtime.py": "c5985f1d888596325da7ddd6c22cdf35a66f73347a7f4d176af4df9cd7d42180",
+      "L1_data_source/normalize.py": "dbc583cd808862a6f129a61632ec2edb7c3026268819c6405bff1c4242e454b9",
+      "L1_data_source/pipeline.py": "ff558d42ccb5b03740bfaac8d8368bf740d294a66e8697b8e9fcbe065cfdeb83",
+      "L1_data_source/planner/crawl_planner.py": "31e849bf274edf2e8bd7801e08a2a4e9e470912a66a26bffdffbb0bca403d704",
+      "L1_data_source/quality_gate.py": "9a1771ae41925cb7be4dca20f2fdb9541e01bb45492dcee0dc32b572b8e4f464",
+      "L1_data_source/registry/source_registry.py": "c9fa8b10a50807ab77348f4d6b6a2a82fe2de206007a25b5a8dc9baafcabf119",
+      "L1_data_source/schema/__init__.py": "e944efdd347d1630bbc370bd477b749fd8e1edc858ccdf0546b89b96e0403a95",
+      "L1_data_source/schema/content_event.py": "63673d0638bd761128798a1fb28d57259b4938279efcabb0d882ac680705ccf9",
+      "L1_data_source/storage/metadata_db.py": "c2b0bc788173217ba7e91195334aed29465f85fb7eb09cfa5771b490fa476720",
+      "L1_data_source/storage/raw_lake.py": "b5d1073934a4a6815adb40695f3c45baef6b3dbe7d31d7bc5b439684faf91b41",
+      "L1_data_source/tests/test_quality_gate.py": "e8def9848eb26dc0e256a6fcbcb4c077e45f9190a5c77573b801978d6ae4ef21",
+      "L1_data_source/watchdog.py": "0d46aa5b732f39cd8bedfdabd53983e5ba1f84ef8944f3000cc901218bf890d2",
+      "L2_signal/processing/__init__.py": "3ed324899103236edade4d92b435a07237ef0a757412f3b28cbea12da4ea6e29",
+      "L2_signal/processing/canonical.py": "9d035a2433bee6b99d0ff94f244ba1d528a9978ce2042e0883f973567f9f5e5b",
+      "L2_signal/processing/classification.py": "431b1aecdae40c924575ad44065a015baf5efa3ed2869513dea47c67ff203af8",
+      "L2_signal/processing/cleaning.py": "c4e2130d211eb241d4b6a702949e45ad8cde3baec40390e71ef24395fea55def",
+      "L2_signal/processing/dedup.py": "16eac71eb2b996632c1260bf7bb310ec44651f4042ea7810b310d00414d85a4d",
+      "L2_signal/processing/embedding.py": "b95fa935a188b81a0177d4eeed8f5637042f7e48dc5a0aed2629b47cac35c83b",
+      "L2_signal/processing/entities.py": "24c7ecbc95e3e7537de70d0bcfcf200bbf6362afa37a61f7b8702ecb60f5f8b4",
+      "L2_signal/processing/features.py": "0dad10b793131c65bcca68fce77e2395d11e6cecfd77c88ffbb7f30e7d06dab8",
+      "L2_signal/processing/language.py": "2d1e8ece2e5efd7e76b65429c3c86c00c4048aea938a9867d3937a25033cad29",
+      "L2_signal/processing/normalize.py": "4b26ce31a2992853069ecad50d369e6098d1776f9152f7cae640de873e1d4038",
+      "L2_signal/processing/pipeline.py": "2434ae57158fe3cef674b3cc0b43eb075c0b9d3c09f1ce6da4fb20613d8b71b7",
+      "L2_signal/processing/quality.py": "e4c7ba73949ce316e9e49af2bf58957c16e8fa8a5e75248f71aa55ff1a1c64ad",
+      "L2_signal/processing/storage.py": "9939613a2bbc9571a69f2960e2573cb95748dd6bd509e3a5d34df8a548608345",
+      "L2_signal/processing/validation.py": "58b48c26df7e7d5111a59beddb6abe906d0874e1cb4e6df512ab45b7788d4225",
+      "L3_semantic/announcements.py": "4f4d0872d7bb54bd66fb469ebb507d2dddc072fe78e26a4ff634e63eabf6dda1",
+      "L3_semantic/tests/test_announcements.py": "c3b7d34b03aa4b4a39d5dc247abef236f0b28e5c19b388939882acb1443d31f5",
+      "L3_trend/event_graph.py": "81395b9102073a9ec459a87daa8fb185a9bf3cca3ad484d0ebbf7c8ce5b663ca",
+      "L3_trend/event_resolver.py": "490260b6216f58b1a468a32b859fffde1e55616debda3b0df3b2c1a802dd8737",
+      "L3_trend/feedback.py": "c78a658b3d51971b6cf6a9e63a51caa95b1ae6c89860ad6826657adf23c0da04",
+      "L3_trend/forming.py": "190e3bb1586b0a9f768dcbc9c8c2ef470f00bd2b3329223077d0c54fb997d030",
+      "L3_trend/forming_report.py": "8f13074107eee331859d84f94bb2d23fc9a77d88bf8fa3fd00efbe906e3a99b4",
+      "L3_trend/game_tags.py": "3333839db08767f739c67d78ba1c9c566e598dd767675881aa1025032751a806",
+      "L3_trend/hotspot_filter.py": "2043e242e2f15703fcc6fbdd1d87a7f44bd0c0573349d39552fe45a5a20117d0",
+      "L3_trend/intel_stats.py": "ec9f7db69c9de88506ff44803420f4c84e6a4ff48f439272e5ff3175974fe693",
+      "L3_trend/kpi_baseline.py": "cb269e04d28c522629af2aa2ede5c180a62f230e7051f689cd7711fe9608ab22",
+      "L3_trend/semantic_recall.py": "db90c3ebe63c49645534bc8ee2c68b3cc5eb84354713438dc7f1dd80a3a3e6b9",
+      "L3_trend/strategy.py": "065cfa47600d2adac89176b82ba1370a75b09bffb8a2cfd86b257dda05666a1f",
+      "L3_trend/tests/test_evaluation.py": "c9c78fe830a2e1484336ad34b5050424b63d48a2af0b0142a3496357d119e554",
+      "L3_trend/tests/test_intel.py": "963eb2eef3d28f4b0ec4011b0e0b9a867b620910764e481cf0e474a56b9223ab",
+      "L3_trend/tests/test_parent_child.py": "6592f73909f1d47cb2554435a2e5b0c631bcf55c81c1f478e7698b8122d60602",
+      "L3_trend/thread_feed.py": "c88cbba606a2059833344cde03df1c007ba0829078849f04fb5c230b33b173f4",
+      "L3_trend/trend_engine/__init__.py": "0af3d005bc5e0adcc1ad0a6b2550769984173446a13b6ab204d8bbc515440523",
+      "L3_trend/trend_engine/candidate.py": "0c20f8af874cb5e689687dd47fd587e233ebca18b15222b728148bc75f0b34c1",
+      "L3_trend/trend_engine/clustering.py": "c4215ab22f90d4488d9c03cd32c30c09467052593c41c41344c0466d67b056ec",
+      "L3_trend/trend_engine/community.py": "109e4e8be28d20aede352786d24f2a26992cd5c2f7edf3412eb8523d89619817",
+      "L3_trend/trend_engine/evaluation.py": "05c0e8d6f485f71bda2f9a8027e8527fa4dc8739b2c95bca41ed4c3233eaf287",
+      "L3_trend/trend_engine/feedback.py": "738084df70f6bb31adb8515d2355888d512d0771c0763c37d41eb53707a74dba",
+      "L3_trend/trend_engine/lifecycle.py": "40a74cf5e8434481db5fa092c8c46dde14a02d74f0e747e41834aab4bf7a2bab",
+      "L3_trend/trend_engine/pipeline.py": "02022bc70b1bd639f205dbc75ff81695e0b70e9f9f0726cbbc0f879136cb2acc",
+      "L3_trend/trend_engine/scoring.py": "19a4a10b4cba6fdca552f46c32763b091d78350e57ceb4e3bb02612ce52ee18b",
+      "L3_trend/trend_engine/signals.py": "68deaf6fa3d548989a2c656c52c66eb2bc329cd67ab23cc754091b874be98822",
+      "L3_trend/trend_engine/similarity.py": "50d57c83de03880b141ed00cef54ed763803b0816f24627c9db7dc4c05fb99e0",
+      "L3_trend/trend_engine/store.py": "77c87d240045d32ad511d2c563a6d34fadf305189b15f2a17e010c4ad61f71a6",
+      "L3_trend/trend_engine/timeseries.py": "7f777166098714166118eee3331ae3186c6c68d772613b6230b012447b05682c",
+      "L4_intelligence/intelligence/__init__.py": "43cb46b1442b4af26e8a08d8402d10c734510c1ce4d20c7e824b0a18c97d8250",
+      "L4_intelligence/intelligence/chat_response.py": "60b7fc5a5fb31c04fd329fa0dffe0ec1f90fb1a33aa29186178b9d4330714d6c",
+      "L4_intelligence/intelligence/community_report.py": "417199a32db6a0328a9faa375847de70e14c740b798d0e44176c412791cc3f13",
+      "L4_intelligence/intelligence/graph/__init__.py": "b7ac91dbed4565d7bde1c1967bfd077edc9973bdf3ea878d1a2f53edd6ab4d0f",
+      "L4_intelligence/intelligence/graph/graph.py": "fab878a20ddfb6ff4a26f8d99a00b877c14b00d9171753ba552023888da8e039",
+      "L4_intelligence/intelligence/graph/routing.py": "67dc435032e439ceb2a3fa165039dad8f9058bfa84541dae1e5cc9f135e8d130",
+      "L4_intelligence/intelligence/hotspot_to_creative.py": "2a4c2c8c2a5d58ae92617aca0f8ee393d08996f0d6b689b6ae72b3738870bd9e",
+      "L4_intelligence/intelligence/knowledge.py": "5a145e441e5a635070a00e475537262322d49350a3ef475032629dea250d5712",
+      "L4_intelligence/intelligence/llm.py": "3ce7058e0c1fd9069aa732c9710b5edd23a9b9a87087ec3ebf6dd2379423cb52",
+      "L4_intelligence/intelligence/nodes/__init__.py": "3a1325854a3ab773805aa89c246f46fb240bb29b4c5510dd03a4e7c82b45dfea",
+      "L4_intelligence/intelligence/nodes/analysis.py": "2a8301272ce806e891e6f4bcc2adfefb1e0e01d636c78fb87cefac44306df2b6",
+      "L4_intelligence/intelligence/nodes/creative.py": "10222dbe1081ebff0a4674a856d6c83ecb4206be014efef8d13ece48b605769d",
+      "L4_intelligence/intelligence/nodes/evaluation.py": "560245a869447d2ef77783196ff32ca30f406e3f82f2aa4c27977c908393ca60",
+      "L4_intelligence/intelligence/nodes/evidence.py": "509aad91b5c8522b0fd1d0260f3f62a52f0ca7e03f911aa2612692167eea658c",
+      "L4_intelligence/intelligence/nodes/llm_augment.py": "ebde69ab0d88a6b8a30a191b872d7fbe923327f9b7fe29bb92c021eb7e5a763b",
+      "L4_intelligence/intelligence/nodes/opportunity.py": "bae63387bf5c612e1e034ac4b825e1f2714867f3c6be97298ceb6efa8f308a23",
+      "L4_intelligence/intelligence/nodes/research.py": "e84e825dfd7e872a2d1f7b8b31301152abf2425cbd99c39bf34cf51991e05758",
+      "L4_intelligence/intelligence/pipeline.py": "57e4a031fb2e9ae0f38fa37d922b2fc826bcb5724f7fc8f09f38565fc1f68c63",
+      "L4_intelligence/intelligence/prompts.py": "93e829452d9c6b47006e0fd4cbeff5f139af23e4c78366210f2e83a1cf91b5f9",
+      "L4_intelligence/intelligence/retrieval.py": "2cbc10133768a8f739c1201b048e77ae6d06488ad152f49a959fc49e77dee417",
+      "L4_intelligence/intelligence/state.py": "39479d8506f22ff2d46c209f0da354b8454661fb8d5ddb38d12eb0986a4a564a",
+      "L4_intelligence/intelligence/store.py": "276c45d25aa0ce173093785bfe9a06b5514b96e6a3f32f398fe77ed401f3f152",
+      "L4_intelligence/intelligence/tools.py": "5713688134e13b919477c39fac2b8c6ec3a2996bd1e66cbd0f60032484217416",
+      "L4_intelligence/intelligence/upstream.py": "c946f3353590bc484459c28835fe90951c6cf9eed74361d45271e56ad3b10405",
+      "L4_intelligence/tests/test_creative_delivery.py": "13d082ab3e2d24d88167785164c4d93ef37924003c5e2fc088631688e239995f",
+      "L4_intelligence/tests/test_intelligence.py": "fb9862c7e573f4210ad62848861fadcb7d320d97f0980bc47a65bf4b327acefb",
+      "L4_intelligence/tests/test_llm.py": "138add38065fc6af1ce40c0ab93cbe2c1c182a1f36633adfe1ae461d92610865",
+      "L4_intelligence/tests/test_memory_adapter.py": "bcc9a991043cda3afd42ba26421cf79c2f6dc65aa6371ded1811c2483e0a0b5d",
+      "L5_memory/memory/__init__.py": "e9546b5719a5f9aad6c685947382657c2cdf169e3a9ee229ded6231598506b35",
+      "L5_memory/memory/cases.py": "c780605d18470f870f393f2228a21c89ad0a339f704f8105669edf114c74c4d7",
+      "L5_memory/memory/context.py": "b8ad59338797f7993a6d199a0ce4fff9fda778561cb927c85e79beebc49254b9",
+      "L5_memory/memory/db.py": "eed6d457ee918b0dbc77d5e65424aa49781eb0e683510c3c3d2921c83ee88f66",
+      "L5_memory/memory/evaluation.py": "1b82404bd461747935db58575fa8cf44c3f3675fc17b8c668e10bf09fac83596",
+      "L5_memory/memory/governance.py": "71f6075cfaf528e19028b484e6c67e7337331b3c77dc8bbb4ff37cdaa3ea94a8",
+      "L5_memory/memory/ingest.py": "885bbb543bf3463f5ded92cff73ad24978ec2bbb5d784be26251e5502c39724c",
+      "L5_memory/memory/pipeline.py": "5f325a26eaa012288529a503d65babf2a571234e67b62cf217dd5b083ab4e5c5",
+      "L5_memory/memory/retrieval.py": "2f203dbc798beb91bf04bf5a8a586c1c69783a0d48a0d7e73ab3fa3f450cf46c",
+      "L5_memory/memory/store.py": "24b59769d1af5d88315ccd4556887fb041434bbc9c82e113a5434578fda0f4cc",
+      "L5_memory/tests/test_cases.py": "ba8d1be21a64c85b9fc5bb1bcf0759a4cd29adb0946eaed212d4c2ae299468dc",
+      "L5_memory/tests/test_context_eval.py": "6796fdc59e1ffcc008b27df572b10aed19fe12dc22b21315fbefeb578d721537",
+      "L5_memory/tests/test_governance.py": "0982eb3b72997ca90a8c06711d25a7ffe4f0420503b73843b57153ca9e7249a9",
+      "L5_memory/tests/test_ingest.py": "d5b7a07ecc9ae951d3b87abef58895604bc9caf5fa14b046447006c9354d8ea3",
+      "L5_memory/tests/test_retrieval.py": "82da232ca9917830c546eae8648d66d4e28bda0c92023af8a62a9694797226d4",
+      "L5_memory/tests/test_store.py": "6a3f90eae8da5c9ebcf2503058586f0f63b1230271af706c2e2c92627c0f2f24",
+      "L6_execution/execution/__init__.py": "ce892904b7bae79a27eda9d8df8cc1ab36c35f1d8fbe920f729fb2cbe920a3c8",
+      "L6_execution/execution/alerts.py": "a1af1339dd8bd4e2de0ab6b83bbea9d89a15c6cd4af5126cf19a361ca0ba4a79",
+      "L6_execution/execution/audit.py": "c2070316ff4f3e85886c448b777323e57d705bb5a5a0299025de51e1027a36de",
+      "L6_execution/execution/db.py": "09a7105afbb41c30036da515005c5be88f9d4682a60ca84d23a2797ff33e0165",
+      "L6_execution/execution/execution_center.py": "7b06ba45ade90c1e48ce6820eeebca2419ad6041df1cb07ab88482b680e3e31d",
+      "L6_execution/execution/experiments.py": "5d18ac22a05ecfd727a9cfc21811665b2433bbd41341ede7ec2a47f0a34f556e",
+      "L6_execution/execution/feed.py": "177c9be922691d38b1cc312c2974cf40b879c5ea1331c2799dfc6273549ccb73",
+      "L6_execution/execution/lineage.py": "dc2ca78cb5b88b9fbcb1a576a73b1d6a9ebda8a431a5ac9947eba8b019df93d7",
+      "L6_execution/execution/ops_context.py": "d268dcda4446c450a5c485d75c87629fabab3931cd0501a510783b76579f5d75",
+      "L6_execution/execution/pipeline.py": "42b9cd19e72511c0c56a84c9c7eefc0ef40cfb61e38c4cbc9c65b5187e51b6f1",
+      "L6_execution/execution/workbench.py": "e1873ff7e4ee526d6599bde5a23361ef2f3d6eb3b7b153c7fa3685a63168e843",
+      "L6_execution/execution/workflow.py": "f66319159d366b58d84cc6eb90e0674a4c463adabe211413290f8fc1f440168f",
+      "L6_execution/execution/workspace.py": "1e1129af2dbb6e7ad76a0d56e1c8cb83ffa9cbcf6cb2edc7bf3881f859851a6d",
+      "L6_execution/tests/test_business.py": "0cd600ff5f1ae96de66bc1287dfde20299f1644e14f6883fa89b198c0f2089d2",
+      "L6_execution/tests/test_core.py": "d7899c7f35736d618b6e44f280c4030d3f808f32c3bcbb456d94bf0bcaaf6671",
+      "agent_v2/__init__.py": "b92ac6cf6d2d329756e9987a676768cd8f69d68d116a0f38d9184cf03534bdcf",
+      "agent_v2/__main__.py": "530d646da2ae17339df80fb6e164ebbc3b542799b7004b9cd36f63a8f44f6c98",
+      "agent_v2/connectors.py": "1d4d84376ecf15f86463d64849f27c1b686e516c84b70d64d390ffb7dc61cb9b",
+      "agent_v2/engine.py": "2385eb1cc5890d367fadcaac3af79f86ff21ea2f165a5c7d86f70dfcd0521a95",
+      "agent_v2/ingest.py": "ff2c6ab74de9d5e6ee9f6c95ecab83c642a2fae19f55e6c46296bdc34406c839",
+      "agent_v2/model.py": "9cfcc44dd111856ce26a8661c36fd85a4892aabb56bdacc2e216e7b6cc5f8745",
+      "agent_v2/reports.py": "6c47d2988adb5d817cd7af260989c0ecc9f745c2517aa86694bf2447ace5d454",
+      "agent_v2/service.py": "dee4faab302ab28bd0c35fe67b5de52b78cb1cd195a7f4977cc8196ccb27d20e",
+      "agent_v2/store.py": "85e69c7e87fd8851adf60424e12a0b8775082b089e13b7be5d4c69a4b97a851c",
+      "agent_v2/tests/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "agent_v2/tests/test_core.py": "3ad7c98e6326d91e6531ec46ded26f1d6ccaf03b7120a448f724b62aafe521e6",
+      "agent_v2/tests/test_model.py": "8b717ccb8ae1dcb9e8279aff3644b370cbe65bde412fad190bca786d45bbd7e9",
+      "agent_v2/tests/test_operations.py": "70a26845367496f9d4b21d212f817287666eb569d1601a408d65682304cd2270",
+      "agent_v2/tools.py": "466c69d89111c9d5cc7f2c64e4443fd5058ccbf493bbab31786fe9072dcb8b67",
+      "agent_v2/tracking.py": "a61d8e8e6bb87e0edfedff94abe6fcb08c7cf844de402e514359db0f4e6795e3",
+      "agent_v3/__init__.py": "f0dbdea10f583cf14a88f50d96d111b5bebff761315fd4a7c5bc452c7e27796d",
+      "agent_v3/__main__.py": "e954246de2db758df976624617033abe77f3ae954e8766019d8e2b445f0c1542",
+      "agent_v3/api.py": "d8042a022b2d77566d88356d659999cef0350b1777655067936f3b94536a0ee9",
+      "agent_v3/benchmark.py": "49193519fa7428ebb3930372ca548b35bd679bf218b1a106b5c2a7df03c4ea10",
+      "agent_v3/browser_tools.py": "24eded089e2a6118d313465003d06497f043c006787fa98c09a5d6037973941e",
+      "agent_v3/browser_worker.cjs": "8f649840c9b699605309a37822907d9b9eefbe1c9bbd1c9b1d98715802f927f1",
+      "agent_v3/comment_region.cjs": "f8e2b8a5d947d510301ad4a3a1b19f2a1de8884f0806e3fcc6fba0d02adfe0f0",
+      "agent_v3/connectors.py": "0e9ed9734d4cb630a07d51bda8bf641b09e68b2cc152ee0a7ba44ccd5db5477e",
+      "agent_v3/contracts.py": "471b2d5a79f3a1da36abac4f2f45183e350ad6dd8ea3b619865f31e37c949ca2",
+      "agent_v3/deepseek.py": "85a0e0ceeda2d3583763bc5598c69eeea5e981b499e8c38a4be273bf972befaf",
+      "agent_v3/delivery_audit.py": "5d27e770dae017411707e6451fce3c58d9d3e5936c9f9ffa911f657a8771d284",
+      "agent_v3/discovery.py": "eb44fb736804b82b0c928b6516b13af961c98d5600d8413f219b6b9c181aa82a",
+      "agent_v3/discussion.py": "504b06e1cc6ff6d03f7d6f95e081ccef6782bdc2899752cfdb67f24cc551b32f",
+      "agent_v3/engine.py": "0f9b429315e92ea0cabe15916565fa0741cc90460a3ab4179c160338220a567d",
+      "agent_v3/enrichment.py": "628310aeb9848500d468a5ebe69883dabc043deda5e708f3fe2e5abad7a2c457",
+      "agent_v3/followups.py": "3cebac7a8ef23805e74f667ea68680904039e615a7e74640045714f3f9b00caf",
+      "agent_v3/freshness.py": "0700175a5d7ee5ceb612145696f93dea2ff9a6d8f39607f030776f92326665fe",
+      "agent_v3/graph_ai.py": "7ef433180be454f4877f25a03192a850b8b0eb27801048821173258151f4e286",
+      "agent_v3/graph_entities.py": "9b6b6237c2d528b71bb7fc2c20242d4cac7f086964122430cd9c4c1c407ddcf7",
+      "agent_v3/graph_retrieval.py": "212b492296ad241b14658c467538186a4366dd2bf0d1f166ce2978ad8d0ba5e6",
+      "agent_v3/intelligence.py": "db4bfd35ad647e53073bbfcfe6a7cea787f25621e782eb095dbb5c3dc64d2cf0",
+      "agent_v3/knowledge_graph.py": "6cbf76575e93afd94a29a30bff067c14b35da507a46c51b35500edfadb689f20",
+      "agent_v3/library_context.py": "306d77902d81ea6033cd95c5cad7e1094e19285c3f11eec5446492a3badb5b46",
+      "agent_v3/main_agent.py": "95341b8757feb86c7d97c16a0cb4e3c87ba6cc80b22eff1f72b60981f60ca8be",
+      "agent_v3/materials.py": "db4c15e2b2c16d6f480b4c5b385aefac2032d1d7c484aae6bd2c772061a2007e",
+      "agent_v3/model.py": "ad8057a713660b5117dd2e626538d2b3526e2de4319b7ad4921a20073186d235",
+      "agent_v3/native_growth.py": "f7bb1ac75daee9378e7afde36c0a8170f55692875d113251c46fbcc5a422cebc",
+      "agent_v3/opencode_go.py": "a696c43ae38082ee9dfbf9b862a64695fdbd8642ec9157081bc2a6bd124b5fdb",
+      "agent_v3/opencode_zen.py": "e7089eb03735840b9e39018e1e681a78a56735602c699bfb77114c538728b23b",
+      "agent_v3/pipeline.py": "3e727b65468e2c01077fd7002ded4e382f61efa100e0040716248f986d48def2",
+      "agent_v3/presentation.py": "870b759031e4de793f8d60a6380aacaf434181703d50c341f8e497c64ed9408d",
+      "agent_v3/production_revision.py": "f0732296c8bbf7492933303be17c9aea8811fcbd3c01b5807312764bfb9d0591",
+      "agent_v3/provider_adapter.py": "b243eae4ebd9ddbcaae0bbe2f98a83b0c8cd652b7833541d18987ddc5152f85d",
+      "agent_v3/providers.py": "3d9da6da8b3c56fadce23de1342ba43c18e6b74c76f4a2e2e114644b152ad1f9",
+      "agent_v3/public_site.py": "036b0c07e7aeafae0d7e7a84d326384fd82f51fc42c0abdf229f769c33479916",
+      "agent_v3/public_sources.py": "1a67c6fc33a8491a52f5176a07b462182e8790292022ef19a901a33ee4dd9d32",
+      "agent_v3/reports.py": "c5e2d5a61e40549c1b21e2b6eef38d8a65f53b4b4a43498a4b590a4eadbb80b1",
+      "agent_v3/research.py": "79ece3f0d31ba4af7f25e22c1dea286cb1c72264b3949894ba6d30e937754bf1",
+      "agent_v3/research_child.py": "fb10afa82c0b2b940a59903611676e7de2c8bc071a7f2db675a375a59a018ada",
+      "agent_v3/retention.py": "96807652c96fad795d60f8174554b790f394839e74b560150d58da9b110853e8",
+      "agent_v3/revisions.py": "77884146604ffbbaa4f5fa63e666b3add6157d6c8f71ac53896a0bb98d019855",
+      "agent_v3/risk.py": "b8b749f01b359257d42d70f808640ae527b278ebab9c38372bcf3c0906eb64f0",
+      "agent_v3/runtime_guard.py": "59288d4dc6a4d9ed53b3d46f4a1d4cab006a7077db86590bf7549241632cb41c",
+      "agent_v3/semantic.py": "11915a3b5e9d07fc8d9405c49e58dd211dca695bcce5a4dbf160bcd1459c991f",
+      "agent_v3/service.py": "202094074506d7d3d380fd1e35f7675b16030a70716cbf908771ea70d4704357",
+      "agent_v3/space_bunny.py": "cb86c2cdda432548cf526ebdf9137efe41badffce7ff9cc1479557af20691fe1",
+      "agent_v3/store.py": "ddf26b2cb78a407bd1d66525bb06cac493ab207adf1caa935cc4b1d333a701ee",
+      "agent_v3/taptap_profile.py": "f2eb8cece49dffc6270a8625da02c4eb61e4d28609ce395d1a38f670024880a8",
+      "agent_v3/task_packets.py": "5f42264ebbc13636f59002a880b683b6a2492ec65b4f93bfdbf13ff6d458eac2",
+      "agent_v3/tests/test_automation13.py": "0cf0803ae50923202a6ed03fc69bb8c6d088f17487deff3d9d51425e07c0966a",
+      "agent_v3/tests/test_benchmark.py": "ad80e714deabafd314ad3b14900216843353c567d14adeb6b44d61e725ed35dc",
+      "agent_v3/tests/test_browser_tools.py": "b448b7df38c62f1621910eb3d89895da0104bb28fedf25eb65629f905b91b6f4",
+      "agent_v3/tests/test_continuity.py": "68438a698e3abc9474ed19a29f85045cf1d20ef005a9c3082ac808c76d8158b5",
+      "agent_v3/tests/test_deepseek.py": "9297675428980657c7bdbc2bee5931127a8daaa46db8cf0941e244acb3ad53a0",
+      "agent_v3/tests/test_delivery.py": "2c48e6cf88326304426f5f46e08dbb420dead10de15c498fce644f0b17ea9331",
+      "agent_v3/tests/test_delivery21.py": "7b9911a024a9ea48b48681e685d1ba853d6c03dc133ff257db4edb9bbf324129",
+      "agent_v3/tests/test_delivery22.py": "e22d4b1df857e0f9b483a2f4e8a38bb7f7be05727788771250a3a56cf2656f63",
+      "agent_v3/tests/test_delivery23.py": "60530424b2f50fc45b7f76a79e822b7a9dbeb8b6d8ddc4a0e21b2326733c9248",
+      "agent_v3/tests/test_go20.py": "80b7b4556fb4a657421aa9a36960aa5b2fa8b747c09ba2d8ed0f0351bc0af9bf",
+      "agent_v3/tests/test_graph17.py": "a1a7ee713ba5776c972d7007afd16e3afffb392e55fbec56cff1e8f3124c0ec2",
+      "agent_v3/tests/test_library15.py": "0a9fb75f18f00e70a5040c51c9176dde508340c32c9a5621c59652641a7161c2",
+      "agent_v3/tests/test_main_agent.py": "2ef15a0518fd0a81fbf028527b00f8cd607accb13104e7f42e13f4bf20a69b45",
+      "agent_v3/tests/test_providers18.py": "7c1fde77c534b0e4e977f06afabdf15513325a249f870a66488ae47645bc82fe",
+      "agent_v3/tests/test_public_site.py": "9cee977e1271ea0d87e8b20f220694bdd32483a85645f83881e9565f54c4f27e",
+      "agent_v3/tests/test_public_sources.py": "9811a78717583cb833ca73df9f1f4a65d0d289865243d1b4368b68f68eee0663",
+      "agent_v3/tests/test_quality.py": "3351d0a3c612ae3f56b147eafec11eeab5fe8b7a4709dfecd0adbb654186d0dd",
+      "agent_v3/tests/test_research_tracking.py": "5b03f8dd157c6b78ef8e1b51b1713eaf355f5e886b08e8bbc0e0d486b8c1aa39",
+      "agent_v3/tests/test_risk_and_comments.py": "312cc70bab9f218386ff7c3b4db90a9f76045d982f0c6adac0cf4d7f4cf5d758",
+      "agent_v3/tests/test_runtime16.py": "1a87225ea7ccb50695e822579aa90b153da766a1a82b51f2e2824c524a82a6bf",
+      "agent_v3/tests/test_space_bunny.py": "ed10aee6fd41ee4f731c5413ff0539104bc421c749f7b40b3e409fa2bb720384",
+      "agent_v3/tests/test_v3.py": "f5f0ce02719d01d02d85596176c700c29af14600b5fb92a5854aec1f057f145b",
+      "agent_v3/tests/test_web_research.py": "3261634a440767afb8c4135dcb911a349bd5e9932f68f5e6e9fb3fc09c1f057d",
+      "agent_v3/tests/test_zen.py": "f15f586e7b29a5218d91394f88dd02152ce75371b7b6025947d3fac97bf965bb",
+      "agent_v3/tool_executor.py": "75f8e79e970620b91954481608ccd1ae0c42e3722b0eab347b8fc35132ef883a",
+      "agent_v3/tools.py": "cc39c5bb5ce53fab27dc5effe92ffd9bd34a501d69e20e2666be5b6d9c6c1e97",
+      "agent_v3/tracking.py": "86c8f797cedfe44853278843199934f6b2720a4aa9c1a88da8feecd5f45d986e",
+      "agent_v3/web_research.py": "b779b821f2d52647eb7811d424568589d0737e3f8d0c1e1e282b3f03921fe9a5",
+      "agent_v3/work.py": "786daa8a262f3106d4c66c850d2dc3511aabaaed59f63c51b8079733a94e1267",
+      "common/pii_hash.py": "88f9eb2fbdbf9ef6c698eabb657064a807883627f81c7bdbad1f0ed98243495c",
+      "games/game_profile.py": "5fdd222a85850ba0425e26213f571899c2ebd035502ee3c3b1cd2f85ea952b93",
+      "games/tests/test_game_profile.py": "5313595a85e1df42b19f91d140cddbaa6e3055dad7100a5fe29a7c1fecc44d95",
+      "paths.py": "5021fa05f4fca52a2fdfbb9d2f356ace02d505adb1d250eb2f7774659ee580ff",
+      "runtime/agent_graph.py": "0b23fa38a7c48610a16049f7c8702da2a08803d66bb724412642e3845c001794",
+      "runtime/harness.py": "b1b49fef8c6c946c8ba15df58361ed0027f3b7e478503aeb285dd5a56c7c54e0",
+      "runtime/pipeline_health.py": "4538be189f20fa3a5ec57ffc4108b3e8c2c59590f79b5fdce689592fb6920391",
+      "runtime/scheduler.py": "35ddbf921683728d511accd79b27a59309bb0912151172ebd857e698c3187791",
+      "runtime/task_contracts.py": "2b6067d56a24b3d1374b5d8ed5e4e73a7cf127a8b8373235fcc84d4e8b315ece",
+      "runtime/tests/test_agent_graph.py": "bc795c8a3c7accbe79e07988615309b190524fe1b81d489a8cd8ae33ee5588a5",
+      "runtime/tests/test_harness.py": "8a49ebd788a23b36544ee0ed93c62c4e16368d2dc6afa920617ea8e071c5a6b9",
+      "runtime/tests/test_langgraph_design.py": "e75449c4a36634c32a5baea2e3218392803e4bafa94a67055440d8c9efa89f6f",
+      "runtime/tests/test_pipeline_health.py": "3132fc97293e586c9167c3edbcf6761619e67eda90a54f33e34b0bb1fadb250d",
+      "runtime/tests/test_scheduler.py": "0b5bf8df0f8ce2361ca3d6b7f1fd191c7db2fd5b28d181dc9a5ed0d5adf37e22",
+      "scripts/benchmark_v3.py": "e03bd4d5e92776ce602cd2cdf31348d80e01fdf3581447a1b214c53eeb224e66",
+      "scripts/evaluate_graph17.py": "7781062f9e73af38389e0351bcec0e50a3b001d9be702e9b55240161bd08c9b9",
+      "scripts/export_public_site.py": "034dc6eca78b5bc2ff19b8583347bb579bd8dce0731ed2bd0c40918b0346b612",
+      "scripts/fetch_game_covers.py": "96a590cdfa09086645f504ccc04a4be2629f6bc455c8baa78ee17ca093d8213b",
+      "scripts/generate_assets.py": "81ec49b33963d79b1bfb3470f64db53faee538e615450ce7c7d96b8c4c901b80",
+      "scripts/install_opencode.py": "6ec0218ccfe3ba274262cb4bb173d1c024857a5654c0903208357c39f25c5ef1",
+      "scripts/version_snapshot.py": "9ceecadf226c43309292d3761c1f07a400c2e918f1e86bc0fdad06f7ca3fe08a",
+      "webapp/__init__.py": "d3eaed102fd3cc2a24eae75bc8683ee5b4358c785ca15085303edba4bb5e07c8",
+      "webapp/auth.py": "169c18308d9756cd9ac4bccce3bd71b1b033de2ffb6384efa8778102326cf539",
+      "webapp/commands.py": "17d316c1eed9a14f8f3f3271db74222060c5b2ce346e5b5bee868ba04faf9866",
+      "webapp/main.py": "f4f31dbb77cb7fc8b0182bc746bb107107e61a5b2c4e244c513ea8c73123d160",
+      "webapp/services.py": "ece58abbab67ebc0c94d2a8cae8bbf0c84a492b223807bb8ef45305827738a8f",
+      "webapp/tests/test_commands.py": "776480544d26e100e64b6916302b19cb1af20093957ab15187c5a7a95b525aad",
+      "webapp/tests/test_webapp.py": "f24208e2286110b1848dac07abe9046359d024da7ea3a0c5388381dceaaa065f",
+      "webapp/universe.py": "4b55cb59d1bd21197a2f85c19d499577a7460cc83f8ac9b524e488ec2d185896"
+    },
+    "research_units_per_trial": 6,
+    "model_calls_per_trial": 16
+  },
+  "trials": [
+    {
+      "trial_id": "case-da9168010263-A",
+      "case_id": "case-da9168010263",
+      "arm": "A",
+      "status": "returned",
+      "seconds": 36.563,
+      "outcome": {},
+      "funnel": {
+        "version": "delivery-funnel-v3.23",
+        "scope": "this_run_only",
+        "screening": [],
+        "research": {
+          "status": "not_completed",
+          "tool_failures": 0
+        },
+        "interpretation": {
+          "ready": 0,
+          "schema_failures": 0,
+          "time_evidence_insufficient": 0,
+          "reused": 0
+        },
+        "graph": {
+          "statuses": [],
+          "nonblocking": true
+        },
+        "business": {
+          "decisions": [],
+          "assessments": []
+        },
+        "persistence": {
+          "business_records": 0,
+          "game_intelligence": 0,
+          "materials": 0,
+          "creatives": 0,
+          "validation_failed": 0,
+          "stale_rejected": 0,
+          "error_type": null
+        },
+        "quality": {
+          "verdict": "unverified",
+          "note": "Schema、逐字引用及入库成功不代表事实支持；需对照原网页核验。"
+        },
+        "resources": {
+          "stages": {},
+          "tools": [],
+          "input_packets": [],
+          "note": "失败调用也计入；未报告价格保持未知，Go订阅成本不由token推算。"
+        }
+      },
+      "resource_calls": [
+        {
+          "stage": "baseline",
+          "status": "returned",
+          "seconds": 36.421,
+          "usage": {
+            "prompt_tokens": 2183,
+            "completion_tokens": 1377,
+            "total_tokens": 3560
+          },
+          "actual_model": "longcat-2.5-preview-free",
+          "cost_known": true
+        }
+      ],
+      "review": {
+        "checks": {
+          "facts": {
+            "verdict": "pass",
+            "notes": "报道支持联动/角色/南镇；遗漏12月档期（需要原文而非450字摘要）。第4条把published_at输入字段当原文，第6条业务上下文改写冒充下载页原文；情报将通常能激发需求写成一般判断，未提供玩家样本。新样本正面事件无法检验负面拒绝。",
+            "supporting_urls": [
+              "https://www.gcores.com/articles/220732"
+            ]
+          },
+          "dates": {
+            "verdict": "unverified",
+            "notes": "报道支持联动/角色/南镇；遗漏12月档期（需要原文而非450字摘要）。第4条把published_at输入字段当原文，第6条业务上下文改写冒充下载页原文；情报将通常能激发需求写成一般判断，未提供玩家样本。新样本正面事件无法检验负面拒绝。",
+            "supporting_urls": [
+              "https://www.gcores.com/articles/220732"
+            ]
+          },
+          "citations": {
+            "verdict": "fail",
+            "notes": "报道支持联动/角色/南镇；遗漏12月档期（需要原文而非450字摘要）。第4条把published_at输入字段当原文，第6条业务上下文改写冒充下载页原文；情报将通常能激发需求写成一般判断，未提供玩家样本。新样本正面事件无法检验负面拒绝。",
+            "supporting_urls": [
+              "https://www.gcores.com/articles/220732"
+            ]
+          },
+          "unsupported_assertions": {
+            "verdict": "fail",
+            "notes": "报道支持联动/角色/南镇；遗漏12月档期（需要原文而非450字摘要）。第4条把published_at输入字段当原文，第6条业务上下文改写冒充下载页原文；情报将通常能激发需求写成一般判断，未提供玩家样本。新样本正面事件无法检验负面拒绝。",
+            "supporting_urls": [
+              "https://www.gcores.com/articles/220732"
+            ]
+          },
+          "risk_refusal": {
+            "verdict": "unverified",
+            "notes": "报道支持联动/角色/南镇；遗漏12月档期（需要原文而非450字摘要）。第4条把published_at输入字段当原文，第6条业务上下文改写冒充下载页原文；情报将通常能激发需求写成一般判断，未提供玩家样本。新样本正面事件无法检验负面拒绝。",
+            "supporting_urls": [
+              "https://www.gcores.com/articles/220732"
+            ]
+          }
+        },
+        "claims_reviewed": 6,
+        "claims_passed": 6,
+        "claims_failed": 0,
+        "claims_unverified": 0,
+        "required_facts_covered": 1,
+        "required_facts_total": 2,
+        "claim_reviews": [
+          {
+            "index": 1,
+            "verdict": "pass",
+            "text": "SNK宣布《饿狼传说：群狼之城》与Bandai Namco的《铁拳》系列进行联动。",
+            "note": "报道支持联动/角色/南镇；遗漏12月档期（需要原文而非450字摘要）。第4条把published_at输入字段当原文，第6条业务上下文改写冒充下载页原文；情报将通常能激发需求写成一般判断，未提供玩家样本。新样本正面事件无法检验负面拒绝。"
+          },
+          {
+            "index": 2,
+            "verdict": "pass",
+            "text": "联动角色为《铁拳8》人气角色“丽奈”，作为第3季第6弹DLC角色上线。",
+            "note": "报道支持联动/角色/南镇；遗漏12月档期（需要原文而非450字摘要）。第4条把published_at输入字段当原文，第6条业务上下文改写冒充下载页原文；情报将通常能激发需求写成一般判断，未提供玩家样本。新样本正面事件无法检验负面拒绝。"
+          },
+          {
+            "index": 3,
+            "verdict": "pass",
+            "text": "丽奈将参与以南镇为舞台展开的新战斗。",
+            "note": "报道支持联动/角色/南镇；遗漏12月档期（需要原文而非450字摘要）。第4条把published_at输入字段当原文，第6条业务上下文改写冒充下载页原文；情报将通常能激发需求写成一般判断，未提供玩家样本。新样本正面事件无法检验负面拒绝。"
+          },
+          {
+            "index": 4,
+            "verdict": "pass",
+            "text": "该新闻发布于2026年10月10日，观测日期同为2026年10月10日。",
+            "note": "报道支持联动/角色/南镇；遗漏12月档期（需要原文而非450字摘要）。第4条把published_at输入字段当原文，第6条业务上下文改写冒充下载页原文；情报将通常能激发需求写成一般判断，未提供玩家样本。新样本正面事件无法检验负面拒绝。"
+          },
+          {
+            "index": 5,
+            "verdict": "pass",
+            "text": "《饿狼传说：群狼之城》在新闻发布时处于“好评发售中”状态。",
+            "note": "报道支持联动/角色/南镇；遗漏12月档期（需要原文而非450字摘要）。第4条把published_at输入字段当原文，第6条业务上下文改写冒充下载页原文；情报将通常能激发需求写成一般判断，未提供玩家样本。新样本正面事件无法检验负面拒绝。"
+          },
+          {
+            "index": 6,
+            "verdict": "pass",
+            "text": "TapTap业务边界为移动端游戏发现和玩家社区，也有PC专区与跨平台讨论；本新闻为PC/主机游戏新闻，不能直接承诺手游下载。",
+            "note": "报道支持联动/角色/南镇；遗漏12月档期（需要原文而非450字摘要）。第4条把published_at输入字段当原文，第6条业务上下文改写冒充下载页原文；情报将通常能激发需求写成一般判断，未提供玩家样本。新样本正面事件无法检验负面拒绝。"
+          }
+        ]
+      }
+    },
+    {
+      "trial_id": "case-da9168010263-C",
+      "case_id": "case-da9168010263",
+      "arm": "C",
+      "status": "budget_stopped",
+      "seconds": 138.875,
+      "outcome": {
+        "enqueued": {
+          "intelligence": 1,
+          "creative": 0,
+          "examined_topics": 1,
+          "limit": 1200
+        },
+        "intelligence": [],
+        "creative": [],
+        "usage": {
+          "prompt_tokens": 16431,
+          "completion_tokens": 1903,
+          "total_tokens": 18334
+        },
+        "status": "ai_deferred",
+        "model": "profile/go-longcat"
+      },
+      "funnel": {
+        "version": "delivery-funnel-v3.23",
+        "scope": "this_run_only",
+        "screening": [
+          {
+            "topic_id": "topic_e8e56b5fbfff8230b8f8",
+            "decision": "delegate_research",
+            "route": "game_direct",
+            "reason": "SNK官方宣布《饿狼传说：群狼之城》与《铁拳》联动，第3季第6弹DLC角色“丽奈”参战，属于明确的游戏内容更新变化，且来源为游戏媒体近一周发布。需核实联动实际上线时间、角色获取方式、平台覆盖（PC/主机）及TapTap页面承接状态，以判断对格斗游戏玩家的触达价值。"
+          }
+        ],
+        "research": {
+          "status": "evidence_sufficient",
+          "tool_failures": 0
+        },
+        "interpretation": {
+          "ready": 1,
+          "schema_failures": 0,
+          "time_evidence_insufficient": 1,
+          "reused": 0
+        },
+        "graph": {
+          "statuses": [
+            "deferred"
+          ],
+          "nonblocking": true
+        },
+        "business": {
+          "decisions": [],
+          "assessments": []
+        },
+        "persistence": {
+          "business_records": 0,
+          "game_intelligence": 0,
+          "materials": 0,
+          "creatives": 0,
+          "validation_failed": 1,
+          "stale_rejected": 0,
+          "error_type": null
+        },
+        "quality": {
+          "verdict": "unverified",
+          "note": "Schema、逐字引用及入库成功不代表事实支持；需对照原网页核验。"
+        },
+        "resources": {
+          "stages": {
+            "main_plan": {
+              "requests": 1,
+              "input_tokens": 2433,
+              "output_tokens": 185,
+              "usage_unknown": 0,
+              "seconds": 22.906,
+              "schema_failures": 0,
+              "validation_failures": 0,
+              "request_failures": 0,
+              "reported_cost": 0,
+              "cost_unknown": 1
+            },
+            "research_plan": {
+              "requests": 1,
+              "input_tokens": 1842,
+              "output_tokens": 163,
+              "usage_unknown": 0,
+              "seconds": 12.546,
+              "schema_failures": 0,
+              "validation_failures": 0,
+              "request_failures": 0,
+              "reported_cost": 0,
+              "cost_unknown": 1
+            },
+            "interpretation": {
+              "requests": 1,
+              "input_tokens": 6628,
+              "output_tokens": 1006,
+              "usage_unknown": 0,
+              "seconds": 27.297,
+              "schema_failures": 0,
+              "validation_failures": 0,
+              "request_failures": 0,
+              "reported_cost": 0,
+              "cost_unknown": 1
+            },
+            "graph_extraction": {
+              "requests": 2,
+              "input_tokens": 5528,
+              "output_tokens": 549,
+              "usage_unknown": 1,
+              "seconds": 34.297,
+              "schema_failures": 0,
+              "validation_failures": 1,
+              "request_failures": 1,
+              "reported_cost": 0,
+              "cost_unknown": 2
+            },
+            "intelligence": {
+              "requests": 1,
+              "input_tokens": 0,
+              "output_tokens": 0,
+              "usage_unknown": 1,
+              "seconds": 0.063,
+              "schema_failures": 0,
+              "validation_failures": 0,
+              "request_failures": 1,
+              "reported_cost": 0,
+              "cost_unknown": 1
+            }
+          },
+          "tools": [
+            {
+              "call_id": "tool_22e4b4ac8155484d8e6077c3a92e6ef8",
+              "tool": "search_web",
+              "status": "completed",
+              "charged_units": 2,
+              "seconds": 18.343,
+              "monetary_cost": null,
+              "cost_status": "not_reported"
+            },
+            {
+              "call_id": "tool_05fa1db7f9d84024a4b373561b6d5931",
+              "tool": "read_detail",
+              "status": "completed",
+              "charged_units": 1,
+              "seconds": 7.313,
+              "monetary_cost": null,
+              "cost_status": "not_reported"
+            },
+            {
+              "call_id": "tool_e90c12b9d5fe465c9f9cb110e0ee694b",
+              "tool": "browse_page",
+              "status": "completed",
+              "charged_units": 1,
+              "seconds": 14.375,
+              "monetary_cost": null,
+              "cost_status": "not_reported"
+            },
+            {
+              "call_id": "tool_9de59d79db23403eb2354e773a24738e",
+              "tool": "read_topic",
+              "status": "completed",
+              "charged_units": 0,
+              "seconds": 0.016,
+              "monetary_cost": null,
+              "cost_status": "not_reported"
+            }
+          ],
+          "input_packets": [
+            {
+              "packet_version": "business-packet-v3.23",
+              "full_bytes": 37196,
+              "compact_bytes": 11906,
+              "sources": 1,
+              "quote_candidates": 8,
+              "note": "字节数不是token；实际用量由model_task记录。全文仍在来源档案，缺口交由研究补查。"
+            }
+          ],
+          "note": "失败调用也计入；未报告价格保持未知，Go订阅成本不由token推算。"
+        }
+      },
+      "resource_calls": [
+        {
+          "stage": "main_plan",
+          "status": "returned",
+          "seconds": 22.906,
+          "usage": {
+            "prompt_tokens": 2433,
+            "completion_tokens": 185,
+            "total_tokens": 2618
+          },
+          "actual_model": "longcat-2.5-preview-free",
+          "cost_known": true
+        },
+        {
+          "stage": "research_plan",
+          "status": "returned",
+          "seconds": 12.562,
+          "usage": {
+            "prompt_tokens": 1842,
+            "completion_tokens": 163,
+            "total_tokens": 2005
+          },
+          "actual_model": "longcat-2.5-preview-free",
+          "cost_known": true
+        },
+        {
+          "stage": "interpretation",
+          "status": "returned",
+          "seconds": 27.359,
+          "usage": {
+            "prompt_tokens": 6628,
+            "completion_tokens": 1006,
+            "total_tokens": 7634
+          },
+          "actual_model": "longcat-2.5-preview-free",
+          "cost_known": true
+        },
+        {
+          "stage": "graph_extraction",
+          "status": "returned",
+          "seconds": 23.36,
+          "usage": {
+            "prompt_tokens": 5528,
+            "completion_tokens": 549,
+            "total_tokens": 6077
+          },
+          "actual_model": "longcat-2.5-preview-free",
+          "cost_known": true
+        },
+        {
+          "stage": "graph_extraction",
+          "status": "usage_unknown",
+          "seconds": 10.531,
+          "usage": {},
+          "actual_model": null,
+          "cost_known": false
+        }
+      ],
+      "review": {
+        "checks": {
+          "facts": {
+            "verdict": "fail",
+            "notes": "解读补到12月档期，覆盖两个必要事实；第2/3/6条虽然全文存在相关事实，引用却指向联动开头而非角色背景/吉斯/声优，未支持整条结论；第5条7个DLC也没有对应引文。第11条把作者YT17与9小时前黏连误读成179小时前。已保存ready不代表引用语义成立。图谱请求异常后业务未交付；无创意不是通过风险验收。",
+            "supporting_urls": [
+              "https://www.gcores.com/articles/220732"
+            ]
+          },
+          "dates": {
+            "verdict": "fail",
+            "notes": "解读补到12月档期，覆盖两个必要事实；第2/3/6条虽然全文存在相关事实，引用却指向联动开头而非角色背景/吉斯/声优，未支持整条结论；第5条7个DLC也没有对应引文。第11条把作者YT17与9小时前黏连误读成179小时前。已保存ready不代表引用语义成立。图谱请求异常后业务未交付；无创意不是通过风险验收。",
+            "supporting_urls": [
+              "https://www.gcores.com/articles/220732"
+            ]
+          },
+          "citations": {
+            "verdict": "fail",
+            "notes": "解读补到12月档期，覆盖两个必要事实；第2/3/6条虽然全文存在相关事实，引用却指向联动开头而非角色背景/吉斯/声优，未支持整条结论；第5条7个DLC也没有对应引文。第11条把作者YT17与9小时前黏连误读成179小时前。已保存ready不代表引用语义成立。图谱请求异常后业务未交付；无创意不是通过风险验收。",
+            "supporting_urls": [
+              "https://www.gcores.com/articles/220732"
+            ]
+          },
+          "unsupported_assertions": {
+            "verdict": "fail",
+            "notes": "解读补到12月档期，覆盖两个必要事实；第2/3/6条虽然全文存在相关事实，引用却指向联动开头而非角色背景/吉斯/声优，未支持整条结论；第5条7个DLC也没有对应引文。第11条把作者YT17与9小时前黏连误读成179小时前。已保存ready不代表引用语义成立。图谱请求异常后业务未交付；无创意不是通过风险验收。",
+            "supporting_urls": [
+              "https://www.gcores.com/articles/220732"
+            ]
+          },
+          "risk_refusal": {
+            "verdict": "unverified",
+            "notes": "解读补到12月档期，覆盖两个必要事实；第2/3/6条虽然全文存在相关事实，引用却指向联动开头而非角色背景/吉斯/声优，未支持整条结论；第5条7个DLC也没有对应引文。第11条把作者YT17与9小时前黏连误读成179小时前。已保存ready不代表引用语义成立。图谱请求异常后业务未交付；无创意不是通过风险验收。",
+            "supporting_urls": [
+              "https://www.gcores.com/articles/220732"
+            ]
+          }
+        },
+        "claims_reviewed": 11,
+        "claims_passed": 10,
+        "claims_failed": 1,
+        "claims_unverified": 0,
+        "required_facts_covered": 2,
+        "required_facts_total": 2,
+        "claim_reviews": [
+          {
+            "index": 1,
+            "verdict": "pass",
+            "text": "SNK宣布在好评发售中的对战格斗游戏《饿狼传说：群狼之城》中与Bandai Namco的《铁拳》系列联动，《铁拳8》人气角色丽奈将作为第3季第6弹DLC角色上线，参与以南镇为舞台的新战斗。",
+            "note": "解读补到12月档期，覆盖两个必要事实；第2/3/6条虽然全文存在相关事实，引用却指向联动开头而非角色背景/吉斯/声优，未支持整条结论；第5条7个DLC也没有对应引文。第11条把作者YT17与9小时前黏连误读成179小时前。已保存ready不代表引用语义成立。图谱请求异常后业务未交付；无创意不是通过风险验收。"
+          },
+          {
+            "index": 2,
+            "verdict": "pass",
+            "text": "丽奈首次登场于《铁拳8》，官方介绍其为三岛工业高等专门学校学生、身份成谜的神秘少女，战斗风格快速且激进，将与《饿狼传说：群狼之城》的REV系统融合。",
+            "note": "解读补到12月档期，覆盖两个必要事实；第2/3/6条虽然全文存在相关事实，引用却指向联动开头而非角色背景/吉斯/声优，未支持整条结论；第5条7个DLC也没有对应引文。第11条把作者YT17与9小时前黏连误读成179小时前。已保存ready不代表引用语义成立。图谱请求异常后业务未交付；无创意不是通过风险验收。"
+          },
+          {
+            "index": 3,
+            "verdict": "pass",
+            "text": "《铁拳7》中《饿狼传说》系列角色吉斯·霍华德曾作为嘉宾参战，本次丽奈参战被描述为继承这一缘分的跨界合作。",
+            "note": "解读补到12月档期，覆盖两个必要事实；第2/3/6条虽然全文存在相关事实，引用却指向联动开头而非角色背景/吉斯/声优，未支持整条结论；第5条7个DLC也没有对应引文。第11条把作者YT17与9小时前黏连误读成179小时前。已保存ready不代表引用语义成立。图谱请求异常后业务未交付；无创意不是通过风险验收。"
+          },
+          {
+            "index": 4,
+            "verdict": "pass",
+            "text": "《饿狼传说：群狼之城》与《铁拳》系列联动，《铁拳8》角色丽奈将作为第3季第6弹DLC角色参战，官方称这是格斗游戏粉丝必看的特别联动合作。",
+            "note": "解读补到12月档期，覆盖两个必要事实；第2/3/6条虽然全文存在相关事实，引用却指向联动开头而非角色背景/吉斯/声优，未支持整条结论；第5条7个DLC也没有对应引文。第11条把作者YT17与9小时前黏连误读成179小时前。已保存ready不代表引用语义成立。图谱请求异常后业务未交付；无创意不是通过风险验收。"
+          },
+          {
+            "index": 5,
+            "verdict": "pass",
+            "text": "第3季以“背负复仇命运者”为概念，除丽奈外还有瑞克·斯托德、达克·金、金家藩等角色参战；10月第4弹上线佐野万次郎和龙宫寺坚，11月上线拉奥，丽奈将于12月作为第3季收官角色加入，第3季共新增7个DLC角色。",
+            "note": "解读补到12月档期，覆盖两个必要事实；第2/3/6条虽然全文存在相关事实，引用却指向联动开头而非角色背景/吉斯/声优，未支持整条结论；第5条7个DLC也没有对应引文。第11条把作者YT17与9小时前黏连误读成179小时前。已保存ready不代表引用语义成立。图谱请求异常后业务未交付；无创意不是通过风险验收。"
+          },
+          {
+            "index": 6,
+            "verdict": "pass",
+            "text": "丽奈由濑户麻沙美（日语）和Kate Clarke（英语）配音，官方公开了“饿狼传说：群狼之城 x 铁拳 丽奈”先行预告短片。",
+            "note": "解读补到12月档期，覆盖两个必要事实；第2/3/6条虽然全文存在相关事实，引用却指向联动开头而非角色背景/吉斯/声优，未支持整条结论；第5条7个DLC也没有对应引文。第11条把作者YT17与9小时前黏连误读成179小时前。已保存ready不代表引用语义成立。图谱请求异常后业务未交付；无创意不是通过风险验收。"
+          },
+          {
+            "index": 7,
+            "verdict": "pass",
+            "text": "《饿狼传说：群狼之城》第3季DLC第4弹角色佐野万次郎（Mikey）和龙宫寺坚（Draken）上线；时间：10月",
+            "note": "解读补到12月档期，覆盖两个必要事实；第2/3/6条虽然全文存在相关事实，引用却指向联动开头而非角色背景/吉斯/声优，未支持整条结论；第5条7个DLC也没有对应引文。第11条把作者YT17与9小时前黏连误读成179小时前。已保存ready不代表引用语义成立。图谱请求异常后业务未交付；无创意不是通过风险验收。"
+          },
+          {
+            "index": 8,
+            "verdict": "pass",
+            "text": "第3季DLC角色拉奥上线；时间：11月",
+            "note": "解读补到12月档期，覆盖两个必要事实；第2/3/6条虽然全文存在相关事实，引用却指向联动开头而非角色背景/吉斯/声优，未支持整条结论；第5条7个DLC也没有对应引文。第11条把作者YT17与9小时前黏连误读成179小时前。已保存ready不代表引用语义成立。图谱请求异常后业务未交付；无创意不是通过风险验收。"
+          },
+          {
+            "index": 9,
+            "verdict": "pass",
+            "text": "SNK正式宣布来自《铁拳》的丽奈将作为第3季收官DLC角色加入战斗；时间：今日（报道发布日）",
+            "note": "解读补到12月档期，覆盖两个必要事实；第2/3/6条虽然全文存在相关事实，引用却指向联动开头而非角色背景/吉斯/声优，未支持整条结论；第5条7个DLC也没有对应引文。第11条把作者YT17与9小时前黏连误读成179小时前。已保存ready不代表引用语义成立。图谱请求异常后业务未交付；无创意不是通过风险验收。"
+          },
+          {
+            "index": 10,
+            "verdict": "pass",
+            "text": "丽奈作为第3季第6弹DLC角色加入《饿狼传说：群狼之城》；时间：12月",
+            "note": "解读补到12月档期，覆盖两个必要事实；第2/3/6条虽然全文存在相关事实，引用却指向联动开头而非角色背景/吉斯/声优，未支持整条结论；第5条7个DLC也没有对应引文。第11条把作者YT17与9小时前黏连误读成179小时前。已保存ready不代表引用语义成立。图谱请求异常后业务未交付；无创意不是通过风险验收。"
+          },
+          {
+            "index": 11,
+            "verdict": "fail",
+            "text": "机核发布报道《饿狼传说：群狼之城》联动《铁拳》DLC角色“丽奈”参战；时间：179小时前（页面显示）",
+            "note": "解读补到12月档期，覆盖两个必要事实；第2/3/6条虽然全文存在相关事实，引用却指向联动开头而非角色背景/吉斯/声优，未支持整条结论；第5条7个DLC也没有对应引文。第11条把作者YT17与9小时前黏连误读成179小时前。已保存ready不代表引用语义成立。图谱请求异常后业务未交付；无创意不是通过风险验收。"
+          }
+        ]
+      }
+    },
+    {
+      "trial_id": "case-da9168010263-B",
+      "case_id": "case-da9168010263",
+      "arm": "B",
+      "status": "not_run",
+      "seconds": null,
+      "outcome": {},
+      "funnel": null,
+      "resource_calls": [],
+      "review": {
+        "checks": {
+          "facts": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "dates": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "citations": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "unsupported_assertions": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "risk_refusal": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          }
+        },
+        "claims_reviewed": 0,
+        "claims_passed": 0,
+        "claims_failed": 0,
+        "claims_unverified": 0,
+        "required_facts_covered": 0,
+        "required_facts_total": 2
+      }
+    },
+    {
+      "trial_id": "case-a4df049baa80-A",
+      "case_id": "case-a4df049baa80",
+      "arm": "A",
+      "status": "not_run",
+      "seconds": null,
+      "outcome": {},
+      "funnel": null,
+      "resource_calls": [],
+      "review": {
+        "checks": {
+          "facts": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "dates": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "citations": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "unsupported_assertions": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "risk_refusal": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          }
+        },
+        "claims_reviewed": 0,
+        "claims_passed": 0,
+        "claims_failed": 0,
+        "claims_unverified": 0,
+        "required_facts_covered": 0,
+        "required_facts_total": 2
+      }
+    },
+    {
+      "trial_id": "case-a4df049baa80-C",
+      "case_id": "case-a4df049baa80",
+      "arm": "C",
+      "status": "not_run",
+      "seconds": null,
+      "outcome": {},
+      "funnel": null,
+      "resource_calls": [],
+      "review": {
+        "checks": {
+          "facts": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "dates": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "citations": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "unsupported_assertions": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "risk_refusal": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          }
+        },
+        "claims_reviewed": 0,
+        "claims_passed": 0,
+        "claims_failed": 0,
+        "claims_unverified": 0,
+        "required_facts_covered": 0,
+        "required_facts_total": 2
+      }
+    },
+    {
+      "trial_id": "case-a4df049baa80-B",
+      "case_id": "case-a4df049baa80",
+      "arm": "B",
+      "status": "not_run",
+      "seconds": null,
+      "outcome": {},
+      "funnel": null,
+      "resource_calls": [],
+      "review": {
+        "checks": {
+          "facts": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "dates": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "citations": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "unsupported_assertions": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "risk_refusal": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          }
+        },
+        "claims_reviewed": 0,
+        "claims_passed": 0,
+        "claims_failed": 0,
+        "claims_unverified": 0,
+        "required_facts_covered": 0,
+        "required_facts_total": 2
+      }
+    },
+    {
+      "trial_id": "case-f2200d46ad87-C",
+      "case_id": "case-f2200d46ad87",
+      "arm": "C",
+      "status": "not_run",
+      "seconds": null,
+      "outcome": {},
+      "funnel": null,
+      "resource_calls": [],
+      "review": {
+        "checks": {
+          "facts": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "dates": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "citations": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "unsupported_assertions": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "risk_refusal": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          }
+        },
+        "claims_reviewed": 0,
+        "claims_passed": 0,
+        "claims_failed": 0,
+        "claims_unverified": 0,
+        "required_facts_covered": 0,
+        "required_facts_total": 2
+      }
+    },
+    {
+      "trial_id": "case-f2200d46ad87-A",
+      "case_id": "case-f2200d46ad87",
+      "arm": "A",
+      "status": "not_run",
+      "seconds": null,
+      "outcome": {},
+      "funnel": null,
+      "resource_calls": [],
+      "review": {
+        "checks": {
+          "facts": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "dates": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "citations": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "unsupported_assertions": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "risk_refusal": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          }
+        },
+        "claims_reviewed": 0,
+        "claims_passed": 0,
+        "claims_failed": 0,
+        "claims_unverified": 0,
+        "required_facts_covered": 0,
+        "required_facts_total": 2
+      }
+    },
+    {
+      "trial_id": "case-f2200d46ad87-B",
+      "case_id": "case-f2200d46ad87",
+      "arm": "B",
+      "status": "not_run",
+      "seconds": null,
+      "outcome": {},
+      "funnel": null,
+      "resource_calls": [],
+      "review": {
+        "checks": {
+          "facts": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "dates": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "citations": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "unsupported_assertions": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "risk_refusal": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          }
+        },
+        "claims_reviewed": 0,
+        "claims_passed": 0,
+        "claims_failed": 0,
+        "claims_unverified": 0,
+        "required_facts_covered": 0,
+        "required_facts_total": 2
+      }
+    },
+    {
+      "trial_id": "case-645aa91f4213-C",
+      "case_id": "case-645aa91f4213",
+      "arm": "C",
+      "status": "not_run",
+      "seconds": null,
+      "outcome": {},
+      "funnel": null,
+      "resource_calls": [],
+      "review": {
+        "checks": {
+          "facts": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "dates": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "citations": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "unsupported_assertions": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "risk_refusal": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          }
+        },
+        "claims_reviewed": 0,
+        "claims_passed": 0,
+        "claims_failed": 0,
+        "claims_unverified": 0,
+        "required_facts_covered": 0,
+        "required_facts_total": 2
+      }
+    },
+    {
+      "trial_id": "case-645aa91f4213-B",
+      "case_id": "case-645aa91f4213",
+      "arm": "B",
+      "status": "not_run",
+      "seconds": null,
+      "outcome": {},
+      "funnel": null,
+      "resource_calls": [],
+      "review": {
+        "checks": {
+          "facts": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "dates": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "citations": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "unsupported_assertions": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "risk_refusal": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          }
+        },
+        "claims_reviewed": 0,
+        "claims_passed": 0,
+        "claims_failed": 0,
+        "claims_unverified": 0,
+        "required_facts_covered": 0,
+        "required_facts_total": 2
+      }
+    },
+    {
+      "trial_id": "case-645aa91f4213-A",
+      "case_id": "case-645aa91f4213",
+      "arm": "A",
+      "status": "not_run",
+      "seconds": null,
+      "outcome": {},
+      "funnel": null,
+      "resource_calls": [],
+      "review": {
+        "checks": {
+          "facts": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "dates": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "citations": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "unsupported_assertions": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "risk_refusal": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          }
+        },
+        "claims_reviewed": 0,
+        "claims_passed": 0,
+        "claims_failed": 0,
+        "claims_unverified": 0,
+        "required_facts_covered": 0,
+        "required_facts_total": 2
+      }
+    },
+    {
+      "trial_id": "case-c29532efebad-C",
+      "case_id": "case-c29532efebad",
+      "arm": "C",
+      "status": "not_run",
+      "seconds": null,
+      "outcome": {},
+      "funnel": null,
+      "resource_calls": [],
+      "review": {
+        "checks": {
+          "facts": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "dates": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "citations": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "unsupported_assertions": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "risk_refusal": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          }
+        },
+        "claims_reviewed": 0,
+        "claims_passed": 0,
+        "claims_failed": 0,
+        "claims_unverified": 0,
+        "required_facts_covered": 0,
+        "required_facts_total": 2
+      }
+    },
+    {
+      "trial_id": "case-c29532efebad-A",
+      "case_id": "case-c29532efebad",
+      "arm": "A",
+      "status": "not_run",
+      "seconds": null,
+      "outcome": {},
+      "funnel": null,
+      "resource_calls": [],
+      "review": {
+        "checks": {
+          "facts": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "dates": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "citations": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "unsupported_assertions": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "risk_refusal": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          }
+        },
+        "claims_reviewed": 0,
+        "claims_passed": 0,
+        "claims_failed": 0,
+        "claims_unverified": 0,
+        "required_facts_covered": 0,
+        "required_facts_total": 2
+      }
+    },
+    {
+      "trial_id": "case-c29532efebad-B",
+      "case_id": "case-c29532efebad",
+      "arm": "B",
+      "status": "not_run",
+      "seconds": null,
+      "outcome": {},
+      "funnel": null,
+      "resource_calls": [],
+      "review": {
+        "checks": {
+          "facts": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "dates": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "citations": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "unsupported_assertions": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "risk_refusal": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          }
+        },
+        "claims_reviewed": 0,
+        "claims_passed": 0,
+        "claims_failed": 0,
+        "claims_unverified": 0,
+        "required_facts_covered": 0,
+        "required_facts_total": 2
+      }
+    },
+    {
+      "trial_id": "case-07f357478152-B",
+      "case_id": "case-07f357478152",
+      "arm": "B",
+      "status": "not_run",
+      "seconds": null,
+      "outcome": {},
+      "funnel": null,
+      "resource_calls": [],
+      "review": {
+        "checks": {
+          "facts": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "dates": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "citations": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "unsupported_assertions": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "risk_refusal": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          }
+        },
+        "claims_reviewed": 0,
+        "claims_passed": 0,
+        "claims_failed": 0,
+        "claims_unverified": 0,
+        "required_facts_covered": 0,
+        "required_facts_total": 2
+      }
+    },
+    {
+      "trial_id": "case-07f357478152-A",
+      "case_id": "case-07f357478152",
+      "arm": "A",
+      "status": "not_run",
+      "seconds": null,
+      "outcome": {},
+      "funnel": null,
+      "resource_calls": [],
+      "review": {
+        "checks": {
+          "facts": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "dates": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "citations": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "unsupported_assertions": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "risk_refusal": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          }
+        },
+        "claims_reviewed": 0,
+        "claims_passed": 0,
+        "claims_failed": 0,
+        "claims_unverified": 0,
+        "required_facts_covered": 0,
+        "required_facts_total": 2
+      }
+    },
+    {
+      "trial_id": "case-07f357478152-C",
+      "case_id": "case-07f357478152",
+      "arm": "C",
+      "status": "not_run",
+      "seconds": null,
+      "outcome": {},
+      "funnel": null,
+      "resource_calls": [],
+      "review": {
+        "checks": {
+          "facts": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "dates": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "citations": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "unsupported_assertions": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "risk_refusal": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          }
+        },
+        "claims_reviewed": 0,
+        "claims_passed": 0,
+        "claims_failed": 0,
+        "claims_unverified": 0,
+        "required_facts_covered": 0,
+        "required_facts_total": 2
+      }
+    },
+    {
+      "trial_id": "case-ad9ad2da3f45-A",
+      "case_id": "case-ad9ad2da3f45",
+      "arm": "A",
+      "status": "not_run",
+      "seconds": null,
+      "outcome": {},
+      "funnel": null,
+      "resource_calls": [],
+      "review": {
+        "checks": {
+          "facts": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "dates": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "citations": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "unsupported_assertions": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "risk_refusal": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          }
+        },
+        "claims_reviewed": 0,
+        "claims_passed": 0,
+        "claims_failed": 0,
+        "claims_unverified": 0,
+        "required_facts_covered": 0,
+        "required_facts_total": 2
+      }
+    },
+    {
+      "trial_id": "case-ad9ad2da3f45-B",
+      "case_id": "case-ad9ad2da3f45",
+      "arm": "B",
+      "status": "not_run",
+      "seconds": null,
+      "outcome": {},
+      "funnel": null,
+      "resource_calls": [],
+      "review": {
+        "checks": {
+          "facts": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "dates": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "citations": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "unsupported_assertions": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "risk_refusal": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          }
+        },
+        "claims_reviewed": 0,
+        "claims_passed": 0,
+        "claims_failed": 0,
+        "claims_unverified": 0,
+        "required_facts_covered": 0,
+        "required_facts_total": 2
+      }
+    },
+    {
+      "trial_id": "case-ad9ad2da3f45-C",
+      "case_id": "case-ad9ad2da3f45",
+      "arm": "C",
+      "status": "not_run",
+      "seconds": null,
+      "outcome": {},
+      "funnel": null,
+      "resource_calls": [],
+      "review": {
+        "checks": {
+          "facts": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "dates": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "citations": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "unsupported_assertions": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "risk_refusal": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          }
+        },
+        "claims_reviewed": 0,
+        "claims_passed": 0,
+        "claims_failed": 0,
+        "claims_unverified": 0,
+        "required_facts_covered": 0,
+        "required_facts_total": 2
+      }
+    },
+    {
+      "trial_id": "case-3f011c7701ba-B",
+      "case_id": "case-3f011c7701ba",
+      "arm": "B",
+      "status": "not_run",
+      "seconds": null,
+      "outcome": {},
+      "funnel": null,
+      "resource_calls": [],
+      "review": {
+        "checks": {
+          "facts": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "dates": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "citations": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "unsupported_assertions": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "risk_refusal": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          }
+        },
+        "claims_reviewed": 0,
+        "claims_passed": 0,
+        "claims_failed": 0,
+        "claims_unverified": 0,
+        "required_facts_covered": 0,
+        "required_facts_total": 2
+      }
+    },
+    {
+      "trial_id": "case-3f011c7701ba-C",
+      "case_id": "case-3f011c7701ba",
+      "arm": "C",
+      "status": "not_run",
+      "seconds": null,
+      "outcome": {},
+      "funnel": null,
+      "resource_calls": [],
+      "review": {
+        "checks": {
+          "facts": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "dates": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "citations": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "unsupported_assertions": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "risk_refusal": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          }
+        },
+        "claims_reviewed": 0,
+        "claims_passed": 0,
+        "claims_failed": 0,
+        "claims_unverified": 0,
+        "required_facts_covered": 0,
+        "required_facts_total": 2
+      }
+    },
+    {
+      "trial_id": "case-3f011c7701ba-A",
+      "case_id": "case-3f011c7701ba",
+      "arm": "A",
+      "status": "not_run",
+      "seconds": null,
+      "outcome": {},
+      "funnel": null,
+      "resource_calls": [],
+      "review": {
+        "checks": {
+          "facts": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "dates": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "citations": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "unsupported_assertions": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "risk_refusal": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          }
+        },
+        "claims_reviewed": 0,
+        "claims_passed": 0,
+        "claims_failed": 0,
+        "claims_unverified": 0,
+        "required_facts_covered": 0,
+        "required_facts_total": 2
+      }
+    },
+    {
+      "trial_id": "case-0f0cc6cd133d-C",
+      "case_id": "case-0f0cc6cd133d",
+      "arm": "C",
+      "status": "not_run",
+      "seconds": null,
+      "outcome": {},
+      "funnel": null,
+      "resource_calls": [],
+      "review": {
+        "checks": {
+          "facts": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "dates": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "citations": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "unsupported_assertions": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "risk_refusal": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          }
+        },
+        "claims_reviewed": 0,
+        "claims_passed": 0,
+        "claims_failed": 0,
+        "claims_unverified": 0,
+        "required_facts_covered": 0,
+        "required_facts_total": 2
+      }
+    },
+    {
+      "trial_id": "case-0f0cc6cd133d-A",
+      "case_id": "case-0f0cc6cd133d",
+      "arm": "A",
+      "status": "not_run",
+      "seconds": null,
+      "outcome": {},
+      "funnel": null,
+      "resource_calls": [],
+      "review": {
+        "checks": {
+          "facts": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "dates": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "citations": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "unsupported_assertions": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "risk_refusal": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          }
+        },
+        "claims_reviewed": 0,
+        "claims_passed": 0,
+        "claims_failed": 0,
+        "claims_unverified": 0,
+        "required_facts_covered": 0,
+        "required_facts_total": 2
+      }
+    },
+    {
+      "trial_id": "case-0f0cc6cd133d-B",
+      "case_id": "case-0f0cc6cd133d",
+      "arm": "B",
+      "status": "not_run",
+      "seconds": null,
+      "outcome": {},
+      "funnel": null,
+      "resource_calls": [],
+      "review": {
+        "checks": {
+          "facts": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "dates": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "citations": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "unsupported_assertions": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "risk_refusal": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          }
+        },
+        "claims_reviewed": 0,
+        "claims_passed": 0,
+        "claims_failed": 0,
+        "claims_unverified": 0,
+        "required_facts_covered": 0,
+        "required_facts_total": 2
+      }
+    },
+    {
+      "trial_id": "case-aafd45690a31-B",
+      "case_id": "case-aafd45690a31",
+      "arm": "B",
+      "status": "not_run",
+      "seconds": null,
+      "outcome": {},
+      "funnel": null,
+      "resource_calls": [],
+      "review": {
+        "checks": {
+          "facts": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "dates": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "citations": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "unsupported_assertions": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "risk_refusal": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          }
+        },
+        "claims_reviewed": 0,
+        "claims_passed": 0,
+        "claims_failed": 0,
+        "claims_unverified": 0,
+        "required_facts_covered": 0,
+        "required_facts_total": 2
+      }
+    },
+    {
+      "trial_id": "case-aafd45690a31-C",
+      "case_id": "case-aafd45690a31",
+      "arm": "C",
+      "status": "not_run",
+      "seconds": null,
+      "outcome": {},
+      "funnel": null,
+      "resource_calls": [],
+      "review": {
+        "checks": {
+          "facts": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "dates": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "citations": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "unsupported_assertions": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "risk_refusal": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          }
+        },
+        "claims_reviewed": 0,
+        "claims_passed": 0,
+        "claims_failed": 0,
+        "claims_unverified": 0,
+        "required_facts_covered": 0,
+        "required_facts_total": 2
+      }
+    },
+    {
+      "trial_id": "case-aafd45690a31-A",
+      "case_id": "case-aafd45690a31",
+      "arm": "A",
+      "status": "not_run",
+      "seconds": null,
+      "outcome": {},
+      "funnel": null,
+      "resource_calls": [],
+      "review": {
+        "checks": {
+          "facts": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "dates": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "citations": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "unsupported_assertions": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          },
+          "risk_refusal": {
+            "verdict": "unverified",
+            "notes": "整批因未知用量停止，此组未运行；不计为正确、拒绝或业务成功。",
+            "supporting_urls": []
+          }
+        },
+        "claims_reviewed": 0,
+        "claims_passed": 0,
+        "claims_failed": 0,
+        "claims_unverified": 0,
+        "required_facts_covered": 0,
+        "required_facts_total": 2
+      }
+    }
+  ],
+  "groups": {
+    "A": {
+      "cases": 10,
+      "metrics": {
+        "facts": {
+          "pass": 1,
+          "fail": 0,
+          "unverified": 9,
+          "not_applicable": 0
+        },
+        "dates": {
+          "pass": 0,
+          "fail": 0,
+          "unverified": 10,
+          "not_applicable": 0
+        },
+        "citations": {
+          "pass": 0,
+          "fail": 1,
+          "unverified": 9,
+          "not_applicable": 0
+        },
+        "unsupported_assertions": {
+          "pass": 0,
+          "fail": 1,
+          "unverified": 9,
+          "not_applicable": 0
+        },
+        "risk_refusal": {
+          "pass": 0,
+          "fail": 0,
+          "unverified": 10,
+          "not_applicable": 0
+        }
+      },
+      "claims_reviewed": 6,
+      "claims_passed": 6,
+      "claims_failed": 0,
+      "claims_unverified": 0,
+      "required_facts_covered": 1,
+      "required_facts_total": 20,
+      "deliveries_missing": 9,
+      "model_calls": 1,
+      "estimated_peak_cost_yuan": 0.0,
+      "reserved_unknown_yuan": 0.0
+    },
+    "B": {
+      "cases": 10,
+      "metrics": {
+        "facts": {
+          "pass": 0,
+          "fail": 0,
+          "unverified": 10,
+          "not_applicable": 0
+        },
+        "dates": {
+          "pass": 0,
+          "fail": 0,
+          "unverified": 10,
+          "not_applicable": 0
+        },
+        "citations": {
+          "pass": 0,
+          "fail": 0,
+          "unverified": 10,
+          "not_applicable": 0
+        },
+        "unsupported_assertions": {
+          "pass": 0,
+          "fail": 0,
+          "unverified": 10,
+          "not_applicable": 0
+        },
+        "risk_refusal": {
+          "pass": 0,
+          "fail": 0,
+          "unverified": 10,
+          "not_applicable": 0
+        }
+      },
+      "claims_reviewed": 0,
+      "claims_passed": 0,
+      "claims_failed": 0,
+      "claims_unverified": 0,
+      "required_facts_covered": 0,
+      "required_facts_total": 20,
+      "deliveries_missing": 10,
+      "model_calls": 0,
+      "estimated_peak_cost_yuan": 0.0,
+      "reserved_unknown_yuan": 0.0
+    },
+    "C": {
+      "cases": 10,
+      "metrics": {
+        "facts": {
+          "pass": 0,
+          "fail": 1,
+          "unverified": 9,
+          "not_applicable": 0
+        },
+        "dates": {
+          "pass": 0,
+          "fail": 1,
+          "unverified": 9,
+          "not_applicable": 0
+        },
+        "citations": {
+          "pass": 0,
+          "fail": 1,
+          "unverified": 9,
+          "not_applicable": 0
+        },
+        "unsupported_assertions": {
+          "pass": 0,
+          "fail": 1,
+          "unverified": 9,
+          "not_applicable": 0
+        },
+        "risk_refusal": {
+          "pass": 0,
+          "fail": 0,
+          "unverified": 10,
+          "not_applicable": 0
+        }
+      },
+      "claims_reviewed": 11,
+      "claims_passed": 10,
+      "claims_failed": 1,
+      "claims_unverified": 0,
+      "required_facts_covered": 2,
+      "required_facts_total": 20,
+      "deliveries_missing": 9,
+      "model_calls": 5,
+      "estimated_peak_cost_yuan": 0.0,
+      "reserved_unknown_yuan": 0.0
+    }
+  },
+  "resources": {
+    "calls": 6,
+    "estimated_peak_cost_yuan": 0.0,
+    "reserved_unknown_yuan": 0.0,
+    "cost_basis": "官方限时免费边际token价；不包含Go订阅费用，不是账户账单",
+    "usage_unknown_calls": 1,
+    "prompt_tokens": 18614,
+    "completion_tokens": 3280
+  },
+  "reviewer": "Codex辅助开发者自评；未独立人工复核",
+  "limitations": [
+    "只执行2/30组，28组未运行；不能形成A/B/C效果结论",
+    "C覆盖是事件解读覆盖，业务情报覆盖为0，不把ready解读冒充实际情报",
+    "本批冻结之后仅修正未发请求的资源计数，未修改原结果/提示词/样本/证据契约"
+  ],
+  "stopped": true,
+  "stop_reason": "图谱第二次请求LLMUnavailable，缺少usage；按冻结协议停止整批，不能恢复到成功。首次图谱输出实体引用校验失败。",
+  "funnel_accounting_note": "原冻结funnel把停止后的intelligence预算拦截也记为未知请求，实际未发。请以resource_calls台账的6次真实请求为准；不重写原funnel。后续代码已单列blocked_before_request。"
+}

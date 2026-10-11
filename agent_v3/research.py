@@ -1,6 +1,6 @@
 from .contracts import run_task
 """Evidence gaps drive bounded research actions, with a model planner when available."""
-import json,re
+import json,re,time
 from datetime import datetime,timedelta,timezone
 
 from jsonschema import Draft202012Validator
@@ -43,7 +43,7 @@ def inspect(store,topic):
       'material':{'status':'references_only','note':'媒体引用未下载或转录，来源使用条件需核查'}}
 
 
-def plan(store,topic,model=None,mission=None,feedback=None):
+def plan(store,topic,model=None,mission=None,feedback=None,run_id=None):
     gaps=inspect(store,topic);sources=(topic['evidence'][:9]+topic.get('research_sources',[])[:3])[:12];actions=[]
     for i,e in enumerate(sources):
         if e['platform'] in READABLE and (not e.get('published_at') or e['content_scope'] not in ('article_excerpt','video_description','topic_description')):
@@ -75,8 +75,20 @@ def plan(store,topic,model=None,mission=None,feedback=None):
         from .graph_retrieval import local_context,PROMPT
         packet['graph_context']=local_context(store,topic_id=topic['topic_id'],limit=4)
         packet['tools'].update({name:'本地只读图查询，不消耗联网预算；query 为实体原名或主题关键词。返回状态与引文，不是事实认证。' for name in GRAPH_TOOLS})
-        response=run_task(model,'research_plan',packet,PLAN_SCHEMA,
+        request_started=time.monotonic()
+        try:response=run_task(model,'research_plan',packet,PLAN_SCHEMA,
            '你是研究子 Agent，根据主 Agent 问题、缺口与上轮工具结果选择最多四个有必要的动作，使用当前sources数组的source_ref。先借图谱定位实体、相关事件和待查关系，再补读实际来源。优先用爬虫read_detail获取正文与sample_discussion真实讨论；静态正文不足时browse_page，动态图片文字用screenshot_ocr。评论接口失败或没有样本时可read_comments_visual，先滑动定位评论区再截图识别。搜索命中可在下一轮读取；失败不要反复重试相同动作，改查询或来源。查询只写主题词。不需要则空列表。不要预设热点必须与游戏相关，不把平台简介或 OCR 广告当评论。'+PROMPT,timeout_seconds=180)
+        except Exception as error:
+            from .opencode_zen import StructuredDeliveryError
+            if run_id and not isinstance(error,StructuredDeliveryError):
+                from .model import request_failure
+                request_failure(store,run_id,'research_plan',error,request_started)
+            raise
+        # Account for a completed request even if the subsequent tool-selection
+        # semantics reject it. Schema failures are recorded by the caller.
+        if run_id:
+            from .model import task_metadata
+            store.step(run_id,'research_plan_model',task_metadata(response))
         Draft202012Validator(PLAN_SCHEMA).validate(response['result']);value=response['result'];planner='model'
     # A model may omit the collection-date gap; bounded source reading is still
     # required before an undated news item can become current business evidence.
@@ -165,11 +177,8 @@ def run(store,*,topic_id=None,max_calls=6,model=None,run_id=None,delegations=Non
         if model is not None and getattr(model,'supports_tasks',False) and not completed:
             try:
                 mission=next((d for d in delegations or [] if d['topic_id']==p['topic_id']),None)
-                fresh=plan(store,read_topic(store,p['topic_id'],include_tracking=False),model,mission=mission)
+                fresh=plan(store,read_topic(store,p['topic_id'],include_tracking=False),model,mission=mission,run_id=run_id)
                 p.update(fresh)
-                if run_id and fresh.get('model_metadata'):
-                    from .model import task_metadata
-                    store.step(run_id,'research_plan_model',task_metadata(fresh['model_metadata']))
             except Exception as error:
                 p['planner_error']=type(error).__name__
                 from .opencode_zen import StructuredDeliveryError
@@ -184,10 +193,7 @@ def run(store,*,topic_id=None,max_calls=6,model=None,run_id=None,delegations=Non
         while pending or rounds<2 and actions and p['planner']=='model' and calls<max_calls:
             if not pending:
                 try:
-                    fresh=plan(store,read_topic(store,p['topic_id'],include_tracking=False),model,mission=mission,feedback=actions)
-                    if run_id and fresh.get('model_metadata'):
-                        from .model import task_metadata
-                        store.step(run_id,'research_plan_model',task_metadata(fresh['model_metadata']))
+                    fresh=plan(store,read_topic(store,p['topic_id'],include_tracking=False),model,mission=mission,feedback=actions,run_id=run_id)
                     p['source_ids']=fresh['source_ids'];pending=list(fresh['actions']);rounds+=1
                     if not pending:break
                 except Exception as error:

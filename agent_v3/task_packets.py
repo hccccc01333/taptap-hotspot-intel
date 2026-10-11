@@ -7,7 +7,7 @@ from zoneinfo import ZoneInfo
 from jsonschema import Draft202012Validator
 
 TEXT={'type':'string','minLength':1,'maxLength':1600}
-TEXTS={'type':'array','items':TEXT,'maxItems':4}
+TEXTS={'type':'array','items':TEXT,'maxItems':4,'description':'最多4项；缺少证据可为空，不为填满字段重复推断。'}
 
 
 def object_schema(properties,required=None):
@@ -16,7 +16,8 @@ def object_schema(properties,required=None):
 
 def references(count,*,minimum=0,maximum=6):
     return {'type':'array','items':{'type':'integer','minimum':0,'maximum':max(0,count-1)},
-            'minItems':minimum,'maxItems':min(count,maximum),'uniqueItems':True}
+            'minItems':minimum,'maxItems':min(count,maximum),'uniqueItems':True,
+            'description':f'引用数量至少{minimum}、最多{min(count,maximum)}个，不可重复。优先选1至2个最直接的引用，不穷举相关引用。'}
 
 
 def topic_packet(topic,context):
@@ -46,6 +47,52 @@ def topic_packet(topic,context):
             'event_tracking':[{'title':e['title'],'note':e['note'],'timeline':e['timeline'][:12]} for e in topic.get('tracked_events',[])],
             'current_time':datetime.now(ZoneInfo('Asia/Shanghai')).isoformat(timespec='seconds')}
     return packet
+
+
+def business_packet(packet):
+    """Reuse grounded interpretation; keep quote identities and necessary excerpts.
+
+    Caller captures source/graph guards BEFORE this projection. This is input
+    selection, never repair/truncation of a model's delivered reference arrays.
+    Full documents remain in the source archive for the research follow-up path.
+    """
+    result=copy.deepcopy(packet)
+    original=result.pop('research_return')
+    sources={e['evidence_id']:e for e in result['evidence']}
+    quotes=result['quote_candidates']
+    index={(q['evidence_id'],q['quote']):q['ref'] for q in quotes}
+    def facts_refs(facts):
+        refs=[]
+        for fact in facts:
+            eid= fact.get('evidence_id');quote=fact.get('quote');source=sources.get(eid)
+            if not source or not isinstance(quote,str) or quote not in source['title']+'\n'+source['body']:
+                raise ValueError('业务摘要的引文不在本次已读来源中，需重新研究')
+            key=(eid,quote)
+            if key not in index:
+                index[key]=len(quotes);quotes.append({'ref':index[key],'evidence_id':eid,'quote':quote})
+            if index[key] not in refs:refs.append(index[key])
+        return refs
+    summary={k:copy.deepcopy(original[k]) for k in ('status','headline','one_line','unknowns','source_matches','recency') if k in original}
+    for section in ('background','core','timeline','views','controversies'):
+        summary[section]=[{k:copy.deepcopy(v) for k,v in item.items() if k not in ('facts','source_versions')}
+                          | {'basis_refs':facts_refs(item.get('facts',[]))} for item in original.get(section,[])]
+    # Recency/risk proofs are supplied once as candidates, not nested snapshots.
+    for key in ('recency','risk_assessment'):
+        if key in original:
+            summary[key]={k:copy.deepcopy(v) for k,v in original[key].items() if k not in ('facts','source_versions','assessments')}
+            summary[key]['basis_refs']=facts_refs(original[key].get('facts',[]))
+    result['research_return']=summary
+    for source in result['evidence']:
+        pieces=list(dict.fromkeys(q['quote'] for q in quotes if q['evidence_id']==source['evidence_id']))
+        source['body']='\n'.join(pieces)
+        source['body_truncated']=True;source['body_kind']='selected_verbatim_excerpts'
+        source.pop('reading_metadata',None)
+    result.pop('graph_context',None)
+    result.pop('event_tracking',None);result.pop('research_gaps',None)
+    result['input_policy']={'version':'business-packet-v3.23','interpretation_reused':True,
+        'full_text_on_demand':'必要语境缺失时写research_questions，由研究子Agent补读来源；不重复推断整篇原文。',
+        'graph':'图谱为可选增强，不要求补齐实体或关系。来源片段不代表全文、热度或独立核实。'}
+    return result
 
 
 def intelligence_schema(packet):

@@ -1,0 +1,363 @@
+{
+  "version": "alpha23-regression-projection",
+  "scope": "开发回归及复用ready解读的业务配对；非新样本对照。实际失败全部保留。",
+  "rows": [
+    {
+      "batch": "go-longcat-2.5-preview-free-20261011-alpha23-regression",
+      "protocol_hash": "dbdbff208b9329bc251e7873700a9c625f599fc92c24fbb85d57eafa56d7bacb",
+      "trials": [
+        {
+          "trial_id": "case-7c7bcc1703e6-A",
+          "case_id": "case-7c7bcc1703e6",
+          "arm": "A",
+          "status": "returned",
+          "outcome": {},
+          "seconds": 31.906,
+          "persistence": {
+            "business_records": 0,
+            "game_intelligence": 0,
+            "materials": 0,
+            "creatives": 0,
+            "validation_failed": 0,
+            "stale_rejected": 0,
+            "error_type": null
+          }
+        },
+        {
+          "trial_id": "case-7c7bcc1703e6-B",
+          "case_id": "case-7c7bcc1703e6",
+          "arm": "B",
+          "status": "returned",
+          "outcome": {},
+          "seconds": 40.687,
+          "persistence": {
+            "business_records": 0,
+            "game_intelligence": 0,
+            "materials": 0,
+            "creatives": 0,
+            "validation_failed": 0,
+            "stale_rejected": 0,
+            "error_type": null
+          }
+        },
+        {
+          "trial_id": "case-7c7bcc1703e6-C",
+          "case_id": "case-7c7bcc1703e6",
+          "arm": "C",
+          "status": "partial",
+          "outcome": {
+            "enqueued": {
+              "intelligence": 1,
+              "creative": 0,
+              "examined_topics": 1,
+              "limit": 1200
+            },
+            "intelligence": [],
+            "creative": [],
+            "usage": {
+              "prompt_tokens": 36513,
+              "completion_tokens": 6957,
+              "total_tokens": 43470
+            },
+            "status": "ai_deferred",
+            "model": "profile/go-longcat",
+            "error": "情报处理未完成，等待重试：结构化交付未通过校验；game_signals/1/basis_refs / maxItems 实际数量=4 允许上限=3。按上述字段重新选择最直接的证据，遵守上限且不重复；不返回原先超限数组。"
+          },
+          "seconds": 255.016,
+          "persistence": {
+            "business_records": 0,
+            "game_intelligence": 0,
+            "materials": 0,
+            "creatives": 0,
+            "validation_failed": 5,
+            "stale_rejected": 0,
+            "error_type": null
+          }
+        },
+        {
+          "trial_id": "case-aae9a24a3590-A",
+          "case_id": "case-aae9a24a3590",
+          "arm": "A",
+          "status": "returned",
+          "outcome": {},
+          "seconds": 34.063,
+          "persistence": {
+            "business_records": 0,
+            "game_intelligence": 0,
+            "materials": 0,
+            "creatives": 0,
+            "validation_failed": 0,
+            "stale_rejected": 0,
+            "error_type": null
+          }
+        },
+        {
+          "trial_id": "case-aae9a24a3590-B",
+          "case_id": "case-aae9a24a3590",
+          "arm": "B",
+          "status": "returned",
+          "outcome": {},
+          "seconds": 41.047,
+          "persistence": {
+            "business_records": 0,
+            "game_intelligence": 0,
+            "materials": 0,
+            "creatives": 0,
+            "validation_failed": 0,
+            "stale_rejected": 0,
+            "error_type": null
+          }
+        },
+        {
+          "trial_id": "case-aae9a24a3590-C",
+          "case_id": "case-aae9a24a3590",
+          "arm": "C",
+          "status": "returned",
+          "outcome": {
+            "enqueued": {
+              "intelligence": 1,
+              "creative": 0,
+              "examined_topics": 1,
+              "limit": 1200
+            },
+            "intelligence": [
+              {
+                "topic_id": "topic_c1ca5b9a36128b2bfc19",
+                "decision": "watch",
+                "usage": {
+                  "prompt_tokens": 7510,
+                  "completion_tokens": 922,
+                  "total_tokens": 8432
+                },
+                "model": "profile/go-longcat"
+              }
+            ],
+            "creative": [],
+            "usage": {
+              "prompt_tokens": 27994,
+              "completion_tokens": 3463,
+              "total_tokens": 31457
+            },
+            "status": "intelligence_ready",
+            "model": "profile/go-longcat"
+          },
+          "seconds": 167.672,
+          "persistence": {
+            "business_records": 1,
+            "game_intelligence": 1,
+            "materials": 0,
+            "creatives": 0,
+            "validation_failed": 2,
+            "stale_rejected": 0,
+            "error_type": null
+          }
+        }
+      ],
+      "resources": {
+        "calls": 20,
+        "estimated_peak_cost_yuan": 0.0,
+        "reserved_unknown_yuan": 0.0,
+        "cost_basis": "官方限时免费边际token价；不包含Go订阅费用，不是账户账单",
+        "usage_unknown_calls": 0,
+        "prompt_tokens": 77547,
+        "completion_tokens": 14529
+      }
+    },
+    {
+      "batch": "go-longcat-2.5-preview-free-20261011-alpha23-business-paired",
+      "protocol_hash": "e5aaa198ba62a0082744a14824d43b2e6847558314416ab725952f6af7f7dc4d",
+      "trials": [
+        {
+          "trial_id": "case-7c7bcc1703e6-full-C",
+          "case_id": "case-7c7bcc1703e6",
+          "input": "full",
+          "status": "returned",
+          "error_type": null,
+          "outcome": {
+            "topic_id": "topic_40a1ca1ddcf05948f78f",
+            "decision": "watch",
+            "usage": {
+              "prompt_tokens": 12850,
+              "completion_tokens": 1310,
+              "total_tokens": 14160
+            },
+            "model": "profile/go-longcat"
+          },
+          "seconds": 41.109,
+          "protocol_hash": "e5aaa198ba62a0082744a14824d43b2e6847558314416ab725952f6af7f7dc4d",
+          "persistence": {
+            "business_records": 1,
+            "game_intelligence": 2,
+            "materials": 0,
+            "creatives": 0,
+            "validation_failed": 0,
+            "stale_rejected": 0,
+            "error_type": null
+          }
+        },
+        {
+          "trial_id": "case-7c7bcc1703e6-compact-C",
+          "case_id": "case-7c7bcc1703e6",
+          "input": "compact",
+          "status": "returned",
+          "error_type": null,
+          "outcome": {
+            "topic_id": "topic_40a1ca1ddcf05948f78f",
+            "decision": "watch",
+            "usage": {
+              "prompt_tokens": 6916,
+              "completion_tokens": 2009,
+              "total_tokens": 8925
+            },
+            "model": "profile/go-longcat"
+          },
+          "seconds": 61.922,
+          "protocol_hash": "e5aaa198ba62a0082744a14824d43b2e6847558314416ab725952f6af7f7dc4d",
+          "persistence": {
+            "business_records": 1,
+            "game_intelligence": 2,
+            "materials": 1,
+            "creatives": 0,
+            "validation_failed": 0,
+            "stale_rejected": 0,
+            "error_type": null
+          }
+        },
+        {
+          "trial_id": "case-aae9a24a3590-full-C",
+          "case_id": "case-aae9a24a3590",
+          "input": "full",
+          "status": "returned",
+          "error_type": null,
+          "outcome": {
+            "topic_id": "topic_c1ca5b9a36128b2bfc19",
+            "decision": "watch",
+            "usage": {
+              "prompt_tokens": 16071,
+              "completion_tokens": 788,
+              "total_tokens": 16859
+            },
+            "model": "profile/go-longcat"
+          },
+          "seconds": 35.266,
+          "protocol_hash": "e5aaa198ba62a0082744a14824d43b2e6847558314416ab725952f6af7f7dc4d",
+          "persistence": {
+            "business_records": 1,
+            "game_intelligence": 1,
+            "materials": 0,
+            "creatives": 0,
+            "validation_failed": 0,
+            "stale_rejected": 0,
+            "error_type": null
+          }
+        },
+        {
+          "trial_id": "case-aae9a24a3590-compact-C",
+          "case_id": "case-aae9a24a3590",
+          "input": "compact",
+          "status": "budget_stopped",
+          "error_type": "LLMUnavailable",
+          "outcome": {},
+          "seconds": 10.688,
+          "protocol_hash": "e5aaa198ba62a0082744a14824d43b2e6847558314416ab725952f6af7f7dc4d",
+          "persistence": {
+            "business_records": 0,
+            "game_intelligence": 0,
+            "materials": 0,
+            "creatives": 0,
+            "validation_failed": 0,
+            "stale_rejected": 0,
+            "error_type": "LLMUnavailable"
+          }
+        }
+      ],
+      "resources": {
+        "calls": 4,
+        "estimated_peak_cost_yuan": 0.0,
+        "reserved_unknown_yuan": 0.0,
+        "cost_basis": "官方限时免费边际token价；不包含Go订阅费用，不是账户账单",
+        "usage_unknown_calls": 1,
+        "prompt_tokens": 35837,
+        "completion_tokens": 4107
+      }
+    },
+    {
+      "batch": "go-longcat-2.5-preview-free-20261011-alpha23-r6-transport-recovery",
+      "protocol_hash": "5172c8aaa5da424bb86b2675fddc9640a84da6c12db823b2c9326805cf3279d3",
+      "trials": [
+        {
+          "trial_id": "case-aae9a24a3590-compact-C",
+          "case_id": "case-aae9a24a3590",
+          "input": "compact",
+          "status": "budget_stopped",
+          "error_type": "BudgetExceeded",
+          "outcome": {},
+          "seconds": 0.266,
+          "protocol_hash": "5172c8aaa5da424bb86b2675fddc9640a84da6c12db823b2c9326805cf3279d3",
+          "persistence": {
+            "business_records": 0,
+            "game_intelligence": 0,
+            "materials": 0,
+            "creatives": 0,
+            "validation_failed": 0,
+            "stale_rejected": 0,
+            "error_type": "BudgetExceeded"
+          }
+        }
+      ],
+      "resources": {
+        "calls": 0,
+        "estimated_peak_cost_yuan": 0.0,
+        "reserved_unknown_yuan": 0.0,
+        "cost_basis": "官方限时免费边际token价；不包含Go订阅费用，不是账户账单",
+        "usage_unknown_calls": 0,
+        "prompt_tokens": 0,
+        "completion_tokens": 0
+      }
+    },
+    {
+      "batch": "go-longcat-2.5-preview-free-20261011-alpha23-r6-transport-recovery-v2",
+      "protocol_hash": "115157851f6648f643d159b122b4d2e8b18e979e1481349f4d8143634d21f079",
+      "trials": [
+        {
+          "trial_id": "case-aae9a24a3590-compact-C",
+          "case_id": "case-aae9a24a3590",
+          "input": "compact",
+          "status": "returned",
+          "error_type": null,
+          "outcome": {
+            "topic_id": "topic_c1ca5b9a36128b2bfc19",
+            "decision": "watch",
+            "usage": {
+              "prompt_tokens": 7965,
+              "completion_tokens": 549,
+              "total_tokens": 8514
+            },
+            "model": "profile/go-longcat"
+          },
+          "seconds": 15.719,
+          "protocol_hash": "115157851f6648f643d159b122b4d2e8b18e979e1481349f4d8143634d21f079",
+          "persistence": {
+            "business_records": 1,
+            "game_intelligence": 1,
+            "materials": 0,
+            "creatives": 0,
+            "validation_failed": 0,
+            "stale_rejected": 0,
+            "error_type": null
+          }
+        }
+      ],
+      "resources": {
+        "calls": 1,
+        "estimated_peak_cost_yuan": 0.0,
+        "reserved_unknown_yuan": 0.0,
+        "cost_basis": "官方限时免费边际token价；不包含Go订阅费用，不是账户账单",
+        "usage_unknown_calls": 0,
+        "prompt_tokens": 7965,
+        "completion_tokens": 549
+      }
+    }
+  ],
+  "quality": "人工语义真值未独立复核；Xbox变化有媒体引文，R6负面风险情报无素材/创意；私有原文、推理、认证不公开。"
+}

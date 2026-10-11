@@ -227,7 +227,8 @@ class GraphTests(unittest.TestCase):
             from agent_v3.pipeline import process
             with patch('agent_v3.research.search_news',side_effect=AssertionError('no network')):result=process(fixture.store,fixture.rid,model=model,topic_id=fixture.tid)
             self.assertEqual(result['status'],'intelligence_ready')
-            self.assertTrue(all('graph_context' in p for s,p in packets if s in ('main_plan','interpretation','intelligence')))
+            self.assertTrue(all('graph_context' in p for s,p in packets if s in ('main_plan','interpretation')))
+            self.assertTrue(all(p['input_policy']['interpretation_reused'] and 'graph_context' not in p for s,p in packets if s=='intelligence'))
             self.assertEqual(AgentContract.create('community_summary',{}, {'type':'object'}).role,'research_child')
         finally:fixture.tearDown()
 

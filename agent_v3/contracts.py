@@ -22,21 +22,57 @@ def safe_schema_errors(items):
     rules={'additionalProperties','maxItems','minItems','type','enum','required','pattern',
            'maxLength','minLength','maximum','minimum','uniqueItems','const','oneOf','anyOf'}
     if not isinstance(items,list):return []
-    return [{'path':item['path'],'constraint':item['constraint']} for item in items[:5]
-            if isinstance(item,dict) and isinstance(item.get('path'),str) and
-            re.fullmatch(r'[A-Za-z0-9_/-]{1,200}',item['path']) and item.get('constraint') in rules]
+    result=[]
+    for item in items[:5]:
+        if not isinstance(item,dict) or not isinstance(item.get('path'),str) or not re.fullmatch(r'[A-Za-z0-9_/-]{1,200}',item['path']) or item.get('constraint') not in rules:continue
+        entry={'path':item['path'],'constraint':item['constraint']}
+        if item['constraint'] in ('maxItems','minItems','uniqueItems'):
+            for key in ('actual_count','allowed_max','allowed_min','distinct_count'):
+                if type(item.get(key)) is int and 0<=item[key]<=1000000:entry[key]=item[key]
+        result.append(entry)
+    return result
+
+
+def trusted_path(schema,path):
+    """Never echo an unexpected model-supplied object key in diagnostics."""
+    node=schema;parts=[]
+    for part in path:
+        if type(part) is int and isinstance(node.get('items'),dict):node=node['items'];parts.append(str(part))
+        elif isinstance(part,str) and part in node.get('properties',{}):node=node['properties'][part];parts.append(part)
+        else:break
+    return '/'.join(parts) or 'root'
+
+
+def array_contract(schema):
+    """Readable budgets derived from the exact schema, including risk overrides."""
+    rows=[]
+    def visit(node,path):
+        if node.get('type')=='array':
+            row=path+': '+str(node.get('minItems',0))+'..'+str(node.get('maxItems','不限'))+' 项'
+            if node.get('uniqueItems'):row+='，不可重复'
+            rows.append(row)
+            if isinstance(node.get('items'),dict):visit(node['items'],path+'/*')
+        for name,child in node.get('properties',{}).items():visit(child,(path+'/' if path else '')+name)
+    visit(schema,'')
+    return '\n数组交付约束（以本次 Schema 为准）：\n'+'\n'.join(rows)+'\n超限时重新选择最能直接支持该断言的引用；不要保留原数组，也不要拆成重复断言逃避上限。提交前逐项检查数量与重复值。'
 
 
 def schema_feedback(schema,value):
     """Missing paths come from the trusted schema, never echoed model values."""
     items=[]
     for error in Draft202012Validator(schema).iter_errors(value):
-        path='/'.join(map(str,error.absolute_path))
+        path=trusted_path(schema,error.absolute_path)
         if error.validator=='required' and isinstance(error.instance,dict):
             for name in error.validator_value:
                 if name not in error.instance:
-                    items.append({'path':(path+'/' if path else '')+name,'constraint':'required'})
-        else:items.append({'path':path or 'root','constraint':error.validator})
+                    items.append({'path':(path+'/' if path!='root' else '')+name,'constraint':'required'})
+        else:
+            item={'path':path,'constraint':error.validator}
+            if isinstance(error.instance,list) and error.validator in ('maxItems','minItems','uniqueItems'):
+                item['actual_count']=len(error.instance)
+                if error.validator in ('maxItems','minItems'):item['allowed_max' if error.validator=='maxItems' else 'allowed_min']=error.validator_value
+                else:item['distinct_count']=len({json.dumps(v,sort_keys=True,ensure_ascii=False) for v in error.instance})
+            items.append(item)
         if len(items)>=5:break
     return safe_schema_errors(items)
 
@@ -103,6 +139,7 @@ def chat_task(client,stage,packet,schema,system,*,timeout_seconds=180):
 
 def run_task(model,stage,packet,schema,system,*,timeout_seconds=180):
     contract=AgentContract.create(stage,packet,schema)
+    system+=array_contract(schema)
     started=time.monotonic()
     delivery_error=None
     try:
@@ -136,7 +173,7 @@ def run_task(model,stage,packet,schema,system,*,timeout_seconds=180):
             errors=schema_feedback(schema,output['result'])
             if errors:output['schema_errors']=errors
         # Report only paths/constraint names, never raw source or reasoning values.
-        path='/'.join(map(str,getattr(error,'absolute_path',()))) or 'root'
+        path=trusted_path(schema,getattr(error,'absolute_path',()))
         validator=getattr(error,'validator',None) or type(error).__name__
         raise StructuredDeliveryError('Agent 契约未通过：'+path+' / '+validator,output) from error
     return output

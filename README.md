@@ -2,7 +2,7 @@
 
 **持续追踪全网热点，自动研究与积累游戏情报、可用素材，从中识别并产出 TapTap 增长创意的 AI Agent 系统。**
 
-[![版本](https://img.shields.io/badge/version-3.0.0--alpha.22-087f8c)](docs/版本记录.md)
+[![版本](https://img.shields.io/badge/version-3.0.0--alpha.23-087f8c)](docs/版本记录.md)
 [![CI](https://github.com/hccccc01333/taptap-hotspot-intel/actions/workflows/ci.yml/badge.svg)](https://github.com/hccccc01333/taptap-hotspot-intel/actions/workflows/ci.yml)
 [![网站部署](https://github.com/hccccc01333/taptap-hotspot-intel/actions/workflows/pages.yml/badge.svg)](https://github.com/hccccc01333/taptap-hotspot-intel/actions/workflows/pages.yml)
 
@@ -15,6 +15,14 @@
 <sub>2026-10-08 线上真实成果页。截图中的数量属于当时的运行快照，以网站最近同步时间为准。</sub>
 
 初次了解项目，可以先看[交付内容](#系统交付什么)和[Agent 分工](#agent-如何工作)；想了解实现，可以继续看[技术栈](#实际技术栈)、[V3 数据链路](#v3-的数据如何变成成果)、[GraphRAG 的实现](#graphrag-思想在-v3-中怎么落地)和[LangGraph 的使用范围](#langgraph-在项目中怎么用)。启动步骤见[本地运行](#本地运行)。
+
+## Alpha23：修复业务JSON并公开核验
+
+把数组引用上限、去重与重新选证据的要求直接交给模型，失败反馈包含路径、约束、数量和上限，不截断引用、不放宽契约。业务主Agent复用已保存解读，接收事实摘要、引用候选与必要片段；来源和图版本守卫仍执行。新增八阶段交付漏斗，分别记录实际入库、拒绝、失败与阶段token；调用成功不会计为情报交付成功。
+
+真实旧案例业务回归：Xbox保存2条有依据的游戏变化，R6保存1条负面风险情报、推广素材和创意为0。Xbox配对业务总token下降37%，R6精简输入曾遇一次未知用量请求异常，另开限额恢复检查通过；不能据此宣称总体成本或成功率已经改善。509项工程回归通过。[详细回归与成本](docs/V3-Alpha23-业务交付与成本核验.md)。
+
+Alpha20全部A/B核验已公开：A为23条支持、4条错误、6条无法确认，B为25/2/7；必要事实均12/20。标注Codex辅助开发者自评、尚未经独立人工复核，完整系统原正式组没有有效情报，所有失败保留。[全部20份质量核验](docs/V3-Alpha20-全部AB质量核验.md)。Alpha23新10例已冻结，正式执行2/30组后因未知用量请求异常停止，28组未运行；[停止与全部记录](docs/V3-Alpha23-新样本对照停止记录.md)。当前没有架构优于基线或TapTap增长效果的结论。
 
 ## Alpha22：解读和图谱分别验收
 
@@ -30,7 +38,7 @@
 
 ## Alpha20：Go免费模型与真实校准
 
-使用系统变量 `OPENCODE_GO_API_KEY` 接入 OpenCode Go 的 `step-5-preview-free` 和 `longcat-2.5-preview-free`。两款已通过真实最终JSON响应检查，LongCat已完成两例校准和10例×3组正式执行，Alpha20正式组的完整系统没有情报、素材或创意交付；事实评分仍待核验。Step的high和另开medium校准均有超时，尚未进入正式对照；LongCat关闭独立思考以保留结构化输出预算；各模型分开比较，不混合结果，也不切换付费型号。
+使用系统变量 `OPENCODE_GO_API_KEY` 接入 OpenCode Go 的 `step-5-preview-free` 和 `longcat-2.5-preview-free`。两款已通过真实最终JSON响应检查，LongCat已完成两例校准和10例×3组正式执行，Alpha20正式组的完整系统没有情报、素材或创意交付；A/B事实核验已在Alpha23补录为Codex辅助开发者自评，独立人工复核尚未完成。Step的high和另开medium校准均有超时，尚未进入正式对照；LongCat关闭独立思考以保留结构化输出预算；各模型分开比较，不混合结果，也不切换付费型号。
 
 Go接入采用流式响应，逐帧丢弃思考内容，只拼接最终`content`；有完整结束标记后再做本地契约校验。免费实验继续限制调用和token，记录失败、未知用量、耗时与工具来源；零边际token价格不包含Go订阅费，官方免费供给为限时安排。474项工程回归通过，**当前没有完整系统优于普通LLM的结论**。配置见[供应商文档](docs/V3-模型供应商与自定义配置.md)，实验方法见[对照实验](docs/V3-可复现对照实验.md)，实际失败与交付统计见[首轮执行记录](docs/V3-Go-真实对照首轮记录.md)。
 

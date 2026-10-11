@@ -194,7 +194,26 @@ class GatedModel:
 
 
 def task_metadata(response):
-    return {k:response[k] for k in ("model","api_model","usage","seconds","transport","session_id",
+    result={k:response[k] for k in ("model","api_model","usage","seconds","transport","session_id",
             "request_id","task_id","input_file","reported_cost","cost_status","reasoning_effort",
             "output_limit","finish_reason","reasoning_present","contract_version","stage","agent_role","input_fingerprint",
             "provider_id","profile_version") if k in response}
+    if response.get('schema_errors'):
+        from .contracts import safe_schema_errors
+        result['schema_errors']=safe_schema_errors(response['schema_errors'])
+    return result
+
+
+def request_failure(store,run_id,stage,error,started):
+    """Count a failed attempt without treating missing usage as zero consumption."""
+    import time
+    from .contracts import ROLES
+    if getattr(error,'request_not_sent',False) is True:
+        store.step(run_id,'model_request_blocked',{'stage':stage,
+            'seconds':round(time.monotonic()-started,3),'error_type':type(error).__name__,
+            'request_sent':False})
+        return
+    store.step(run_id,'model_task',{'stage':stage,'agent_role':ROLES[stage],
+        'usage':{},'seconds':round(time.monotonic()-started,3),
+        'delivery_status':'request_failed','error_type':type(error).__name__,
+        'cost_status':'unknown_after_exception'})
