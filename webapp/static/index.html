@@ -13,11 +13,11 @@
   <form class="login-card" id="login-form">
     <div class="brand"><span class="logo">◆</span> 增长情报台</div>
     <p class="login-sub">明日方舟 · 社区增长助手</p>
-    <label>你的名字<input id="li-actor" placeholder="运营A / 评审B / 发布C / 管理D / 观察E"></label>
-    <label>密码<input id="li-pass" type="password" value="demo"></label>
+    <label>你的名字<input id="li-actor" placeholder="输入本机已配置的账号" autoComplete="username"></label>
+    <label>密码<input id="li-pass" type="password" autoComplete="current-password"></label>
     <div class="login-err" id="li-err"></div>
     <button class="btn-primary" type="submit">进入工作台</button>
-    <p class="login-tip">演示密码统一是 <b>demo</b>。不同角色能做的事不一样。</p>
+    <p class="login-tip">使用本机已配置的账号登录。权限由服务端校验。</p>
   </form>
 </div>
 

@@ -22,6 +22,8 @@ jobs:
           agent_v3.tests.test_delivery22
           agent_v3.tests.test_delivery23
           agent_v3.tests.test_delivery24
+          agent_v3.tests.test_repo_publication
+          webapp.tests.test_auth_local webapp.tests.test_webapp
           agent_v3.tests.test_go20
           agent_v3.tests.test_benchmark
           agent_v3.tests.test_providers18
@@ -61,23 +63,5 @@ jobs:
           python -m unittest discover -s runtime/tests -p "test_*.py"
           python -m unittest discover -s games/tests -p "test_*.py"
 
-      # 2026-09-29 事故复盘后新增：原始域 CSV 曾因 .gitignore 规则与实际目录名
-      # 不匹配（02数据_*/ vs 02数据/）而被推送到公开仓库。扫描升级为
-      # 「所有被 git 跟踪的文件」+ 排除代码/文档自身的字段名提及，防复发。
-      - name: PII guard — no plaintext identity columns in ANY tracked file
-        run: |
-          set -e
-          HIT=0
-          while IFS= read -r f; do
-            # 只扫 CSV，代码/文档里出现字段名是正常引用
-            case "$f" in *.csv) ;; *) continue ;; esac
-            if head -1 "$f" | grep -qE "(^|,)(user_name|user_id|avatar_url)(,|$)"; then
-              echo "::error file=$f::PII 明文字段出现在被跟踪的 CSV 中: $f"
-              HIT=1
-            fi
-          done < <(git ls-files)
-          if [ "$HIT" -ne 0 ]; then
-            echo "存在含明文身份字段的被跟踪 CSV，请先清洗或移出版本库"
-            exit 1
-          fi
-          echo "PII guard: 通过（所有被跟踪 CSV 均不含 user_name/user_id/avatar_url 列）"
+      - name: Guard current publication index
+        run: python scripts/public_repo_guard.py

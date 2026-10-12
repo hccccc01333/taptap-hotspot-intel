@@ -45,8 +45,21 @@ class GoTests(unittest.TestCase):
         self.assertEqual(step['api_key_env'], 'OPENCODE_GO_API_KEY')
         self.assertEqual(request_body(step,'baseline',{},SCHEMA,'fixture')[0]['reasoning_effort'],'high')
         self.assertNotIn('reasoning_effort',request_body(cat,'baseline',{},SCHEMA,'fixture')[0])
-        self.assertEqual(request_body(cat,'baseline',{},SCHEMA,'fixture')[0]['thinking'],{'type':'disabled'})
+        self.assertNotIn('thinking',request_body(cat,'baseline',{},SCHEMA,'fixture')[0])
+        disabled=profile(MODELS[1],reasoning_effort='none')
+        self.assertEqual(request_body(disabled,'baseline',{},SCHEMA,'fixture')[0]['thinking'],{'type':'disabled'})
         with self.assertRaises(ValueError): profile('paid-model')
+
+    def test_explicit_go_quality_output_limit_reaches_request_and_authorization(self):
+        auth=self.ledger.authorize_go(MODELS[1],'quality calibration fixture',output_limit=32768,reasoning_effort='default')
+        self.assertEqual(auth['profile']['output_limit'],32768)
+        self.assertEqual(request_body(auth['profile'],'intelligence',{},SCHEMA,'fixture')[1],32768)
+        self.assertEqual(request_body(auth['profile'],'graph_extraction',{},SCHEMA,'fixture')[1],16384)
+        self.assertNotIn('thinking',request_body(auth['profile'],'intelligence',{},SCHEMA,'fixture')[0])
+        legacy=profile(MODELS[1],8192,'none')
+        self.assertEqual(request_body(legacy,'intelligence',{},SCHEMA,'fixture')[1],8192)
+        from agent_v3.tests.test_benchmark import profile as paid
+        self.assertEqual(request_body(paid(),'intelligence',{},SCHEMA,'fixture')[1],8192)
 
     def test_step_supported_strengths_are_frozen_and_not_transferred_to_longcat(self):
         for effort in ('low','medium','high'):
@@ -161,6 +174,38 @@ class GoTests(unittest.TestCase):
         self.assertEqual(delivery['failure']['category'],'http_429')
         self.assertTrue(model.stopped)
         self.assertNotIn('fixture',json.dumps(delivery))
+
+    def test_longer_time_budget_is_frozen_and_shared_by_retries(self):
+        self.ledger.authorize_go(MODELS[1],'offline quality fixture',task_timeout_seconds=600)
+        p=profile(MODELS[1]);observed=[]
+        class Client:
+            def __init__(self,*args,**kwargs):pass
+            def run_task(self,*args,**kwargs):
+                observed.append(kwargs['timeout_seconds'])
+                return {'result':{'ready':True},'usage':{'prompt_tokens':1,'completion_tokens':1},'api_model':MODELS[1]}
+        model=b.RecordedModel(p,self.ledger,'test-C','pilot',self.root/'outputs',client_factory=Client)
+        model.run_task('baseline',{},SCHEMA,'fixture',timeout_seconds=180)
+        self.assertEqual(observed,[600])
+        self.assertEqual(model.task_timeout_seconds,600)
+        self.assertEqual(self.ledger.authorization()['task_timeout_seconds'],600)
+        model.run_task('main_plan',{},SCHEMA,'fixture',timeout_seconds=123)
+        self.assertEqual(observed,[600,123])
+        from agent_v3.tests.test_main_agent import MainAgentTests
+        from agent_v3.main_agent import task
+        fixture=MainAgentTests();fixture.setUp()
+        try:
+            fake=fixture.model();budgets=[]
+            fake.task_timeout_seconds=600
+            def tracked(*args,**kwargs):
+                budgets.append(kwargs['timeout_seconds'])
+                return {'result':{'ready':len(budgets)>1},'usage':{'prompt_tokens':1,'completion_tokens':1},'model':'fixture'}
+            fake.run_task=tracked
+            task(fixture.store,fixture.rid,fake,'main_plan',{},SCHEMA,'fixture',90)
+            self.assertEqual(len(budgets),2)
+            self.assertGreater(budgets[0],590)
+            self.assertLessEqual(budgets[0],600)
+            self.assertLessEqual(budgets[1],budgets[0])
+        finally:fixture.tearDown()
 
 
 class GroundingRetryTests(unittest.TestCase):

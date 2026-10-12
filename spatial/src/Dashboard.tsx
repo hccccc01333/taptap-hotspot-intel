@@ -24,7 +24,7 @@ function download(name: string, content: string) {
 }
 
 export function Login({ onLogin }: { onLogin: (me: Me) => void }) {
-  const [actor, setActor] = useState('观察E'); const [password, setPassword] = useState('');
+  const [actor, setActor] = useState(''); const [password, setPassword] = useState('');
   const [error, setError] = useState(''); const [busy, setBusy] = useState(false);
   return <main className="login-page"><div className="login-orbit" /><form className="login-card" onSubmit={async e => {
     e.preventDefault(); setError(''); setBusy(true);

@@ -1,0 +1,114 @@
+{
+  "checked_at": "2026-10-12",
+  "scope": "本地所有可达Git对象，源代码当前工作树；未取得GitHub不可达缓存及他人克隆。只输出路径、字段和数量，不输出密钥、身份值或正文。",
+  "source_head_at_scan": "0526483ad5647d6a90421188ca2cb836d01b1d44",
+  "tracked_files_after_untracking_at_scan": 473,
+  "reachable_objects": 4181,
+  "reachable_bytes_scanned": 324966122,
+  "known_secret_values_checked": 14,
+  "known_secret_matches_current": 0,
+  "known_secret_matches_history": 0,
+  "credential_pattern_matches_current": 0,
+  "credential_pattern_matches_history": 0,
+  "approved_untracking": [
+    {
+      "path": "data/events/bilibili__bili_comments.jsonl",
+      "action": "git_untrack_only",
+      "local_file_retained": true,
+      "local_sha256_unchanged": true
+    },
+    {
+      "path": "data/events/bilibili__bili_videos.jsonl",
+      "action": "git_untrack_only",
+      "local_file_retained": true,
+      "local_sha256_unchanged": true
+    },
+    {
+      "path": "data/events/douyin__douyin_comments.jsonl",
+      "action": "git_untrack_only",
+      "local_file_retained": true,
+      "local_sha256_unchanged": true
+    },
+    {
+      "path": "data/events/douyin__douyin_videos.jsonl",
+      "action": "git_untrack_only",
+      "local_file_retained": true,
+      "local_sha256_unchanged": true
+    },
+    {
+      "path": "data/events/taptap__taptap_comments.jsonl",
+      "action": "git_untrack_only",
+      "local_file_retained": true,
+      "local_sha256_unchanged": true
+    },
+    {
+      "path": "data/events/taptap__taptap_hashtags.jsonl",
+      "action": "git_untrack_only",
+      "local_file_retained": true,
+      "local_sha256_unchanged": true
+    },
+    {
+      "path": "data/events/taptap__taptap_moments.jsonl",
+      "action": "git_untrack_only",
+      "local_file_retained": true,
+      "local_sha256_unchanged": true
+    },
+    {
+      "path": "data/events/taptap__taptap_reviews.jsonl",
+      "action": "git_untrack_only",
+      "local_file_retained": true,
+      "local_sha256_unchanged": true
+    },
+    {
+      "path": "data/events/weibo__weibo_comments.jsonl",
+      "action": "git_untrack_only",
+      "local_file_retained": true,
+      "local_sha256_unchanged": true
+    },
+    {
+      "path": "data/events/weibo__weibo_posts.jsonl",
+      "action": "git_untrack_only",
+      "local_file_retained": true,
+      "local_sha256_unchanged": true
+    },
+    {
+      "path": "L3_trend/state/topic_tracker.sqlite3",
+      "action": "git_untrack_only",
+      "local_file_retained": true,
+      "local_sha256_unchanged": true
+    },
+    {
+      "path": "runtime/state/scheduler.sqlite3",
+      "action": "git_untrack_only",
+      "local_file_retained": true,
+      "local_sha256_unchanged": true
+    },
+    {
+      "path": "runtime/reports/scheduler_status_latest.md",
+      "action": "git_untrack_only",
+      "local_file_retained": true,
+      "local_sha256_unchanged": true
+    },
+    {
+      "path": "webapp/auth_users.json",
+      "action": "git_untrack_only",
+      "local_file_retained": true,
+      "local_sha256_unchanged": true
+    }
+  ],
+  "history_unresolved": [
+    {
+      "path": "08对照_微博/posts_sample.csv",
+      "blob": "2ff63dc58397d91cded15873ea2a12b3f05fef19",
+      "rows": 43,
+      "nonempty_identity_rows": 43,
+      "field": "user_name",
+      "history_rewritten": false
+    }
+  ],
+  "limits": [
+    "没有检查GitHub不可达对象、缓存与第三方克隆。",
+    "已知密钥匹配与格式扫描不能证明不存在所有秘密。",
+    "当前索引守卫不检查历史。"
+  ]
+}

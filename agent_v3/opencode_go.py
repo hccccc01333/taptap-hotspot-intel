@@ -18,9 +18,9 @@ PRICING = {'currency': 'CNY', 'input_per_million': 0, 'output_per_million': 0,
 def profile(model, output_limit=8192, reasoning_effort=None):
     if model not in MODELS:
         raise ValueError('只授权 Step 5 / LongCat 2.5 Preview Free；不能切换付费模型')
-    effort=reasoning_effort or ('high' if model==MODELS[0] else 'none')
-    if effort not in (('low','medium','high') if model==MODELS[0] else ('none',)):
-        raise ValueError('Step支持low/medium/high；LongCat本实验只允许关闭独立思考')
+    effort=reasoning_effort or ('high' if model==MODELS[0] else 'default')
+    if effort not in (('low','medium','high') if model==MODELS[0] else ('default','none')):
+        raise ValueError('Step支持low/medium/high；LongCat使用供应商默认推理或明确关闭，不移植其他模型强度参数')
     return validate(preset(
         'go-step5' if model == MODELS[0] else 'go-longcat',
         'OpenCode Go / ' + model, BASE_URL, model, 'OPENCODE_GO_API_KEY',
@@ -41,7 +41,9 @@ def read_stream(response, started, timeout_seconds):
     usage, refusal, tools = {}, False, False
     for chunk in response.iter_content(chunk_size=256):
         if time.monotonic() - started > timeout_seconds:
-            raise LLMUnavailable('Go流式响应超过任务时间预算')
+            error=LLMUnavailable('Go流式响应超过任务时间预算')
+            error.failure_category='task_timeout'
+            raise error
         size += len(chunk)
         if size > 2000000:
             raise LLMUnavailable('Go流式响应超过大小预算')

@@ -55,6 +55,13 @@ class SemanticDeliveryError(ValueError):
 
 def task(store, run_id, model, stage, packet, schema, system, timeout_seconds=180, *, validate=None):
     """Shared bounded model call; final JSON only, no private reasoning persisted."""
+    # An isolated benchmark may preauthorize a longer shared retry window.
+    # Production models keep their existing stage deadline.
+    configured=getattr(model,'task_timeout_seconds',None)
+    if configured is not None:
+        if type(configured) is not int or not 5 <= configured <= 1200:
+            raise ValueError('模型任务时间上限无效')
+        timeout_seconds=max(timeout_seconds,configured)
     started=time.monotonic();usage={}
     for attempt in range(2):
         store.heartbeat(run_id)

@@ -154,6 +154,16 @@ data/v2/
 # V3 candidate ledger, material library and growth packs are local runtime data.
 data/v3/
 
+# Collected event bodies and machine-specific state are runtime data.
+data/events/
+L3_trend/state/
+runtime/reports/scheduler_status_latest.md
+webapp/auth_users.json
+
+# SQLite sidecars can contain recent runtime writes too.
+**/*.sqlite3-wal
+**/*.sqlite3-shm
+
 # Python package entry points are source files, not underscore-prefixed probes.
 !**/__init__.py
 !**/__main__.py

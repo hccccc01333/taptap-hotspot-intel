@@ -14,7 +14,7 @@ const time=(v?:string)=>v?new Intl.DateTimeFormat('zh-CN',{timeZone:'Asia/Shangh
 const kind:Record<string,string>={...materialGroups};
 
 export default function V3Workspace(){
- const [user,setUser]=useState<any>(null),[actor,setActor]=useState('运营A'),[password,setPassword]=useState('demo');
+ const [user,setUser]=useState<any>(null),[actor,setActor]=useState(''),[password,setPassword]=useState('');
  const [data,setData]=useState<any>(null),[view,setView]=useState<View>('discover'),[error,setError]=useState(''),[busy,setBusy]=useState(false);
  const [topic,setTopic]=useState<any>(null),[domain,setDomain]=useState(''),[filtered,setFiltered]=useState<any[]>([]);
  const [settings,setSettings]=useState(false),settingsOpener=useRef<HTMLElement|null>(null);
@@ -27,7 +27,7 @@ export default function V3Workspace(){
  useEffect(()=>{if(!data||!domain)return;let live=true;void v3Api.topics(domain).then(r=>live&&setFiltered(r.hotspots||[])).catch(()=>{});return()=>{live=false;};},[domain,data]);
  useEffect(()=>{if(!user)return;const id=new URLSearchParams(location.search).get('topic');if(id)void openTopic(id);},[user?.actor]);
  if(isPublicResults&&!data)return <main className="agentv2 agentv2-login"><section><p className="v2-eyebrow">TAPTAP / V3 ALPHA 18</p><h1>正在读取已整理的成果</h1><p role="status">{error||'情报、素材和增长创意正在载入…'}</p></section></main>;
- if(!user)return <main className="agentv2 agentv2-login"><section><p className="v2-eyebrow">TAPTAP / V3 ALPHA 18</p><h1>情报、素材与增长创意，打开即可查看。</h1><p>后台持续发现、研究并归类；你可以查看成果，也可以沿来源核查。</p><form onSubmit={e=>{e.preventDefault();setBusy(true);void v3Api.login(actor,password).then(async u=>{setUser(u);setPassword('');await refresh();}).catch(e=>setError(e.message)).finally(()=>setBusy(false));}}><label>账号<input autoComplete="username" value={actor} onChange={e=>setActor(e.target.value)} required/></label><label>密码<input type="password" autoComplete="current-password" value={password} onChange={e=>setPassword(e.target.value)} required/></label><button disabled={busy}>进入</button></form>{error&&<p role="alert">{error}</p>}<small>本地账号：运营A / 观察E，密码 demo。</small></section></main>;
+ if(!user)return <main className="agentv2 agentv2-login"><section><p className="v2-eyebrow">TAPTAP / V3 ALPHA 18</p><h1>情报、素材与增长创意，打开即可查看。</h1><p>后台持续发现、研究并归类；你可以查看成果，也可以沿来源核查。</p><form onSubmit={e=>{e.preventDefault();setBusy(true);void v3Api.login(actor,password).then(async u=>{setUser(u);setPassword('');await refresh();}).catch(e=>setError(e.message)).finally(()=>setBusy(false));}}><label>账号<input autoComplete="username" value={actor} onChange={e=>setActor(e.target.value)} required/></label><label>密码<input type="password" autoComplete="current-password" value={password} onChange={e=>setPassword(e.target.value)} required/></label><button disabled={busy}>进入</button></form>{error&&<p role="alert">{error}</p>}<small>使用本机已配置的账号登录。</small></section></main>;
  const hotspots=domain?filtered:(data?.hotspots||[]);
  const tracked=[...(data?.hotspots||[]),...(data?.game_coverage?.briefs||[])].filter((v,i,a)=>a.findIndex(x=>x.topic_id===v.topic_id)===i);
  const materials=data?.materials||[],creatives=data?.creatives||[];

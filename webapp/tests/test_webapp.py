@@ -13,6 +13,7 @@
 from __future__ import annotations
 
 import json
+import hashlib
 import os
 import sys
 import tempfile
@@ -34,9 +35,16 @@ class WebAppFixture(unittest.TestCase):
         self._tmp = tempfile.TemporaryDirectory()
         tmp = Path(self._tmp.name)
         self._old_env = {k: os.environ.get(k) for k in
-                         ("L6_EXECUTION_DB", "L5_MEMORY_DB")}
+                         ("L6_EXECUTION_DB", "L5_MEMORY_DB", "TAPTAP_AUTH_USERS_FILE")}
         os.environ["L6_EXECUTION_DB"] = str(tmp / "l6.sqlite3")
         os.environ["L5_MEMORY_DB"] = str(tmp / "l5.sqlite3")
+        users_path = tmp / "users.json"
+        os.environ["TAPTAP_AUTH_USERS_FILE"] = str(users_path)
+        users_path.write_text(json.dumps([
+            {"actor": actor, "role": role, "sha256": hashlib.sha256(b"demo").hexdigest()}
+            for actor, role in (("运营A", "operator"), ("评审B", "reviewer"),
+                                ("管理D", "admin"), ("观察E", "viewer"))
+        ], ensure_ascii=False), encoding="utf-8")
         self._patch_l4_l3(tmp)
         # App 只在 L5 库文件已存在时才挂 MemoryStore —— 预建空库
         from memory.store import MemoryStore

@@ -230,16 +230,17 @@ class Ledger:
             raise BudgetExceeded('尚未记录实验模型和资源预算授权')
         return json.loads(row[0])
 
-    def authorize_go(self, model, note, *, max_calls=220, pilot_calls=40, max_tokens=4000000, reasoning_effort=None):
+    def authorize_go(self, model, note, *, max_calls=220, pilot_calls=40, max_tokens=4000000, reasoning_effort=None, output_limit=8192, task_timeout_seconds=180):
         from .opencode_go import profile, PRICING as go_pricing
         if (not note or type(max_calls) is not int or not 1 <= pilot_calls <= max_calls <= 220
-                or type(pilot_calls) is not int or type(max_tokens) is not int or not 1 <= max_tokens <= 4000000):
+                or type(pilot_calls) is not int or type(max_tokens) is not int or not 1 <= max_tokens <= 4000000
+                or type(task_timeout_seconds) is not int or not 5 <= task_timeout_seconds <= 1200):
             raise ValueError('免费模型也需要有限的请求、token与校准预算')
-        p = profile(model,reasoning_effort=reasoning_effort)
+        p = profile(model,output_limit=output_limit,reasoning_effort=reasoning_effort)
         value = {'at': now_iso(), 'note': note, 'pricing': go_pricing,
                  'profile': p, 'model': model, 'reasoning_effort': p['reasoning_effort'],
                  'output_limit': p['output_limit'], 'max_calls': max_calls,
-                 'pilot_calls': pilot_calls, 'max_tokens': max_tokens}
+                 'pilot_calls': pilot_calls, 'max_tokens': max_tokens, 'task_timeout_seconds': task_timeout_seconds}
         with self.conn:
             self.conn.execute('INSERT INTO authorization VALUES(1,?)', (dump(value),))
             self.conn.execute('''CREATE TABLE resource_reservations(
@@ -350,6 +351,7 @@ class RecordedModel:
         self.transport = profile['protocol']
         self.stopped = False
         self.last_failure = None
+        self.task_timeout_seconds = auth.get('task_timeout_seconds',180)
         self.client = (client_factory or ProfileModel)(profile, final_observer=self.observe)
 
     def observe(self, content, metadata):
@@ -382,7 +384,11 @@ class RecordedModel:
         status = 'failed'
         failure = None
         try:
-            response = self.client.run_task(stage, packet, schema, system, timeout_seconds=timeout_seconds)
+            # Direct one-shot baseline/research requests use the frozen cap.
+            # Other stages receive the remaining shared retry window from task().
+            effective_timeout=(max(timeout_seconds,self.task_timeout_seconds)
+                               if stage in ('baseline','research_plan') else timeout_seconds)
+            response = self.client.run_task(stage, packet, schema, system,timeout_seconds=effective_timeout)
             status = 'returned'
             return response
         except StructuredDeliveryError as error:
@@ -795,7 +801,9 @@ def main(argv=None):
     p = sub.add_parser('authorize-go')
     from .opencode_go import MODELS
     p.add_argument('--model', choices=MODELS, required=True)
-    p.add_argument('--reasoning-effort', choices=('low','medium','high','none'))
+    p.add_argument('--reasoning-effort', choices=('low','medium','high','none','default'))
+    p.add_argument('--output-limit', type=int, default=8192)
+    p.add_argument('--task-timeout-seconds', type=int, default=180)
     p.add_argument('--note', required=True)
     for command in ('run', 'review', 'summary'):
         p = sub.add_parser(command)
@@ -819,7 +827,8 @@ def main(argv=None):
     elif args.command == 'authorize-go':
         ledger = Ledger(root)
         try:
-            result = ledger.authorize_go(args.model, args.note,reasoning_effort=args.reasoning_effort)
+            result = ledger.authorize_go(args.model, args.note,reasoning_effort=args.reasoning_effort,output_limit=args.output_limit,
+                                         task_timeout_seconds=args.task_timeout_seconds)
         finally:
             ledger.close()
     elif args.command == 'run':
