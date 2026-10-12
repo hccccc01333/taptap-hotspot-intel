@@ -21,10 +21,21 @@ from unittest.mock import patch
 
 from agent_v2.store import dump, now_iso
 
-VERSION = 'agent-benchmark-v2'
+VERSION = 'agent-benchmark-v3'
 ARMS = ('A', 'B', 'C')
 METRICS = ('facts', 'dates', 'citations', 'unsupported_assertions', 'risk_refusal')
 VERDICTS = ('pass', 'fail', 'unverified', 'not_applicable')
+RESOURCE_GROUP_FIELDS = ('model_calls', 'estimated_peak_cost_yuan', 'reserved_unknown_yuan')
+QUALITY_POLICY = {
+    'version': 'quality-first-v1',
+    'priority': '先验证证据与实际交付质量，再观察资源消耗；没有token降低验收目标。',
+    'primary_metrics': list(METRICS) + ['required_fact_coverage', 'delivery_completeness'],
+    'resource_metrics_excluded_from_quality': ['token_usage', 'reasoning_tokens', 'latency', 'cost', 'model_calls'],
+    'product_review': '另行核查情报是否有意义、素材是否可直接编辑使用、创意是否有具体人群/切口/TapTap承接/用户动作；不以输出数量代替可用性。',
+    'business_delivery': '最终报告非空不等于业务实际入库，完整系统须另查持久交付漏斗。',
+    'reasoning_policy': '运行前固定模型支持的推理与最终输出配置，不因消耗较高自动降强度、换弱模型或裁掉必要证据。',
+    'incomplete_results': '资源中断、超时、未运行单独记录；无结果不能判事实正确，也不能冒充内容质量已核验。',
+}
 # Upper peak RMB rates, no cache discounts. Verify again before authorizing.
 PRICING = {'currency': 'CNY', 'input_per_million': 2, 'output_per_million': 8,
            'source': 'https://api-docs.deepseek.com/zh-cn/quick_start/pricing/',
@@ -163,6 +174,7 @@ def freeze(root, selected, *, phase='formal', order_seed=20261010):
              'order_seed': order_seed, 'frozen_at': now_iso(), 'project_version': __version__,
              'git_commit': commit, 'tracked_diff_sha256': code_dirty_hash,
              'contract_version': contract_version, 'business_profile': copy.deepcopy(PROFILE),
+             'evaluation_policy': copy.deepcopy(QUALITY_POLICY),
              'code_inventory': code_inventory(),
              'gold_hash': digest(gold),
              'research_units_per_trial': 6, 'model_calls_per_trial': 16,
@@ -670,6 +682,7 @@ def review_export(root, phase='formal'):
     write_new(root / f'{phase}-mapping-{token}.json', mapping)
     path = root / f'{phase}-review-{token}.json'
     write_new(path, {'version': VERSION, 'manifest_hash': manifest['manifest_hash'], 'items': items,
+                     'evaluation_policy': copy.deepcopy(manifest.get('evaluation_policy')),
                      'warning': '部分盲化；开发者可能从文风推测架构。来源支持性仍需逐条人工查证。'})
     return {'review': str(path), 'mapping': str(root / f'{phase}-mapping-{token}.json')}
 
@@ -751,6 +764,10 @@ def summarize(root, review_path, mapping_path, phase='formal'):
                           estimated_peak_cost_yuan=sum(r['charged'] or 0 for r in calls) / 1000000,
                           reserved_unknown_yuan=sum(r['reserved'] for r in calls if r['charged'] is None) / 1000000)
     result = {'version': VERSION, 'manifest_hash': manifest['manifest_hash'], 'groups': totals,
+              'evaluation_policy': copy.deepcopy(manifest.get('evaluation_policy')),
+              'quality_groups': {arm: {k: copy.deepcopy(v) for k, v in group.items() if k not in RESOURCE_GROUP_FIELDS}
+                                 for arm, group in totals.items()},
+              'resource_groups': {arm: {k: group[k] for k in RESOURCE_GROUP_FIELDS} for arm, group in totals.items()},
               'case_results': rows, 'budget': costs,
               'conclusion_status': 'exploratory_only',
               'limitations': ['10例不能证明统计显著性或TapTap增长效果', '未核实单独计数，不当作正确',

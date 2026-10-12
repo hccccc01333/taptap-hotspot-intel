@@ -165,6 +165,28 @@ class BenchmarkTests(unittest.TestCase):
             self.assertNotIn('selection_reason', c['seed'])
         self.assertEqual(m['manifest_hash'], b.digest({k: v for k, v in m.items() if k != 'manifest_hash'}))
 
+    def test_quality_first_policy_is_frozen_not_added_retroactively(self):
+        manifest = self.frozen_formal()
+        self.assertEqual(manifest['evaluation_policy']['version'], 'quality-first-v1')
+        self.assertNotIn('token_usage', manifest['evaluation_policy']['primary_metrics'])
+        changed = copy.deepcopy(manifest)
+        changed['evaluation_policy']['primary_metrics'].append('token_usage')
+        self.assertNotEqual(manifest['manifest_hash'], b.digest({k: v for k, v in changed.items() if k != 'manifest_hash'}))
+
+    def test_resource_consumption_does_not_change_quality_result(self):
+        self.frozen_formal()
+        paths = b.review_export(self.root)
+        first = b.read(b.summarize(self.root, paths['review'], paths['mapping'])['summary'])
+        self.authorize()
+        call = self.ledger.reserve('case-0-A', 'formal', 'baseline', 100000, 100000)
+        self.ledger.settle(call, {'api_model': 'deepseek-flash', 'usage': {
+            'prompt_tokens': 90000, 'completion_tokens': 90000}}, 120, 'returned')
+        second = b.read(b.summarize(self.root, paths['review'], paths['mapping'])['summary'])
+        self.assertEqual(first['quality_groups'], second['quality_groups'])
+        self.assertGreater(second['resource_groups']['A']['estimated_peak_cost_yuan'], first['resource_groups']['A']['estimated_peak_cost_yuan'])
+        self.assertEqual(second['quality_groups']['A']['metrics']['facts']['unverified'], 10)
+        self.assertTrue(all(k not in second['quality_groups']['A'] for k in b.RESOURCE_GROUP_FIELDS))
+
     def test_no_results_cannot_be_reported_as_success(self):
         self.frozen_formal()
         paths = b.review_export(self.root)
