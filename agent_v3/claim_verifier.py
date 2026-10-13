@@ -68,6 +68,20 @@ def _quote_blob(quotes):
     return '\n'.join(normalize(q.get('quote', '')) for q in quotes)
 
 
+def _own_titles(quotes, titles):
+    """Title support is limited to the evidence this record itself cites;
+    titles of other sources in the same packet must never leak in."""
+    if not titles:
+        return []
+    own = {q.get('evidence_id') for q in quotes if isinstance(q.get('evidence_id'), str)}
+    return [normalize(titles[identifier]) for identifier in sorted(own) if identifier in titles]
+
+
+def _own_blob(quotes, titles):
+    parts = [_quote_blob(quotes)] + _own_titles(quotes, titles)
+    return '\n'.join(part for part in parts if part)
+
+
 def _covered_ratio(clause, blob):
     if not clause:
         return 1.0
@@ -138,8 +152,8 @@ def _rule_detail_reasons(text, quotes, titles):
     return [('rule_detail_title_only', '参与规则/步骤细节缺少正文级引用（仅有标题级引用）')]
 
 
-def _coverage_reasons(text, quotes):
-    blob = _quote_blob(quotes)
+def _coverage_reasons(text, quotes, titles=None):
+    blob = _own_blob(quotes, titles)
     if not blob:
         return [('quote_missing', '没有可核对的引用')]
     reasons = []
@@ -156,7 +170,7 @@ def _coverage_reasons(text, quotes):
 
 
 def _token_reasons(text, quotes, titles):
-    blob = _quote_blob(quotes) + '\n' + '\n'.join(normalize(t) for t in (titles or {}).values())
+    blob = _own_blob(quotes, titles)
     missing = [token for token in specific_tokens(text) if normalize(token) not in blob]
     if not missing:
         return []
@@ -207,9 +221,9 @@ def verify_signal(signal, titles=None):
     """A game signal must state only what its cited quotes directly support."""
     text = signal.get('observed_change', '') or ''
     quotes = [f for f in signal.get('facts', []) if isinstance(f, dict)]
-    blob = _quote_blob(quotes)
+    blob = _own_blob(quotes, titles)
     reasons = []
-    reasons += _coverage_reasons(text, quotes)
+    reasons += _coverage_reasons(text, quotes, titles)
     reasons += _token_reasons(text, quotes, titles)
     reasons += _rule_detail_reasons(text, quotes, titles)
     reasons += _placeholder_reasons(text)
@@ -224,7 +238,7 @@ def verify_material(item, quotes, titles=None):
     delivery = item.get('delivery') or {}
     if isinstance(delivery, dict) and delivery.get('body'):
         texts.append(delivery['body'])
-    blob = _quote_blob(quotes)
+    blob = _own_blob(quotes, titles)
     reasons = []
     for text in texts:
         reasons += _placeholder_reasons(text)
@@ -242,10 +256,10 @@ def verify_creative(payload, quotes, titles=None):
     reasons = []
     copy = payload.get('copy', '') or ''
     reasons += _placeholder_reasons(copy)
-    reasons += _sufficiency_reasons(copy, _quote_blob(quotes))
+    reasons += _sufficiency_reasons(copy, _own_blob(quotes, titles))
     reasons += _token_reasons(copy, quotes, titles)
     reasons += _rule_detail_reasons(copy, quotes, titles)
-    reasons += _negation_reasons(copy, _quote_blob(quotes))
+    reasons += _negation_reasons(copy, _own_blob(quotes, titles))
     if not quotes:
         reasons.append(('quote_missing', '没有可核对的引用'))
     return _verdict('creative', reasons, ('copy',))
