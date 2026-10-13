@@ -97,6 +97,10 @@ def run(store,run_id,model,topic_id,*,timeout_seconds=360):
             'growth_hypothesis':intel['opportunity'].get('hypothesis',''),
             'validation_plan':intel['opportunity'].get('validation_plan',''),
             'prerequisites':intel['opportunity'].get('prerequisites',[]),'readiness':'unreviewed_draft'})
+        from .claim_verifier import verify_creative,verify_material
+        creative['evidence_review']=verify_creative(creative,intel['facts'])
+        for deliverable in creative['deliverables']:
+            deliverable['evidence_review']=verify_material(deliverable,intel['facts'])
         opportunity=intel['opportunity']
         assessment={'title':topic['title'],'verdict':'related','topic_id':topic_id,'topic_fingerprint':topic['fingerprint'],
             'evidence_ids':source_ids,'summary':intel['summary'],'facts':intel['facts'],

@@ -297,6 +297,10 @@ class Store(RuntimeStore, EvidenceStore):
         if "eligible" not in {r[1] for r in self.conn.execute("PRAGMA table_info(topic)")}:
             self.conn.execute("ALTER TABLE topic ADD COLUMN eligible INTEGER DEFAULT 0")
             self.conn.commit()
+        if "evidence_review" not in {r[1] for r in self.conn.execute("PRAGMA table_info(material)")}:
+            # Claim-vs-evidence verdict; NULL on records saved before Alpha25.
+            self.conn.execute("ALTER TABLE material ADD COLUMN evidence_review TEXT")
+            self.conn.commit()
         from .runtime_guard import initialize as initialize_runtime
         initialize_runtime(self)
         from .knowledge_graph import initialize as initialize_graph
@@ -378,8 +382,19 @@ class Store(RuntimeStore, EvidenceStore):
           ORDER BY s.created_at DESC LIMIT ?""",(limit,)) if delivery_freshness(self,r['topic_id'])['business_eligible']]
 
     def usable_materials(self,query='',limit=60,*,kind=''):
-        return [m for m in self.assets(query,kind,limit=100) if m.get('revision_state')!='historical' and m.get('risk_assessment',{}).get('material_allowed')
+        return [m for m in self.assets(query,kind,limit=100)
+                if m.get('revision_state')!='historical' and m.get('risk_assessment',{}).get('material_allowed')
+                and self.material_evidence_status(m)!='insufficient'
                 and (m.get('application') or m['kind'] in ('copy','script','visual_brief','production_checklist'))][:limit]
+
+    def material_evidence_status(self,item):
+        """Alpha25 claim-vs-evidence verdict; legacy rows without one stay usable."""
+        review=item.get('evidence_review')
+        if not review:return None
+        if isinstance(review,str):
+            try:review=json.loads(review)
+            except ValueError:return None
+        return review.get('status') if isinstance(review,dict) else None
 
     def event_risk(self,assessment):
         from .risk import policy,verdict
@@ -512,8 +527,10 @@ class Store(RuntimeStore, EvidenceStore):
                                           (item["kind"],item["origin"],item["title"],item["content"],item["rights_status"])):
             if sorted(json.loads(previous["evidence_ids"]))==sorted(ids) and json.loads(previous["source_versions"])==versions:
                 key=previous["material_id"];break
-        self.conn.execute("INSERT OR IGNORE INTO material VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)",
-                          (key,item["kind"],item["origin"],item["title"],item["content"],dump(item.get("tags",[])),dump(ids),dump(versions),item["rights_status"],now_iso(),run_id,event_id,creative_id))
+        review=item.get("evidence_review")
+        review_text=dump(review) if isinstance(review,dict) else (review if isinstance(review,str) and review else None)
+        self.conn.execute("INSERT INTO material VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?) ON CONFLICT(material_id) DO UPDATE SET evidence_review=COALESCE(excluded.evidence_review,evidence_review)",
+                          (key,item["kind"],item["origin"],item["title"],item["content"],dump(item.get("tags",[])),dump(ids),dump(versions),item["rights_status"],now_iso(),run_id,event_id,creative_id,review_text))
         if event_id:
             self.conn.execute("INSERT OR IGNORE INTO material_use VALUES(?,?,?,?)",(key,event_id,creative_id or "",run_id))
         return key

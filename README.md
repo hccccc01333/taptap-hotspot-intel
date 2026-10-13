@@ -2,7 +2,7 @@
 
 **持续从全网热点中，为 TapTap 积累游戏情报、可用素材，并识别增长创意的 AI 自动化系统。**
 
-[![版本](https://img.shields.io/badge/version-3.0.0--alpha.24-087f8c)](docs/版本记录.md)
+[![版本](https://img.shields.io/badge/version-3.0.0--alpha.25-087f8c)](docs/版本记录.md)
 [![CI](https://github.com/hccccc01333/taptap-hotspot-intel/actions/workflows/ci.yml/badge.svg)](https://github.com/hccccc01333/taptap-hotspot-intel/actions/workflows/ci.yml)
 [![网站部署](https://github.com/hccccc01333/taptap-hotspot-intel/actions/workflows/pages.yml/badge.svg)](https://github.com/hccccc01333/taptap-hotspot-intel/actions/workflows/pages.yml)
 
@@ -47,7 +47,7 @@ flowchart TD
     Idea --> Archive
 ```
 
-模型提出研究动作，程序通过统一 Tool Executor 检查参数和预算，执行工具并返回真实结果。模型最终 JSON 通过字段、引用、日期、风险与版本检查后才保存；模型推理文本不作为业务结果。
+模型提出研究动作，程序通过统一 Tool Executor 检查参数和预算，执行工具并返回真实结果。模型最终 JSON 通过字段、引用、日期、风险与版本检查后才保存；另做确定性的断言-引用核对，证据不足的成果保留为草稿、不进入可直接使用的素材库。模型推理文本不作为业务结果。
 
 后台自动产生、领取与恢复工作项，页面用于阅读。租约、过期恢复、写入幂等和来源版本守卫用于防止中断丢失、重复交付或旧结果覆盖。未确认事项进入补查队列；无法核实的内容保留缺口，不按正确事实发布。[自动执行与契约说明](docs/V3-自动执行可靠性与统一契约.md)。
 

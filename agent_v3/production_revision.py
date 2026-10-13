@@ -35,11 +35,16 @@ def revise(store,run_id,model,creative_id):
         if d['kind'] in ('copy','script'):
             d['content']=production['copy' if d['kind']=='copy' else 'script'];d['rights_status']=production['rights_notes']
             tools.validate_asset(d,tools.read_ids)
+    from .claim_verifier import verify_creative,verify_material
+    facts=assessment.get('facts') or []
+    revised['evidence_review']=verify_creative(revised,facts)
+    for d in revised['deliverables']:
+        d['evidence_review']=verify_material(d,facts)
     revised['production_revision_run']=run_id;revised['review_status']='unreviewed'
     new_assessment=copy.deepcopy(event['assessment'])
     matches=[c for c in new_assessment['creatives'] if c['title']==old['title'] and c.get('copy')==old['copy']]
     if len(matches)!=1:raise ValueError('当前事件中的创意版本不一致，未更新')
-    matches[0].update({k:revised[k] for k in ('copy','deliverables','production_revision_run','review_status')})
+    matches[0].update({k:revised[k] for k in ('copy','deliverables','production_revision_run','review_status','evidence_review')})
     with store.conn:
         current=store.conn.execute('SELECT payload FROM creative WHERE creative_id=?',(creative_id,)).fetchone()
         if current[0]!=row['payload']:raise ValueError('创意已由另一任务更新，未覆盖')

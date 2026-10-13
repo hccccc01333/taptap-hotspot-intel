@@ -328,6 +328,14 @@ game_signals尽量填写category和platform以归类。patterns每项填写deliv
         delivery=pattern.get('delivery')
         if delivery and any(w in delivery['body'] for w in ('你是一个','请根据以下','作为AI','请生成','系统提示词')):
             raise ValueError('素材正文必须是交付内容，不能是生成指令')
+    # Deterministic claim-vs-evidence verdicts before refs are translated;
+    # insufficient materials stay saved as drafts and leave the usable bank.
+    from .claim_verifier import verify_material,verify_signal,summarize
+    quotes=packet['quote_candidates']
+    titles={e['evidence_id']:e['title'] for e in packet.get('evidence',[])}
+    for pattern in value['patterns']:
+        pattern_quotes=[quotes[r] for r in pattern.get('basis_refs') or []]
+        pattern['evidence_review']=verify_material(pattern,pattern_quotes,titles)
     applications=[{k:p[k] for k in ('game_application','usage_example','delivery') if k in p} for p in value['patterns']]
     for p in value['patterns']:p.pop('delivery',None)
     for p in value['patterns']:p.pop('game_application');p.pop('usage_example')
@@ -335,7 +343,6 @@ game_signals尽量填写category和platform以归类。patterns每项填写deliv
     payload=copy.deepcopy(value);patterns=payload.pop('patterns')
     payload['patterns']=[]
     payload=intelligence_result(payload,packet)
-    quotes=packet['quote_candidates']
     for pattern in patterns:
         pattern['evidence_ids']=list(dict.fromkeys(quotes[r]['evidence_id'] for r in pattern.pop('basis_refs')))
         pattern.update(origin='source' if pattern['kind']=='source_quote' else 'original' if pattern['kind']=='game_adaptation' else 'inferred',tags=[])
@@ -358,6 +365,7 @@ game_signals尽量填写category和platform以归类。patterns每项填写deliv
                 signal['validation']=signal_validation(signal,topic)
                 signal['facts']=[{k:quotes[r][k] for k in ('evidence_id','quote')} for r in signal.pop('basis_refs')]
                 signal['source_versions']={f['evidence_id']:store.snapshot(f['evidence_id']) for f in signal['facts']}
+                signal['evidence_review']=verify_signal(signal,titles)
                 signal_id=stable_id('signal_',dump([job['topic_id'],job['fingerprint'],run_id,signal]))
                 store.conn.execute('INSERT OR IGNORE INTO game_signal VALUES(?,?,?,?,?,?)',
                     (signal_id,job['topic_id'],job['fingerprint'],run_id,now_iso(),dump(signal)))
@@ -367,8 +375,17 @@ game_signals尽量填写category和platform以归类。patterns每项填写deliv
                     (mid,job['topic_id'],job['fingerprint'],run_id,dump(application)))
                 store.conn.execute('INSERT OR IGNORE INTO material_application_run VALUES(?,?,?,?,?,?)',
                     (mid,job['topic_id'],job['fingerprint'],run_id,now_iso(),dump(application)))
+        signal_counts=summarize([s.get('evidence_review') for s in signals])
+        material_counts=summarize([p.get('evidence_review') for p in patterns])
+        evidence_counts={k:signal_counts[k]+material_counts[k] for k in signal_counts}
+        store.step(run_id,'claim_verification',{'topic_id':job['topic_id'],
+            'signals':[{k:s['evidence_review'][k] for k in ('status','reasons')} for s in signals if s.get('evidence_review')],
+            'materials':[{k:p['evidence_review'][k] for k in ('status','reasons')} for p in patterns if p.get('evidence_review')],
+            'note':'确定性断言-引用核对；insufficient 仅保留草稿、不进入可直接使用素材库；模型语义判断尚未启用。'})
         store.step(run_id,'main_agent_delivery',{'topic_id':job['topic_id'],'signals':len(signals),'materials':len(patterns),
-            'decision':result['opportunity']['decision'],'research_questions':questions,'role':'business_main'})
+            'decision':result['opportunity']['decision'],'research_questions':questions,'role':'business_main',
+            'evidence_supported':evidence_counts['supported'],'evidence_draft':evidence_counts['draft'],
+            'evidence_insufficient':evidence_counts['insufficient']})
         if questions:
             from .followups import enqueue
             enqueue(store,job['topic_id'],job['fingerprint'],run_id,[],questions)

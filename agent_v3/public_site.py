@@ -59,11 +59,14 @@ def quotes(value):
 def signal(value):
     result=project(value,'signal_id topic_id fingerprint current_fingerprint created_at risk_assessment delivery_meta')
     result['payload']=quotes(project(value.get('payload',{}),
-        'title category platform game_context observed_change why_it_matters hypothesis next_watch facts validation'))
+        'title category platform game_context observed_change why_it_matters hypothesis next_watch facts validation evidence_review'))
     return result
 
 def material(value):
-    result=project(value,'material_id kind origin title content rights_status evidence_ids source_versions application created_at delivery_meta')
+    result=project(value,'material_id kind origin title content rights_status evidence_ids source_versions application created_at delivery_meta evidence_review')
+    if isinstance(result.get('evidence_review'),str):
+        try:result['evidence_review']=json.loads(result['evidence_review'])
+        except ValueError:result.pop('evidence_review',None)
     # Delivery body is generated, editable product content, not source text.
     delivery=value.get('application',{}).get('delivery') if value.get('application') else None
     if delivery:result['application']['delivery']['body']=clean(delivery['body'])
@@ -74,7 +77,7 @@ def creative(value):
     result=project(value,'creative_id event_id created_at risk_assessment delivery_meta')
     result['payload']=project(value.get('payload',{}),
         'title category platform audience growth_goal hook distribution placement user_action journey copy steps '
-        'timing resources growth_hypothesis prerequisites validation_plan measurement risks deliverables')
+        'timing resources growth_hypothesis prerequisites validation_plan measurement risks deliverables evidence_review')
     result['payload']['deliverables']=[material(m) for m in result['payload'].get('deliverables',[])]
     return quotes(result)
 

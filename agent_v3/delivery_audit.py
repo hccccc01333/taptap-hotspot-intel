@@ -40,6 +40,11 @@ def funnel(store,run_id,topic_id=None,*,error_type=None):
     failed_tools=sum(t['status'] in ('failed','stale','interrupted') for t in tools)
     persisted_materials=sum(s.get('materials',0) for s in business)
     creative_count=store.conn.execute('SELECT COUNT(*) FROM creative WHERE run_id=?',(run_id,)).fetchone()[0]
+    reviews=[json.loads(r['payload']).get('evidence_review') for r in signals]
+    reviews+= [json.loads(r['evidence_review']) if r['evidence_review'] else None
+               for r in store.conn.execute('SELECT evidence_review FROM material WHERE run_id=?',(run_id,))]
+    evidence_review={status:sum(1 for r in reviews if (r or {}).get('status')==status)
+                     for status in ('supported','draft','insufficient')}
     return {'version':'delivery-funnel-v3.23','scope':'this_run_only','screening':[
         {'topic_id':d['topic_id'],'decision':d.get('action'),'route':d.get('route'),'reason':d.get('reason')} for d in decisions],
         'research':{'status':research,'tool_failures':failed_tools},
@@ -52,10 +57,11 @@ def funnel(store,run_id,topic_id=None,*,error_type=None):
             'assessments':[json.loads(r['payload']).get('output_assessments',{}) for r in intel]},
         'persistence':{'business_records':len(intel),'game_intelligence':len(signals),
             'materials':persisted_materials,'creatives':creative_count,
+            'evidence_review':evidence_review,
             'validation_failed':sum(v['validation_failures'] for v in resources.values()),
             'stale_rejected':len(by_kind.get('stale_delivery_rejected',[])),
             'error_type':error_type},
-        'quality':{'verdict':'unverified','note':'Schema、逐字引用及入库成功不代表事实支持；需对照原网页核验。'},
+        'quality':{'verdict':'unverified','note':'Schema、逐字引用及入库成功不代表事实支持；证据核对为确定性词面校验，不替代对照原网页的语义核查。'},
         'resources':{'stages':resources,'tools':tools,'blocked_before_request':by_kind.get('model_request_blocked',[]),
             'input_packets':by_kind.get('business_input',[]),
             'note':'失败调用也计入；未报告价格保持未知，Go订阅成本不由token推算。'}}
