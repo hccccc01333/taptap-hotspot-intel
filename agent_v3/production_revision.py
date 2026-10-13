@@ -35,11 +35,12 @@ def revise(store,run_id,model,creative_id):
         if d['kind'] in ('copy','script'):
             d['content']=production['copy' if d['kind']=='copy' else 'script'];d['rights_status']=production['rights_notes']
             tools.validate_asset(d,tools.read_ids)
-    from .claim_verifier import verify_creative,verify_material
+    from .claim_verifier import aggregate,verify_creative,verify_material
     facts=assessment.get('facts') or []
-    revised['evidence_review']=verify_creative(revised,facts)
+    copy_verdict=verify_creative(revised,facts)
     for d in revised['deliverables']:
         d['evidence_review']=verify_material(d,facts)
+    revised['evidence_review']=aggregate([copy_verdict]+[d['evidence_review'] for d in revised['deliverables']])
     revised['production_revision_run']=run_id;revised['review_status']='unreviewed'
     new_assessment=copy.deepcopy(event['assessment'])
     matches=[c for c in new_assessment['creatives'] if c['title']==old['title'] and c.get('copy')==old['copy']]

@@ -109,13 +109,15 @@ def native_task(store,run_id,model,topic_id,*,timeout_seconds=360):
             try:
                 if delivery_error:raise delivery_error
                 assessments=tools.validate(response["result"])
-                from .claim_verifier import verify_creative,verify_material
+                from .claim_verifier import aggregate,verify_creative,verify_material
                 for assessment in assessments:
                     facts=assessment.get('facts') or []
                     for creative in assessment.get('creatives',[]):
-                        creative['evidence_review']=verify_creative(creative,facts)
+                        copy_verdict=verify_creative(creative,facts)
                         for deliverable in creative.get('deliverables',[]):
                             deliverable['evidence_review']=verify_material(deliverable,facts)
+                        # Worst part wins: a passing copy cannot carry a failing script.
+                        creative['evidence_review']=aggregate([copy_verdict]+[d['evidence_review'] for d in creative.get('deliverables',[])])
             except (ValueError,TypeError,KeyError) as error:
                 store.step(run_id,"validation_error",{"name":"native_creative_delivery","error":str(error)})
                 packet["validation_errors"]=[str(error)]

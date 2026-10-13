@@ -260,3 +260,23 @@ def summarize(verdicts):
         if status in counts:
             counts[status] += 1
     return counts
+
+
+def aggregate(verdicts, scope='creative'):
+    """A composite record (a creative with deliverables) is usable only when no
+    part failed its checks: any insufficient part makes the whole insufficient.
+    Reasons are merged for the draft record without duplicating entries."""
+    parts = [v for v in verdicts if isinstance(v, dict)]
+    insufficient = any(v.get('status') == 'insufficient' for v in parts)
+    seen, reasons = set(), []
+    for verdict in parts:
+        for reason in verdict.get('reasons', []):
+            key = (reason.get('code'), reason.get('detail'))
+            if key in seen:
+                continue
+            seen.add(key)
+            reasons.append(reason)
+    return {'status': 'insufficient' if insufficient else 'needs_review',
+            'version': VERSION, 'scope': scope,
+            'checked_at': datetime.now(timezone.utc).isoformat(timespec='seconds'),
+            'checked': ['parts:%d' % len(parts)], 'reasons': reasons[:8]}

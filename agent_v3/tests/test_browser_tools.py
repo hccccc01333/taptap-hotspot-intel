@@ -49,6 +49,18 @@ class BrowserTests(unittest.TestCase):
             for url in ('http://news.test/','https://news.test/','https://user:password@news.test/'):
                 with self.assertRaises(ValueError):browser_tools.public_url(url)
 
+    def test_fake_ip_is_accepted_only_with_a_loopback_proxy_configured(self):
+        fake=[(2,1,6,'',('198.18.0.95',443))]
+        private=[(2,1,6,'',('192.168.1.10',443))]
+        with patch.dict('os.environ',{'HTTPS_PROXY':'http://127.0.0.1:9674'},clear=False),              patch('agent_v3.browser_tools.socket.getaddrinfo',return_value=fake):
+            self.assertEqual(browser_tools.public_url('https://news.test/'),'https://news.test/')
+        with patch.dict('os.environ',{},clear=True),              patch('agent_v3.browser_tools.socket.getaddrinfo',return_value=fake):
+            with self.assertRaises(ValueError):browser_tools.public_url('https://news.test/')
+        with patch.dict('os.environ',{'HTTPS_PROXY':'http://127.0.0.1:9674'},clear=True),              patch('agent_v3.browser_tools.socket.getaddrinfo',return_value=private):
+            with self.assertRaises(ValueError):browser_tools.public_url('https://news.test/')
+        with patch.dict('os.environ',{'HTTPS_PROXY':'http://10.0.0.9:8080'},clear=True),              patch('agent_v3.browser_tools.socket.getaddrinfo',return_value=fake):
+            with self.assertRaises(ValueError):browser_tools.public_url('https://news.test/')
+
     def test_http_failure_escalates_to_browser_then_ocr_within_budget(self):
         model=self.f.model();run_task=model.run_task
         def run(stage,*args,**kwargs):

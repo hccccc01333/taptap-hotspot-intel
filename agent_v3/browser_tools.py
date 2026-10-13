@@ -17,13 +17,34 @@ from agent_v2.store import ROOT,dump,now_iso
 
 ARTIFACT_ROOT=ROOT/'data'/'v3'/'research_captures'
 BLOCKED=('验证码','安全验证','人机验证','访问过于频繁','Access Denied','verify you are human')
+# RFC 2544 benchmarking range; local TUN/fake-IP resolvers map public domains onto it.
+FAKE_IP_RANGE=ipaddress.ip_network('198.18.0.0/15')
+
+
+def loopback_proxy_configured():
+    for key in ('HTTPS_PROXY','https_proxy','HTTP_PROXY','http_proxy','ALL_PROXY','all_proxy'):
+        value=os.environ.get(key)
+        if not isinstance(value,str) or not value:continue
+        try: host=urlparse(value).hostname
+        except ValueError: continue
+        if host in ('127.0.0.1','::1','localhost'):return True
+    return False
+
+
+def usable_address(address):
+    """Public addresses stay required; a loopback proxy answering DNS with
+    fake-IP (TUN mode) maps public domains onto the benchmarking range, which is
+    accepted only while that proxy is configured. Private ranges stay blocked."""
+    ip=ipaddress.ip_address(address)
+    if ip.is_global:return True
+    return ip.version==4 and ip in FAKE_IP_RANGE and loopback_proxy_configured()
 
 
 def public_url(url):
     p=urlparse(url)
     if p.scheme!='https' or not p.hostname or p.username or p.password or p.port not in (None,443):raise ValueError('仅支持公开 HTTPS 网页')
     addresses=socket.getaddrinfo(p.hostname,443,type=socket.SOCK_STREAM)
-    if not addresses or any(not ipaddress.ip_address(a[4][0]).is_global for a in addresses):raise ValueError('网页地址不属于公网')
+    if not addresses or any(not usable_address(a[4][0]) for a in addresses):raise ValueError('网页地址不属于公网')
     return url
 
 

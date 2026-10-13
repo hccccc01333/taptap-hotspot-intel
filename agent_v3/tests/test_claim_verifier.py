@@ -11,7 +11,7 @@ from unittest.mock import patch
 
 from agent_v2.store import dump, now_iso
 from agent_v3.store import Store
-from agent_v3.claim_verifier import verify_creative, verify_material, verify_signal, summarize
+from agent_v3.claim_verifier import aggregate, verify_creative, verify_material, verify_signal, summarize
 
 
 # --- real case: 《月圆之夜》C run, saved game_signal 3 ------------------------
@@ -137,6 +137,22 @@ class ClaimVerifierTests(unittest.TestCase):
         verdict = verify_material({'content': '没有任何引用的素材'}, [])
         self.assertEqual(verdict['status'], 'insufficient')
         self.assertIn('quote_missing', self.codes(verdict))
+
+    def test_aggregate_withholds_a_composite_when_any_part_fails(self):
+        passing = verify_material({'content': '投稿截止10月31日23:59。'},
+                                  [{'evidence_id': 'e1', 'quote': '即日起至10月31日23:59'}])
+        self.assertEqual(passing['status'], 'needs_review')
+        failing = verify_material({'content': '投稿截止10月99日。'},
+                                  [{'evidence_id': 'e1', 'quote': '即日起至10月31日23:59'}])
+        self.assertEqual(failing['status'], 'insufficient')
+        combined = aggregate([passing, failing])
+        self.assertEqual(combined['status'], 'insufficient')
+        self.assertTrue(any(r['code'] == 'detail_not_quoted' for r in combined['reasons']))
+        self.assertEqual(aggregate([passing, passing])['status'], 'needs_review')
+        # merged reasons are de-duplicated
+        duplicates = aggregate([failing, failing])
+        codes = [r['code'] for r in duplicates['reasons']]
+        self.assertEqual(len(codes), len(set(codes)))
 
     def test_summarize_counts_statuses(self):
         counts = summarize([{'status': 'verified'}, None, {'status': 'insufficient'}, {'status': 'needs_review'}])
@@ -266,6 +282,40 @@ class AnalyzeWiringTests(unittest.TestCase):
             topic_outputs = __import__('agent_v3.presentation', fromlist=['business_outputs'])
             from agent_v3.discovery import read_topic
             self.assertEqual(read_topic(fixture.store, fixture.tid)['business_outputs']['game_signals'], [])
+        finally:
+            fixture.tearDown()
+
+
+    def test_creative_with_failing_script_is_withheld_while_copy_passes(self):
+        from agent_v3.tests.test_main_agent import MainAgentTests
+        from agent_v3.pipeline import process
+        fixture = MainAgentTests('setUp')
+        fixture.setUp()
+        try:
+            inner = fixture.model('opportunity')
+            class BadScript:
+                def __init__(self, inner): self._inner = inner
+                def __getattr__(self, name): return getattr(self._inner, name)
+                def run_task(self, stage, packet, schema, system, **kwargs):
+                    value = self._inner.run_task(stage, packet, schema, system, **kwargs)
+                    if stage == 'creative_production':
+                        # copy stays grounded; the script fabricates a deadline
+                        value['result']['script'] = value['result']['script'] + ' 补充：活动截止10月99日。'
+                    return value
+            with patch('agent_v3.research.search_news', side_effect=AssertionError('fixture must not use network')):
+                result = process(fixture.store, fixture.rid, model=BadScript(inner), topic_id=fixture.tid)
+            self.assertEqual(result['status'], 'completed')
+            creative = fixture.store.conn.execute('SELECT payload FROM creative').fetchone()
+            payload = json.loads(creative[0])
+            self.assertEqual(payload['evidence_review']['status'], 'insufficient')
+            statuses = {d['kind']: d['evidence_review']['status'] for d in payload['deliverables']}
+            self.assertEqual(statuses['copy'], 'needs_review')
+            self.assertEqual(statuses['script'], 'insufficient')
+            # the composite creative is withheld; its failing script is not usable
+            self.assertEqual(fixture.store.creative_feed(), [])
+            usable = {m['title'] for m in fixture.store.usable_materials()}
+            self.assertFalse(any('短视频脚本' in title for title in usable))
+            self.assertTrue(any('传播文案' in title for title in usable))
         finally:
             fixture.tearDown()
 
