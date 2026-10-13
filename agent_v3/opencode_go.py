@@ -9,6 +9,10 @@ from L4_intelligence.intelligence.llm import LLMUnavailable
 from L4_intelligence.intelligence.chat_response import usage_counts
 
 BASE_URL = 'https://opencode.ai/zen/go/v1'
+# Bounded runaway streams; paired with the per-task wall clock (up to 600s).
+# Long default-reasoning streams measured up to 2.0MB at 526s, so the byte
+# budget must exceed 2MB while staying finite.
+STREAM_BYTES_BUDGET = 5_000_000
 MODELS = ('step-5-preview-free', 'longcat-2.5-preview-free')
 PRICING = {'currency': 'CNY', 'input_per_million': 0, 'output_per_million': 0,
            'source': 'https://opencode.ai/docs/go/', 'checked_at': '2026-10-10',
@@ -63,8 +67,8 @@ def read_stream(response, started, timeout_seconds):
             if time.monotonic() - started > timeout_seconds:
                 fail('Go流式响应超过任务时间预算', 'task_timeout')
             size += len(chunk)
-            if size > 2000000:
-                fail('Go流式响应超过大小预算')
+            if size > STREAM_BYTES_BUDGET:
+                fail('Go流式响应超过大小预算，未收到结束帧', 'stream_size_budget')
             now = time.monotonic() - started
             if first_data is None:
                 first_data = now
@@ -116,7 +120,7 @@ def read_stream(response, started, timeout_seconds):
         raise
     if not done:
         error = LLMUnavailable('Go流式响应中断，未收到完整结束帧')
-        error.failure_category = 'request_exception'
+        error.failure_category = 'stream_incomplete'
         error.stream_stats = stats()
         raise error
     message = {'content': ''.join(content)}

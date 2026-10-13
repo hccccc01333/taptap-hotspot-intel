@@ -15,7 +15,8 @@ from .opencode_zen import StructuredDeliveryError
 from .deepseek import STAGE_TOKENS
 from . import providers
 
-FAILURE_CATEGORIES={'connect_timeout','read_timeout','task_timeout','connection_error','request_exception','response_json_invalid'}
+FAILURE_CATEGORIES={'connect_timeout','read_timeout','task_timeout','connection_error','request_exception',
+    'response_json_invalid','stream_size_budget','stream_incomplete','response_format_invalid','model_identity_invalid'}
 
 
 def safe_failure_category(error):
@@ -219,10 +220,12 @@ class ProfileModel:
                 message, parts = completion_parts(raw)
                 parts['reasoning_present'] |= stream_reasoning
         except CompletionError:
-            raise LLMUnavailable('模型接口响应格式无效') from None
+            error=LLMUnavailable('模型接口响应格式无效');error.failure_category='response_format_invalid'
+            raise error from None
         actual = raw.get('model')
         if not isinstance(actual, str) or not 1 <= len(actual) <= 180 or not re_model(actual):
-            raise LLMUnavailable('模型接口缺少有效的实际模型名称')
+            error=LLMUnavailable('模型接口缺少有效的实际模型名称');error.failure_category='model_identity_invalid'
+            raise error from None
         cost = raw.get('usage', {}).get('cost') if isinstance(raw.get('usage'), dict) else None
         if type(cost) not in (int, float) or not math.isfinite(cost) or cost < 0:
             cost = None

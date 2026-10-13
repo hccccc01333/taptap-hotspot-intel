@@ -119,6 +119,19 @@ class GoTests(unittest.TestCase):
         changed=copy.deepcopy(p);changed['base_url']='https://opencode.ai/zen/v1'
         with self.assertRaises(ValueError):b.RecordedModel(changed,self.ledger,'test-B','pilot',self.root)
 
+    def test_invalid_response_shape_and_model_identity_carry_safe_categories(self):
+        p=profile(MODELS[1])
+        broken=reply(p);broken['choices']=[{'message':{'content':{'not':'text'}}}]
+        with patch('agent_v3.providers.credential',return_value='fixture'),patch('requests.post',return_value=response(broken)):
+            with self.assertRaises(LLMUnavailable) as bad_shape:
+                ProfileModel(p).run_task('baseline',{},SCHEMA,'fixture')
+        self.assertEqual(bad_shape.exception.failure_category,'response_format_invalid')
+        misnamed=reply(p);misnamed['model']='bad model!!'
+        with patch('agent_v3.providers.credential',return_value='fixture'),patch('requests.post',return_value=response(misnamed)):
+            with self.assertRaises(LLMUnavailable) as bad_name:
+                ProfileModel(p).run_task('baseline',{},SCHEMA,'fixture')
+        self.assertEqual(bad_name.exception.failure_category,'model_identity_invalid')
+
     def test_wrong_returned_model_stops_instead_of_falling_back(self):
         self.ledger.authorize_go(MODELS[0],'offline fixture')
         p=profile(MODELS[0]);raw=reply(p);raw['model']='paid-replacement'
@@ -141,10 +154,16 @@ class GoTests(unittest.TestCase):
         self.assertNotIn('stream_options',post.call_args.kwargs['json'])
 
     def test_stream_without_done_or_over_time_and_size_is_rejected(self):
-        with self.assertRaises(LLMUnavailable):read_stream(sse(MODELS[0],done=False),time.monotonic(),180)
+        with self.assertRaises(LLMUnavailable) as incomplete:
+            read_stream(sse(MODELS[0],done=False),time.monotonic(),180)
+        self.assertEqual(incomplete.exception.failure_category,'stream_incomplete')
         with self.assertRaises(LLMUnavailable):read_stream(sse(MODELS[0]),time.monotonic()-181,180)
-        r=Mock();r.iter_content.return_value=iter([b'x'*2000001])
-        with self.assertRaises(LLMUnavailable):read_stream(r,time.monotonic(),180)
+        from agent_v3.opencode_go import STREAM_BYTES_BUDGET
+        r=Mock();r.iter_content.return_value=iter([b'x'*(STREAM_BYTES_BUDGET+1)])
+        with self.assertRaises(LLMUnavailable) as oversize:
+            read_stream(r,time.monotonic(),180)
+        self.assertEqual(oversize.exception.failure_category,'stream_size_budget')
+        self.assertGreater(oversize.exception.stream_stats['bytes_read'],STREAM_BYTES_BUDGET)
 
     def test_stream_records_transport_acceptance_statistics(self):
         p=profile(MODELS[1])
