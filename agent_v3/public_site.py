@@ -56,10 +56,23 @@ def quotes(value):
     if isinstance(value,list):return [quotes(v) for v in value]
     return value
 
+EVIDENCE_STATUSES=('verified','needs_review','insufficient')
+
+def evidence_status(review):
+    """Stable display vocabulary; records without a stored verdict are
+    legacy_unreviewed, never silently presented as verified."""
+    if isinstance(review,str):
+        try:review=json.loads(review)
+        except ValueError:review=None
+    status=review.get('status') if isinstance(review,dict) else None
+    return status if status in EVIDENCE_STATUSES else 'legacy_unreviewed'
+
 def signal(value):
     result=project(value,'signal_id topic_id fingerprint current_fingerprint created_at risk_assessment delivery_meta')
-    result['payload']=quotes(project(value.get('payload',{}),
+    payload=value.get('payload',{})
+    result['payload']=quotes(project(payload,
         'title category platform game_context observed_change why_it_matters hypothesis next_watch facts validation evidence_review'))
+    result['payload']['evidence_status']=evidence_status(payload.get('evidence_review'))
     return result
 
 def material(value):
@@ -67,6 +80,7 @@ def material(value):
     if isinstance(result.get('evidence_review'),str):
         try:result['evidence_review']=json.loads(result['evidence_review'])
         except ValueError:result.pop('evidence_review',None)
+    result['evidence_status']=evidence_status(result.get('evidence_review'))
     # Delivery body is generated, editable product content, not source text.
     delivery=value.get('application',{}).get('delivery') if value.get('application') else None
     if delivery:result['application']['delivery']['body']=clean(delivery['body'])
@@ -75,9 +89,11 @@ def material(value):
 
 def creative(value):
     result=project(value,'creative_id event_id created_at risk_assessment delivery_meta')
-    result['payload']=project(value.get('payload',{}),
+    payload=value.get('payload',{})
+    result['payload']=project(payload,
         'title category platform audience growth_goal hook distribution placement user_action journey copy steps '
         'timing resources growth_hypothesis prerequisites validation_plan measurement risks deliverables evidence_review')
+    result['payload']['evidence_status']=evidence_status(payload.get('evidence_review'))
     result['payload']['deliverables']=[material(m) for m in result['payload'].get('deliverables',[])]
     return quotes(result)
 

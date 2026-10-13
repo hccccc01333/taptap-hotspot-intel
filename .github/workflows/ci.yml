@@ -23,6 +23,7 @@ jobs:
           agent_v3.tests.test_delivery23
           agent_v3.tests.test_delivery24
           agent_v3.tests.test_claim_verifier
+          agent_v3.tests.test_claim_fact_set
           agent_v3.tests.test_repo_publication
           webapp.tests.test_auth_local webapp.tests.test_webapp
           agent_v3.tests.test_go20

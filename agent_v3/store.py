@@ -379,6 +379,7 @@ class Store(RuntimeStore, EvidenceStore):
           FROM game_signal s JOIN topic t USING(topic_id) WHERE t.eligible=1 AND s.fingerprint=t.fingerprint AND
           s.run_id=(SELECT i.run_id FROM topic_intelligence i WHERE i.topic_id=s.topic_id AND i.fingerprint=s.fingerprint ORDER BY i.created_at DESC,i.rowid DESC LIMIT 1)
           AND COALESCE(json_extract(s.payload,'$.validation.status'),'accepted')='accepted'
+          AND COALESCE(json_extract(s.payload,'$.evidence_review.status'),'')<>'insufficient'
           ORDER BY s.created_at DESC LIMIT ?""",(limit,)) if delivery_freshness(self,r['topic_id'])['business_eligible']]
 
     def usable_materials(self,query='',limit=60,*,kind=''):
@@ -388,13 +389,16 @@ class Store(RuntimeStore, EvidenceStore):
                 and (m.get('application') or m['kind'] in ('copy','script','visual_brief','production_checklist'))][:limit]
 
     def material_evidence_status(self,item):
-        """Alpha25 claim-vs-evidence verdict; legacy rows without one stay usable."""
+        """Alpha26 evidence vocabulary: verified / needs_review / insufficient;
+        records saved before the verifier are legacy_unreviewed (kept, marked,
+        never silently treated as verified)."""
         review=item.get('evidence_review')
-        if not review:return None
+        if not review:return 'legacy_unreviewed'
         if isinstance(review,str):
             try:review=json.loads(review)
-            except ValueError:return None
-        return review.get('status') if isinstance(review,dict) else None
+            except ValueError:return 'legacy_unreviewed'
+        status=review.get('status') if isinstance(review,dict) else None
+        return status if status in ('verified','needs_review','insufficient') else 'legacy_unreviewed'
 
     def event_risk(self,assessment):
         from .risk import policy,verdict
@@ -455,7 +459,10 @@ class Store(RuntimeStore, EvidenceStore):
         for row in self.conn.execute('SELECT c.*,e.assessment FROM creative c JOIN event e USING(event_id) ORDER BY c.created_at DESC'):
             safety=self.event_risk(self.creative_basis(row))
             if safety['growth_allowed']==held:continue
-            item=dict(row);item.pop('assessment');item.update(payload=json.loads(row['payload']),risk_assessment=safety)
+            payload=json.loads(row['payload'])
+            # Evidence-insufficient creatives stay saved but never display.
+            if (payload.get('evidence_review') or {}).get('status')=='insufficient':continue
+            item=dict(row);item.pop('assessment');item.update(payload=payload,risk_assessment=safety)
             result.append(item)
             if len(result)>=limit:break
         return result
@@ -606,6 +613,14 @@ class Store(RuntimeStore, EvidenceStore):
         data['game_coverage']=game_coverage(self)
         data['counts']['hotspots']=len(self.hotspot_feed(limit=100))
         data['counts']['usable_materials']=len(self.usable_materials(limit=100))
+        # Evidence-review transparency: withheld records stay saved as drafts.
+        withheld_signals=self.conn.execute("SELECT COUNT(*) FROM game_signal WHERE json_extract(payload,'$.evidence_review.status')='insufficient'").fetchone()[0]
+        withheld_materials=self.conn.execute("SELECT COUNT(*) FROM material WHERE json_extract(evidence_review,'$.status')='insufficient'").fetchone()[0]
+        withheld_creatives=self.conn.execute("SELECT COUNT(*) FROM creative WHERE json_extract(payload,'$.evidence_review.status')='insufficient'").fetchone()[0]
+        legacy_materials=self.conn.execute("SELECT COUNT(*) FROM material WHERE evidence_review IS NULL").fetchone()[0]
+        data['counts']['withheld_insufficient']=withheld_signals+withheld_materials+withheld_creatives
+        data['counts']['legacy_unreviewed_materials']=legacy_materials
+        data['evidence_review_note']='证据核对为确定性词面校验：通过仅表示未发现词面不一致（needs_review），不代表事实已获证明；insufficient 记录保留为草稿、不进入可用成果；核查前保存的历史记录标记为 legacy_unreviewed。'
         data["growth_drafts"]=self.growth_drafts()
         data["source_reads"]=[dict(r) for r in self.conn.execute("SELECT * FROM source_read ORDER BY attempted_at DESC LIMIT 12")]
         data['reading_summary']=[dict(r) for r in self.conn.execute('''SELECT e.platform,r.status,r.scope,COUNT(*) AS count

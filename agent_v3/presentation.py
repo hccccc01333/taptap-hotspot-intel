@@ -84,23 +84,28 @@ def recognized_captures(rows):
 
 
 def business_outputs(store,topic_id,fingerprint,record):
-    """Current business revision only; older artifacts stay in their audit tables."""
+    """Current business revision only; older artifacts stay in their audit tables.
+    Evidence-insufficient records stay saved but never appear as usable outputs."""
     signals=[];materials=[];creatives=[]
     if record:
         for row in store.conn.execute('SELECT * FROM game_signal WHERE topic_id=? AND fingerprint=? AND run_id=?',
                 (topic_id,fingerprint,record['run_id'])):
             p=json.loads(row['payload'])
-            if p.get('validation',{}).get('status','accepted')=='accepted':signals.append({**dict(row),'payload':p})
+            if p.get('validation',{}).get('status','accepted')!='accepted':continue
+            if (p.get('evidence_review') or {}).get('status')=='insufficient':continue
+            signals.append({**dict(row),'payload':p})
         for row in store.conn.execute('''SELECT m.*,a.payload AS application FROM material_application_run a JOIN material m USING(material_id)
                 WHERE a.topic_id=? AND a.fingerprint=? AND a.run_id=?''',(topic_id,fingerprint,record['run_id'])):
             materials.append({**dict(row),'application':json.loads(row['application'])})
-        materials=[m for m in materials if material_ready(m)]
+        materials=[m for m in materials if material_ready(m) and store.material_evidence_status(m)!='insufficient']
         for row in store.conn.execute('''SELECT c.* FROM creative c JOIN event e USING(event_id)
                 WHERE json_extract(e.assessment,'$.topic_id')=? AND json_extract(e.assessment,'$.topic_fingerprint')=?
                 ORDER BY c.created_at DESC''',(topic_id,fingerprint)):
             basis=store.creative_basis(row)
             if basis.get('topic_id')!=topic_id or basis.get('topic_fingerprint')!=fingerprint:continue
-            creatives.append({**dict(row),'payload':json.loads(row['payload'])})
+            payload=json.loads(row['payload'])
+            if (payload.get('evidence_review') or {}).get('status')=='insufficient':continue
+            creatives.append({**dict(row),'payload':payload})
     jobs=[dict(r) for r in store.conn.execute('''SELECT stage,status,error FROM work_item WHERE topic_id=? AND fingerprint=?
             ORDER BY created_at DESC,rowid DESC LIMIT 8''',(topic_id,fingerprint))]
     p=record['payload'] if record else {}

@@ -64,8 +64,10 @@ class MainAgentTests(unittest.TestCase):
                               'adaptation_steps':['替换为实际游戏与关卡名称','确认地图分享和组队玩法确实支持'],
                               'usage_boundary':'原创邀请内容，不声称评论统计或保证玩法可用'}}] if self.patterns else [],
                         'game_signals':[{'title':'来源展示地图分享与组队玩法','game_context':'组队挑战内容',
+                            # refs must be the quote that actually covers the claim;
+                            # ref 2 is the sentence about the creator and invitees.
                             'observed_change':'创作者公开展示邀请朋友体验的玩法','why_it_matters':'可以关注共同参与场景的传播表达',
-                            'next_watch':'后续补查实际评论和参与行为','basis_refs':[1],'hypothesis':'传播价值尚待测试'}] if self.signals else [],
+                            'next_watch':'后续补查实际评论和参与行为','basis_refs':[2],'hypothesis':'传播价值尚待测试'}] if self.signals else [],
                         'research_questions':[],'risk_assessment':{'polarity':'positive','level':'low','reason':'夹具为正常游戏玩法分享，无负面事件','basis_refs':[1]},'output_assessments':{'intelligence':'展示玩法属于带来源的游戏线索' if self.signals else '没有适合保存的游戏变化','materials':'可以原创改编邀请句式' if self.patterns else '没有适合保存的表达素材'},
                         'opportunity':{'decision':decision,'reason':'有玩法表达可小规模验证',
                             'audience_need':'寻求共同参与内容的人群' if decision=='opportunity' else '',

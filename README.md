@@ -2,7 +2,7 @@
 
 **持续从全网热点中，为 TapTap 积累游戏情报、可用素材，并识别增长创意的 AI 自动化系统。**
 
-[![版本](https://img.shields.io/badge/version-3.0.0--alpha.25-087f8c)](docs/版本记录.md)
+[![版本](https://img.shields.io/badge/version-3.0.0--alpha.26-087f8c)](docs/版本记录.md)
 [![CI](https://github.com/hccccc01333/taptap-hotspot-intel/actions/workflows/ci.yml/badge.svg)](https://github.com/hccccc01333/taptap-hotspot-intel/actions/workflows/ci.yml)
 [![网站部署](https://github.com/hccccc01333/taptap-hotspot-intel/actions/workflows/pages.yml/badge.svg)](https://github.com/hccccc01333/taptap-hotspot-intel/actions/workflows/pages.yml)
 

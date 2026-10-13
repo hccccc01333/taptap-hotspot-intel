@@ -78,18 +78,18 @@ class ClaimVerifierTests(unittest.TestCase):
 
     def test_fully_quoted_signal_is_not_flagged(self):
         verdict = verify_signal(MOONNIGHT_SIGNAL_QUOTED)
-        self.assertEqual(verdict['status'], 'supported')
+        self.assertEqual(verdict['status'], 'needs_review')
         self.assertEqual(verdict['reasons'], [])
 
     def test_declared_link_slot_is_draft_not_insufficient(self):
         verdict = verify_material(MOONNIGHT_COPY_MATERIAL, MOONNIGHT_QUOTES)
-        self.assertEqual(verdict['status'], 'draft')
+        self.assertEqual(verdict['status'], 'needs_review')
         self.assertEqual(self.codes(verdict), {'placeholder_link_slot'})
 
     def test_real_case_copy_creative_keeps_grounded_numbers_across_spacing(self):
         creative = {'copy': '《月圆之夜》1V1对战S5赛季「追忆与决心」10月15日上线——65+张新卡牌。'}
         verdict = verify_creative(creative, MOONNIGHT_QUOTES)
-        self.assertEqual(verdict['status'], 'supported')
+        self.assertEqual(verdict['status'], 'needs_review')
 
     def test_unquoted_detail_tokens_are_flagged_with_the_tokens(self):
         material = {'content': '活动截止10月30日，共送出66张卡牌。', 'kind': 'copy', 'origin': 'original'}
@@ -101,10 +101,29 @@ class ClaimVerifierTests(unittest.TestCase):
     def test_sufficiency_claim_needs_the_same_mechanism_in_a_quote(self):
         text = {'content': '带话题发帖即可参与活动，作品请原创首发。'}
         unflagged = verify_material(text, [{'evidence_id': 'e1', 'quote': '带话题发帖即可参与活动，优秀作品有奖。'}])
-        self.assertEqual(unflagged['status'], 'supported')
+        self.assertEqual(unflagged['status'], 'needs_review')
         flagged = verify_material(text, [{'evidence_id': 'e1',
             'quote': '点击话题进入活动专题页，点击「参与活动」投稿即可；发帖请遵守社区行为准则。'}])
         self.assertIn('sufficiency_not_grounded', self.codes(flagged))
+
+    def test_negation_difference_is_insufficient_in_both_directions(self):
+        # A claim that denies what the quote states.
+        denied = verify_material({'content': '本作不支持多人联机。'},
+                                 [{'evidence_id': 'e1', 'quote': '本作支持多人联机，可随时组队。'}])
+        self.assertEqual(denied['status'], 'insufficient')
+        self.assertIn('negation_mismatch', self.codes(denied))
+        # A claim that affirms what the quote denies (the user's example).
+        affirmed = verify_material({'content': '本作支持多人联机，可随时组队。'},
+                                   [{'evidence_id': 'e1', 'quote': '本作不支持多人联机。'}])
+        self.assertEqual(affirmed['status'], 'insufficient')
+        self.assertIn('negation_mismatch', self.codes(affirmed))
+        # Grounded negation and grounded affirmation stay unflagged.
+        grounded_denial = verify_material({'content': '本作不支持多人联机。'},
+                                          [{'evidence_id': 'e1', 'quote': '本作不支持多人联机。'}])
+        self.assertNotIn('negation_mismatch', self.codes(grounded_denial))
+        grounded = verify_material({'content': '本作支持多人联机。'},
+                                   [{'evidence_id': 'e1', 'quote': '本作支持多人联机，可随时组队。'}])
+        self.assertNotIn('negation_mismatch', self.codes(grounded))
 
     def test_rule_details_need_a_body_level_quote_not_only_the_title(self):
         text = {'content': '活动参与截止时间为10月31日，具体步骤见专题页。'}
@@ -120,8 +139,8 @@ class ClaimVerifierTests(unittest.TestCase):
         self.assertIn('quote_missing', self.codes(verdict))
 
     def test_summarize_counts_statuses(self):
-        counts = summarize([{'status': 'supported'}, None, {'status': 'insufficient'}, {'status': 'draft'}])
-        self.assertEqual(counts, {'supported': 1, 'draft': 1, 'insufficient': 1})
+        counts = summarize([{'status': 'verified'}, None, {'status': 'insufficient'}, {'status': 'needs_review'}])
+        self.assertEqual(counts, {'verified': 1, 'needs_review': 1, 'insufficient': 1})
 
 
 class MaterialGateTests(unittest.TestCase):
@@ -136,7 +155,7 @@ class MaterialGateTests(unittest.TestCase):
 
     def test_usable_bank_excludes_insufficient_and_keeps_drafts_and_legacy(self):
         self.store = Store(':memory:')
-        self.store.assets = lambda *args, **kwargs: self.rows(['supported', 'draft', None, 'insufficient'])
+        self.store.assets = lambda *args, **kwargs: self.rows(['verified', 'needs_review', None, 'insufficient'])
         usable = self.store.usable_materials(limit=10)
         self.assertEqual([m['material_id'] for m in usable], ['material_0', 'material_1', 'material_2'])
         self.assertEqual(self.store.material_evidence_status(self.rows(['insufficient'])[0]), 'insufficient')
@@ -156,22 +175,22 @@ class MaterialGateTests(unittest.TestCase):
         row = self.store.conn.execute('SELECT evidence_review FROM material WHERE material_id=?', (material_id,)).fetchone()
         self.assertEqual(json.loads(row[0])['status'], 'supported')
         # legacy rows without a verdict stay parseable as unknown
-        self.assertIsNone(self.store.material_evidence_status({'evidence_review': None}))
-        self.assertIsNone(self.store.material_evidence_status({'evidence_review': 'not-json'}))
+        self.assertEqual(self.store.material_evidence_status({'evidence_review': None}), 'legacy_unreviewed')
+        self.assertEqual(self.store.material_evidence_status({'evidence_review': 'not-json'}), 'legacy_unreviewed')
 
     def test_funnel_counts_evidence_review_statuses(self):
         self.store = Store(':memory:')
         run = self.store.create_run('claim verifier funnel')
         self.store.conn.execute('INSERT INTO game_signal VALUES(?,?,?,?,?,?)',
             ('signal_x', 'topic_x', 'fp_x', run, now_iso(), dump({'evidence_review': {'status': 'insufficient'}})))
-        for i, status in enumerate(('supported', 'draft')):
+        for i, status in enumerate(('needs_review', 'needs_review')):
             self.store.conn.execute('INSERT INTO material VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
                 ('material_%d' % i, 'copy', 'original', 'title', 'content', '[]', '[]', '{}', 'rights', now_iso(), run, None, None,
                  dump({'status': status})))
         self.store.conn.commit()
         from agent_v3.delivery_audit import funnel
         counts = funnel(self.store, run)['persistence']['evidence_review']
-        self.assertEqual(counts, {'supported': 1, 'draft': 1, 'insufficient': 1})
+        self.assertEqual(counts, {'verified': 0, 'needs_review': 2, 'insufficient': 1})
 
 
 class PublicExportTests(unittest.TestCase):
@@ -182,8 +201,11 @@ class PublicExportTests(unittest.TestCase):
                'evidence_ids': ['e1'], 'source_versions': {}, 'created_at': now_iso(), 'evidence_review': dump(verdict)}
         exported = export_material(row)
         self.assertEqual(exported['evidence_review']['status'], 'insufficient')
+        self.assertEqual(exported['evidence_status'], 'insufficient')
         legacy = dict(row); legacy.pop('evidence_review')
-        self.assertNotIn('evidence_review', export_material(legacy))
+        exported_legacy = export_material(legacy)
+        self.assertNotIn('evidence_review', exported_legacy)
+        self.assertEqual(exported_legacy['evidence_status'], 'legacy_unreviewed')
 
 
 class AnalyzeWiringTests(unittest.TestCase):
@@ -203,20 +225,47 @@ class AnalyzeWiringTests(unittest.TestCase):
             steps = fixture.store.get_run(fixture.rid)['steps']
             verification = [s for s in steps if s['kind'] == 'claim_verification']
             self.assertEqual(len(verification), 1)
-            # This fixture's signal selects one sentence as its quote while the
-            # observed_change also carries the next sentence's content; the fuller
-            # sentence is in the source body but not in the business packet's
-            # quote candidates, so the signal is (correctly) marked insufficient
-            # and stays saved as a marked draft instead of being dropped.
+            # The fixture selects the quote that covers its claim, so the signal
+            # passes deterministic checks (needs_review, never "verified") and
+            # stays in the gated feed.
             signal_review = verification[0]['payload']['signals'][0]
-            self.assertEqual(signal_review['status'], 'insufficient')
-            self.assertEqual(signal_review['reasons'][0]['code'], 'claim_clause_not_quoted')
+            self.assertEqual(signal_review['status'], 'needs_review')
             self.assertIn('不进入可直接使用素材库', verification[0]['payload']['note'])
             statuses = sorted(json.loads(r[0])['status']
                               for r in fixture.store.conn.execute('SELECT evidence_review FROM material WHERE evidence_review IS NOT NULL'))
-            self.assertEqual(statuses, ['draft', 'supported', 'supported'])
-            self.assertEqual(fixture.store.game_signals()[0]['payload']['evidence_review']['status'], 'insufficient')
+            self.assertEqual(statuses, ['needs_review', 'needs_review', 'needs_review'])
+            self.assertEqual(len(fixture.store.game_signals()), 1)
+            self.assertEqual(fixture.store.game_signals()[0]['payload']['evidence_review']['status'], 'needs_review')
             self.assertEqual(len(fixture.store.usable_materials()), 3)
+        finally:
+            fixture.tearDown()
+
+    def test_insufficient_signal_is_withheld_from_feeds_but_kept_as_draft(self):
+        from agent_v3.tests.test_main_agent import MainAgentTests
+        from agent_v3.pipeline import process
+        fixture = MainAgentTests('setUp')
+        fixture.setUp()
+        try:
+            inner = fixture.model('watch')
+            class Misquoted:
+                def __init__(self, inner): self._inner = inner
+                def __getattr__(self, name): return getattr(self._inner, name)
+                def run_task(self, stage, packet, schema, system, **kwargs):
+                    value = self._inner.run_task(stage, packet, schema, system, **kwargs)
+                    if stage == 'intelligence':
+                        for signal in value['result']['game_signals']:
+                            signal['basis_refs'] = [1]  # quote no longer covers the claim
+                    return value
+            with patch('agent_v3.research.search_news', side_effect=AssertionError('fixture must not use network')):
+                result = process(fixture.store, fixture.rid, model=Misquoted(inner), topic_id=fixture.tid)
+            self.assertEqual(result['status'], 'intelligence_ready')
+            saved = json.loads(fixture.store.conn.execute('SELECT payload FROM game_signal').fetchone()[0])
+            self.assertEqual(saved['evidence_review']['status'], 'insufficient')
+            self.assertEqual(fixture.store.game_signals(), [])
+            self.assertEqual(fixture.store.overview()['counts']['withheld_insufficient'], 1)
+            topic_outputs = __import__('agent_v3.presentation', fromlist=['business_outputs'])
+            from agent_v3.discovery import read_topic
+            self.assertEqual(read_topic(fixture.store, fixture.tid)['business_outputs']['game_signals'], [])
         finally:
             fixture.tearDown()
 

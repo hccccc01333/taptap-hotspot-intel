@@ -384,7 +384,7 @@ game_signals尽量填写category和platform以归类。patterns每项填写deliv
             'note':'确定性断言-引用核对；insufficient 仅保留草稿、不进入可直接使用素材库；模型语义判断尚未启用。'})
         store.step(run_id,'main_agent_delivery',{'topic_id':job['topic_id'],'signals':len(signals),'materials':len(patterns),
             'decision':result['opportunity']['decision'],'research_questions':questions,'role':'business_main',
-            'evidence_supported':evidence_counts['supported'],'evidence_draft':evidence_counts['draft'],
+            'evidence_needs_review':evidence_counts['needs_review'],'evidence_verified':evidence_counts['verified'],
             'evidence_insufficient':evidence_counts['insufficient']})
         if questions:
             from .followups import enqueue

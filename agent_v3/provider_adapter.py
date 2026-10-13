@@ -183,9 +183,10 @@ class ProfileModel:
                               403: '服务拒绝访问', 404: '接口或模型不存在', 429: '模型服务限流'}.get(code, '模型服务未完成请求')
                     raise LLMUnavailable(f'HTTP {code}: {reason}')
                 content_type = getattr(response,'headers',{}).get('Content-Type','')
+                stream_stats = None
                 if body['stream'] and isinstance(content_type,str) and 'text/event-stream' in content_type.lower():
                     from .opencode_go import read_stream
-                    raw, stream_reasoning = read_stream(response, started, timeout_seconds)
+                    raw, stream_reasoning, stream_stats = read_stream(response, started, timeout_seconds)
                 else:
                     data = bytearray()
                     for chunk in response.iter_content(chunk_size=1):
@@ -195,11 +196,15 @@ class ProfileModel:
                         if len(data) > 2000000:
                             raise LLMUnavailable('模型响应超过大小预算')
                     raw = json.loads(data)
+                    stream_stats = {'first_byte_seconds': None, 'last_data_seconds': None,
+                                    'bytes_read': len(data), 'end_marker': True}
         except requests.RequestException as cause:
             error=LLMUnavailable('模型连接超时或中断，任务保留')
             error.failure_category=('connect_timeout' if isinstance(cause,requests.ConnectTimeout) else
                 'read_timeout' if isinstance(cause,requests.ReadTimeout) else
                 'connection_error' if isinstance(cause,requests.ConnectionError) else 'request_exception')
+            if isinstance(getattr(cause,'stream_stats',None),dict):
+                error.stream_stats=cause.stream_stats
             raise error from None
         except (ValueError, TypeError):
             error=LLMUnavailable('模型接口未返回有效 JSON');error.failure_category='response_json_invalid'
@@ -229,7 +234,8 @@ class ProfileModel:
                   'reasoning_effort': p['reasoning_effort'], 'output_limit': budget,
                   'finish_reason': parts['finish_reason'], 'reported_cost': cost,
                   'cost_status': 'reported' if cost is not None else 'provider_billed_not_reported',
-                  'provider_id': p['id'], 'profile_version': providers.fingerprint(p)}
+                  'provider_id': p['id'], 'profile_version': providers.fingerprint(p),
+                  'stream_stats': stream_stats}
         if self.final_observer is not None:
             self.final_observer(parts['content'], {k: v for k, v in output.items() if k != 'result'})
         try:

@@ -44,7 +44,7 @@ def funnel(store,run_id,topic_id=None,*,error_type=None):
     reviews+= [json.loads(r['evidence_review']) if r['evidence_review'] else None
                for r in store.conn.execute('SELECT evidence_review FROM material WHERE run_id=?',(run_id,))]
     evidence_review={status:sum(1 for r in reviews if (r or {}).get('status')==status)
-                     for status in ('supported','draft','insufficient')}
+                     for status in ('verified','needs_review','insufficient')}
     return {'version':'delivery-funnel-v3.23','scope':'this_run_only','screening':[
         {'topic_id':d['topic_id'],'decision':d.get('action'),'route':d.get('route'),'reason':d.get('reason')} for d in decisions],
         'research':{'status':research,'tool_failures':failed_tools},

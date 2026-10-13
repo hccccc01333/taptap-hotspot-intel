@@ -1,17 +1,24 @@
-"""Deterministic claim-vs-evidence checks for business records (Alpha25 P0).
+"""Deterministic claim-vs-evidence checks for business records (Alpha25/26).
 
 Runs before a business record becomes usable. It never calls a model and never
 rewrites content: it only classifies how well the delivered text is supported
 by the quotes it cites, and records machine-readable reasons.
 
-Status levels:
-- supported:   deterministic checks passed.
-- draft:       fact tokens are grounded, but declared production slots remain
-               (link placeholders and similar pre-publication conditions).
-- insufficient: high-specificity facts, participation-rule details or whole
-               claim clauses are not directly supported by the cited quotes.
-               These records stay in the database as drafts but leave the
-               directly usable material bank.
+Status vocabulary (stored verdicts use the first three; legacy records without
+a verdict are reported as legacy_unreviewed):
+- verified:        independently confirmed facts. No writer sets this yet; the
+                   value is reserved for a future human/independent review path.
+                   Word-level checks alone are not verification.
+- needs_review:    all deterministic checks passed, but the record is not proof
+                   of the fact: word similarity is not meaning (e.g. a negated
+                   statement can be textually close). Facts still await human
+                   or independent confirmation.
+- insufficient:    high-specificity facts, participation-rule details or whole
+                   claim clauses are not directly supported, or a negation
+                   contradicts the cited quotes. These records stay in the
+                   database as drafts but leave the directly usable outputs.
+- legacy_unreviewed: saved before the verifier existed (no verdict recorded);
+                   kept and marked, never silently treated as verified.
 """
 from __future__ import annotations
 
@@ -20,7 +27,7 @@ import unicodedata
 from datetime import datetime, timezone
 from difflib import SequenceMatcher
 
-VERSION = 'claim-verifier-v3.25'
+VERSION = 'claim-verifier-v3.26'
 
 # Reasons that block direct usability (evidence not sufficient).
 INSUFFICIENT_CODES = frozenset({
@@ -30,6 +37,7 @@ INSUFFICIENT_CODES = frozenset({
     'sufficiency_not_grounded',     # "X即可参与" style sufficiency claims without a matching quote
     'placeholder_unknown_date',     # 截止X月X日 style unknown value presented in a fact slot
     'placeholder_generic_slot',     # #游戏名SideStory# style generic name slot
+    'negation_mismatch',            # claim and quote differ by negation (支持 vs 不支持)
     'quote_missing',                # no quotes available to support the record
 })
 DRAFT_CODES = frozenset({
@@ -37,6 +45,7 @@ DRAFT_CODES = frozenset({
     'placeholder_declared_pending', # 待替换/待确认 style declared pending items
     'placeholder_dangling_arrow',   # trailing arrow with no target
 })
+NEGATION_CHARS = '不未无难非禁停取消别'
 
 _RULE_TOKEN_HINTS = ('参与', '报名', '截止', '步骤', '入口', '专题', '资格', '规则', '细则', '名次', '获奖')
 _SUFFICIENCY = re.compile(r'([\u4e00-\u9fa5A-Za-z0-9#]{2,18}?)(?:即可|就能|便可|就可以|只需|仅需)')
@@ -79,6 +88,7 @@ def specific_tokens(text):
     tokens += re.findall(r'\d{3,}', t)
     tokens += re.findall(r'#([^#\n]{2,24})#', t)
     tokens += re.findall(r'《([^》\n]{2,30})》', t)
+    tokens += re.findall(r'(Steam|Switch|PS[45]|Xbox|Epic|安卓|鸿蒙|iOS|Android)', t)
     tokens += _PRIZE_CONTEXT.findall(t)
     return list(dict.fromkeys(tokens))
 
@@ -153,14 +163,41 @@ def _token_reasons(text, quotes, titles):
     return [('detail_not_quoted', '具体细节未获引用支持：' + '、'.join(missing[:4]))]
 
 
+def _negation_reasons(text, blob):
+    """Word similarity is not meaning: catch claims that differ from the quotes
+    only, or decisively, by negation (支持 vs 不支持). Textual closeness alone
+    must never let an opposite statement pass."""
+    if not blob:
+        return []
+    t = normalize(text)
+    # forward: the claim's negated span should exist in a quote as stated
+    for match in re.finditer(r'[%s]([\u4e00-\u9fa5]{2,8})' % NEGATION_CHARS, t):
+        span = match.group(0)
+        if span in blob:
+            continue
+        if match.group(1) in blob:
+            return [('negation_mismatch', '否定断言“' + span[:16] + '”与引用不一致')]
+    # reverse: the claim's positive phrase occurs in quotes only negated
+    if not any(char in t for char in NEGATION_CHARS):
+        blocks = [b for b in SequenceMatcher(None, t, blob, autojunk=False).get_matching_blocks() if b.size >= 4]
+        for block in sorted(blocks, key=lambda b: -b.size)[:3]:
+            phrase = t[block.a:block.a + block.size]
+            starts = []
+            index = blob.find(phrase)
+            while index != -1:
+                starts.append(index)
+                index = blob.find(phrase, index + 1)
+            if starts and all(index > 0 and blob[index - 1] in NEGATION_CHARS for index in starts):
+                return [('negation_mismatch', '断言“' + phrase[:16] + '”在引用中仅以否定形式出现')]
+    return []
+
+
 def _verdict(scope, reasons, checked):
     codes = {code for code, _ in reasons}
-    if codes.intersection(INSUFFICIENT_CODES):
-        status = 'insufficient'
-    elif codes.intersection(DRAFT_CODES):
-        status = 'draft'
-    else:
-        status = 'supported'
+    # Deterministic pass is never "verified": it is needs_review until facts are
+    # independently confirmed. Only unspecified insufficient evidence blocks
+    # direct usability, with reasons kept for the draft record.
+    status = 'insufficient' if codes.intersection(INSUFFICIENT_CODES) else 'needs_review'
     return {'status': status, 'version': VERSION, 'scope': scope,
             'checked_at': datetime.now(timezone.utc).isoformat(timespec='seconds'),
             'checked': list(checked), 'reasons': [{'code': code, 'detail': detail} for code, detail in reasons[:8]]}
@@ -170,11 +207,13 @@ def verify_signal(signal, titles=None):
     """A game signal must state only what its cited quotes directly support."""
     text = signal.get('observed_change', '') or ''
     quotes = [f for f in signal.get('facts', []) if isinstance(f, dict)]
+    blob = _quote_blob(quotes)
     reasons = []
     reasons += _coverage_reasons(text, quotes)
     reasons += _token_reasons(text, quotes, titles)
     reasons += _rule_detail_reasons(text, quotes, titles)
     reasons += _placeholder_reasons(text)
+    reasons += _negation_reasons(text, blob)
     return _verdict('game_signal', reasons, ('observed_change',))
 
 
@@ -185,11 +224,13 @@ def verify_material(item, quotes, titles=None):
     delivery = item.get('delivery') or {}
     if isinstance(delivery, dict) and delivery.get('body'):
         texts.append(delivery['body'])
+    blob = _quote_blob(quotes)
     reasons = []
     for text in texts:
         reasons += _placeholder_reasons(text)
-        reasons += _sufficiency_reasons(text, _quote_blob(quotes))
+        reasons += _sufficiency_reasons(text, blob)
         reasons += _token_reasons(text, quotes, titles)
+        reasons += _negation_reasons(text, blob)
     reasons += _rule_detail_reasons('\n'.join(texts), quotes, titles)
     if not quotes:
         reasons.append(('quote_missing', '没有可核对的引用'))
@@ -204,13 +245,16 @@ def verify_creative(payload, quotes, titles=None):
     reasons += _sufficiency_reasons(copy, _quote_blob(quotes))
     reasons += _token_reasons(copy, quotes, titles)
     reasons += _rule_detail_reasons(copy, quotes, titles)
+    reasons += _negation_reasons(copy, _quote_blob(quotes))
     if not quotes:
         reasons.append(('quote_missing', '没有可核对的引用'))
     return _verdict('creative', reasons, ('copy',))
 
 
 def summarize(verdicts):
-    counts = {'supported': 0, 'draft': 0, 'insufficient': 0}
+    """Count the stored status vocabulary; legacy records have no verdict and
+    are reported separately by their consumers as legacy_unreviewed."""
+    counts = {'verified': 0, 'needs_review': 0, 'insufficient': 0}
     for verdict in verdicts:
         status = (verdict or {}).get('status')
         if status in counts:

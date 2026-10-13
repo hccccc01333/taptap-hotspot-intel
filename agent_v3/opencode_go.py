@@ -34,62 +34,93 @@ def headers(session):
 
 
 def read_stream(response, started, timeout_seconds):
-    """Bound SSE bytes; retain final content only, discard every thinking delta."""
+    """Bound SSE bytes; retain final content only, discard every thinking delta.
+
+    Records transport acceptance statistics (first data byte, last data, bytes
+    read, complete end marker) on success and on every failure path. The stats
+    are seconds since ``started`` and never contain payload content."""
     buffer = bytearray()
     size = 0
+    first_data = None
+    last_data = None
     content, reasoning, done, model, request_id, finish = [], False, False, None, None, None
     usage, refusal, tools = {}, False, False
-    for chunk in response.iter_content(chunk_size=256):
-        if time.monotonic() - started > timeout_seconds:
-            error=LLMUnavailable('Go流式响应超过任务时间预算')
-            error.failure_category='task_timeout'
-            raise error
-        size += len(chunk)
-        if size > 2000000:
-            raise LLMUnavailable('Go流式响应超过大小预算')
-        buffer.extend(chunk)
-        while b'\n' in buffer:
-            line, _, rest = buffer.partition(b'\n')
-            buffer = bytearray(rest)
-            if not line.startswith(b'data:'):
-                continue
-            raw = bytes(line[5:]).strip()
-            if raw == b'[DONE]':
-                done = True
-                break
-            event = json.loads(raw)
-            if not isinstance(event, dict) or event.get('error'):
-                raise LLMUnavailable('Go流式接口未完成交付')
-            if event.get('model'):
-                if model is not None and model != event['model']:
-                    raise LLMUnavailable('Go流式响应中模型发生变化')
-                model = event['model']
-            if event.get('id'):
-                request_id = event['id']
-            if isinstance(event.get('usage'), dict):
-                usage = usage_counts(event['usage'])
-                cost = event['usage'].get('cost')
-                if type(cost) in (int,float):usage['cost'] = cost
-            choices = event.get('choices', [])
-            if not isinstance(choices,list):raise ValueError('Go流式choices无效')
-            for choice in choices:
-                if not isinstance(choice,dict) or choice.get('index',0) != 0:
-                    raise ValueError('Go流式回答分支无效')
-                delta = choice.get('delta') or {}
-                if not isinstance(delta,dict):raise ValueError('Go流式delta无效')
-                if delta.get('content') is not None:
-                    if not isinstance(delta['content'],str):raise ValueError('Go流式最终文本无效')
-                    content.append(delta['content'])
-                reasoning |= any(bool(delta.get(k)) for k in ('reasoning_content','reasoning','reasoning_details'))
-                refusal |= bool(delta.get('refusal'))
-                tools |= bool(delta.get('tool_calls'))
-                if choice.get('finish_reason') is not None:
-                    finish = choice['finish_reason']
-        if done:break
+
+    def stats():
+        return {'first_byte_seconds': round(first_data, 3) if first_data is not None else None,
+                'last_data_seconds': round(last_data, 3) if last_data is not None else None,
+                'bytes_read': size, 'end_marker': done}
+
+    def fail(message, category=None):
+        error = LLMUnavailable(message)
+        if category:
+            error.failure_category = category
+        error.stream_stats = stats()
+        raise error
+
+    try:
+        for chunk in response.iter_content(chunk_size=256):
+            if time.monotonic() - started > timeout_seconds:
+                fail('Go流式响应超过任务时间预算', 'task_timeout')
+            size += len(chunk)
+            if size > 2000000:
+                fail('Go流式响应超过大小预算')
+            now = time.monotonic() - started
+            if first_data is None:
+                first_data = now
+            last_data = now
+            buffer.extend(chunk)
+            while b'\n' in buffer:
+                line, _, rest = buffer.partition(b'\n')
+                buffer = bytearray(rest)
+                if not line.startswith(b'data:'):
+                    continue
+                raw = bytes(line[5:]).strip()
+                if raw == b'[DONE]':
+                    done = True
+                    break
+                event = json.loads(raw)
+                if not isinstance(event, dict) or event.get('error'):
+                    fail('Go流式接口未完成交付')
+                if event.get('model'):
+                    if model is not None and model != event['model']:
+                        fail('Go流式响应中模型发生变化')
+                    model = event['model']
+                if event.get('id'):
+                    request_id = event['id']
+                if isinstance(event.get('usage'), dict):
+                    usage = usage_counts(event['usage'])
+                    cost = event['usage'].get('cost')
+                    if type(cost) in (int,float):usage['cost'] = cost
+                choices = event.get('choices', [])
+                if not isinstance(choices,list):raise ValueError('Go流式choices无效')
+                for choice in choices:
+                    if not isinstance(choice,dict) or choice.get('index',0) != 0:
+                        raise ValueError('Go流式回答分支无效')
+                    delta = choice.get('delta') or {}
+                    if not isinstance(delta,dict):raise ValueError('Go流式delta无效')
+                    if delta.get('content') is not None:
+                        if not isinstance(delta['content'],str):raise ValueError('Go流式最终文本无效')
+                        content.append(delta['content'])
+                    reasoning |= any(bool(delta.get(k)) for k in ('reasoning_content','reasoning','reasoning_details'))
+                    refusal |= bool(delta.get('refusal'))
+                    tools |= bool(delta.get('tool_calls'))
+                    if choice.get('finish_reason') is not None:
+                        finish = choice['finish_reason']
+            if done:break
+    except LLMUnavailable:
+        raise
+    except Exception as cause:
+        # Keep the observed transport statistics even when the socket dies.
+        cause.stream_stats = stats()
+        raise
     if not done:
-        raise LLMUnavailable('Go流式响应中断，未收到完整结束帧')
+        error = LLMUnavailable('Go流式响应中断，未收到完整结束帧')
+        error.failure_category = 'request_exception'
+        error.stream_stats = stats()
+        raise error
     message = {'content': ''.join(content)}
     if refusal:message['refusal'] = True
     if tools:message['tool_calls'] = [True]
     return {'id':request_id,'model':model,'usage':usage,
-            'choices':[{'message':message,'finish_reason':finish}]}, reasoning
+            'choices':[{'message':message,'finish_reason':finish}]}, reasoning, stats()

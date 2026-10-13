@@ -197,7 +197,7 @@ def task_metadata(response):
     result={k:response[k] for k in ("model","api_model","usage","seconds","transport","session_id",
             "request_id","task_id","input_file","reported_cost","cost_status","reasoning_effort",
             "output_limit","finish_reason","reasoning_present","contract_version","stage","agent_role","input_fingerprint",
-            "provider_id","profile_version") if k in response}
+            "provider_id","profile_version","stream_stats") if k in response}
     if response.get('schema_errors'):
         from .contracts import safe_schema_errors
         result['schema_errors']=safe_schema_errors(response['schema_errors'])
@@ -214,8 +214,13 @@ def request_failure(store,run_id,stage,error,started):
             'request_sent':False})
         return
     from .provider_adapter import safe_failure_category
-    store.step(run_id,'model_task',{'stage':stage,'agent_role':ROLES[stage],
+    payload={'stage':stage,'agent_role':ROLES[stage],
         'usage':{},'seconds':round(time.monotonic()-started,3),
         'delivery_status':'request_failed','error_type':type(error).__name__,
         'error_category':safe_failure_category(error),
-        'cost_status':'unknown_after_exception'})
+        'cost_status':'unknown_after_exception'}
+    stats=getattr(error,'stream_stats',None)
+    if isinstance(stats,dict):
+        # Transport acceptance statistics only; never payload content.
+        payload['stream_stats']={k:stats[k] for k in ('first_byte_seconds','last_data_seconds','bytes_read','end_marker') if k in stats}
+    store.step(run_id,'model_task',payload)

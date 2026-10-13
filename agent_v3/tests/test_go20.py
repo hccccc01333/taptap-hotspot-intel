@@ -146,6 +146,26 @@ class GoTests(unittest.TestCase):
         r=Mock();r.iter_content.return_value=iter([b'x'*2000001])
         with self.assertRaises(LLMUnavailable):read_stream(r,time.monotonic(),180)
 
+    def test_stream_records_transport_acceptance_statistics(self):
+        p=profile(MODELS[1])
+        with patch('agent_v3.providers.credential',return_value='fixture'),patch(
+                'requests.post',return_value=sse(p['model_id'])):
+            r=ProfileModel(p).run_task('baseline',{},SCHEMA,'fixture')
+        stats=r['stream_stats']
+        self.assertTrue(stats['end_marker'])
+        self.assertGreater(stats['bytes_read'],0)
+        self.assertIsNotNone(stats['first_byte_seconds'])
+        self.assertIsNotNone(stats['last_data_seconds'])
+        self.assertLessEqual(stats['first_byte_seconds'],stats['last_data_seconds'])
+        # An interrupted stream keeps the observed statistics on the error
+        # without any payload content.
+        with self.assertRaises(LLMUnavailable) as caught:
+            read_stream(sse(MODELS[0],done=False),time.monotonic(),180)
+        failed=caught.exception.stream_stats
+        self.assertFalse(failed['end_marker'])
+        self.assertGreater(failed['bytes_read'],0)
+        self.assertNotIn(PRIVATE,json.dumps(failed))
+
     def test_streamed_reasoning_alone_and_length_never_become_business_results(self):
         for changes in ({'only_reasoning':True},{'finish':'length'}):
             p=profile(MODELS[1])

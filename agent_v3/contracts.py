@@ -15,7 +15,7 @@ ROLES = {'readiness':'system', 'main_plan':'business_main', 'intelligence':'busi
          'research_plan':'research_child','interpretation':'research_child','graph_extraction':'research_child','event_relation':'research_child','community_summary':'research_child'}
 SAFE_METADATA = ('model','api_model','usage','seconds','transport','session_id','request_id',
     'reported_cost','cost_status','reasoning_effort','output_limit','finish_reason','reasoning_present','input_file','task_id',
-    'provider_id','profile_version','schema_errors')
+    'provider_id','profile_version','schema_errors','stream_stats')
 
 
 def safe_schema_errors(items):
