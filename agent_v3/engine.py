@@ -112,10 +112,14 @@ def native_task(store,run_id,model,topic_id,*,timeout_seconds=360):
                 from .claim_verifier import aggregate,verify_creative,verify_material
                 for assessment in assessments:
                     facts=assessment.get('facts') or []
+                    titles={}
+                    for identifier in {f['evidence_id'] for f in facts if isinstance(f,dict) and f.get('evidence_id')}:
+                        found=store.evidence([identifier])
+                        if found and found[0].get('title'):titles[identifier]=found[0]['title']
                     for creative in assessment.get('creatives',[]):
-                        copy_verdict=verify_creative(creative,facts)
+                        copy_verdict=verify_creative(creative,facts,titles)
                         for deliverable in creative.get('deliverables',[]):
-                            deliverable['evidence_review']=verify_material(deliverable,facts)
+                            deliverable['evidence_review']=verify_material(deliverable,facts,titles)
                         # Worst part wins: a passing copy cannot carry a failing script.
                         creative['evidence_review']=aggregate([copy_verdict]+[d['evidence_review'] for d in creative.get('deliverables',[])])
             except (ValueError,TypeError,KeyError) as error:

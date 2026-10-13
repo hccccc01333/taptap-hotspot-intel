@@ -98,9 +98,13 @@ def run(store,run_id,model,topic_id,*,timeout_seconds=360):
             'validation_plan':intel['opportunity'].get('validation_plan',''),
             'prerequisites':intel['opportunity'].get('prerequisites',[]),'readiness':'unreviewed_draft'})
         from .claim_verifier import aggregate,verify_creative,verify_material
-        copy_verdict=verify_creative(creative,intel['facts'])
+        titles={}
+        for identifier in {f['evidence_id'] for f in intel['facts'] if isinstance(f,dict) and f.get('evidence_id')}:
+            found=store.evidence([identifier])
+            if found and found[0].get('title'):titles[identifier]=found[0]['title']
+        copy_verdict=verify_creative(creative,intel['facts'],titles)
         for deliverable in creative['deliverables']:
-            deliverable['evidence_review']=verify_material(deliverable,intel['facts'])
+            deliverable['evidence_review']=verify_material(deliverable,intel['facts'],titles)
         # A passing copy may not carry a failing script: the composite verdict
         # is the worst of its parts, so the creative is withheld if any fails.
         creative['evidence_review']=aggregate([copy_verdict]+[d['evidence_review'] for d in creative['deliverables']])

@@ -37,9 +37,13 @@ def revise(store,run_id,model,creative_id):
             tools.validate_asset(d,tools.read_ids)
     from .claim_verifier import aggregate,verify_creative,verify_material
     facts=assessment.get('facts') or []
-    copy_verdict=verify_creative(revised,facts)
+    titles={}
+    for identifier in {f['evidence_id'] for f in facts if isinstance(f,dict) and f.get('evidence_id')}:
+        found=store.evidence([identifier])
+        if found and found[0].get('title'):titles[identifier]=found[0]['title']
+    copy_verdict=verify_creative(revised,facts,titles)
     for d in revised['deliverables']:
-        d['evidence_review']=verify_material(d,facts)
+        d['evidence_review']=verify_material(d,facts,titles)
     revised['evidence_review']=aggregate([copy_verdict]+[d['evidence_review'] for d in revised['deliverables']])
     revised['production_revision_run']=run_id;revised['review_status']='unreviewed'
     new_assessment=copy.deepcopy(event['assessment'])
