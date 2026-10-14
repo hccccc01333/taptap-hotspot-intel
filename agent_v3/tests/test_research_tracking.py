@@ -110,8 +110,12 @@ class ResearchTrackingTests(unittest.TestCase):
         self.assertEqual(second,read_topic(self.store,tid)['fingerprint'])
 
     def test_official_search_form_is_post_parsed_as_unverified_background(self):
+        # Relative date: the search window is the last 7 days, so a fixed date
+        # would age out of the fixture and break the test on later days.
+        from datetime import datetime,timedelta
+        recent=(datetime.now()-timedelta(days=2)).strftime('%Y-%m-%d 13:00:00')
         html='<script>var docArr = '+json.dumps([{'title':'<em>返程</em>安排','url':'http://www.chinanews.com.cn/sh/actual.shtml',
-            'content_without_tag':'这是查询命中的来源摘要。','pubtime':'2026-10-07 13:00:00'}])+';</script>'
+            'content_without_tag':'这是查询命中的来源摘要。','pubtime':recent}])+';</script>'
         with patch('agent_v3.public_sources.read_public',return_value=(html.encode(),'https://sou.chinanews.com.cn/search/news')) as reader:
             rows=search_news('返程')
         self.assertEqual(reader.call_args.kwargs['method'],'POST');self.assertEqual(rows[0]['title'],'返程安排')
