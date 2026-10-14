@@ -320,5 +320,40 @@ class AnalyzeWiringTests(unittest.TestCase):
             fixture.tearDown()
 
 
+    def test_claim_feedback_retry_recovers_an_unsupported_clause(self):
+        from agent_v3.tests.test_main_agent import MainAgentTests
+        from agent_v3.pipeline import process
+        fixture = MainAgentTests('setUp')
+        fixture.setUp()
+        try:
+            inner = fixture.model('watch')
+            state = {'calls': 0}
+            class FirstBad:
+                def __init__(self, inner): self._inner = inner
+                def __getattr__(self, name): return getattr(self._inner, name)
+                def run_task(self, stage, packet, schema, system, **kwargs):
+                    if stage == 'intelligence':
+                        state['calls'] += 1
+                    value = self._inner.run_task(stage, packet, schema, system, **kwargs)
+                    if stage == 'intelligence' and state['calls'] == 1:
+                        for signal in value['result']['game_signals']:
+                            signal['observed_change'] = signal['observed_change'] + '，玩家反响热烈'
+                    return value
+            with patch('agent_v3.research.search_news', side_effect=AssertionError('fixture must not use network')):
+                result = process(fixture.store, fixture.rid, model=FirstBad(inner), topic_id=fixture.tid)
+            self.assertEqual(result['status'], 'intelligence_ready')
+            # the first attempt was rejected with safe claim feedback, retried once
+            self.assertEqual(state['calls'], 2)
+            steps = fixture.store.get_run(fixture.rid)['steps']
+            feedback = [s for s in steps if s['kind'] == 'validation_error' and '引用核对' in (s['payload'].get('error') or '')]
+            self.assertEqual(len(feedback), 1)
+            # the corrected delivery passes the gate and is saved unflagged
+            saved = json.loads(fixture.store.conn.execute('SELECT payload FROM game_signal').fetchone()[0])
+            self.assertEqual(saved['evidence_review']['status'], 'needs_review')
+            self.assertEqual(len(fixture.store.game_signals()), 1)
+        finally:
+            fixture.tearDown()
+
+
 if __name__ == '__main__':
     unittest.main()
