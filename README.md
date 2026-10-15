@@ -2,7 +2,7 @@
 
 **持续从全网热点中，为 TapTap 积累游戏情报、可用素材，并识别增长创意的 AI 自动化系统。**
 
-[![版本](https://img.shields.io/badge/version-3.0.0--alpha.27-087f8c)](docs/版本记录.md)
+[![版本](https://img.shields.io/badge/version-3.0.0--alpha.28-087f8c)](docs/版本记录.md)
 [![CI](https://github.com/hccccc01333/taptap-hotspot-intel/actions/workflows/ci.yml/badge.svg)](https://github.com/hccccc01333/taptap-hotspot-intel/actions/workflows/ci.yml)
 [![网站部署](https://github.com/hccccc01333/taptap-hotspot-intel/actions/workflows/pages.yml/badge.svg)](https://github.com/hccccc01333/taptap-hotspot-intel/actions/workflows/pages.yml)
 
@@ -117,6 +117,7 @@ GitHub Pages 只托管静态页面，不执行采集或模型任务。目前生�
 最新质量优先实验已执行 10 例、30 组：完整系统入库 5 条情报、2 条业务素材和 1 个创意，但连接失败与引用、参与路径错误仍存在。当前没有证明系统优于基线，也没有证明实际增长效果。来源核查由 Codex 完成，已知组别，未经开发者本人或独立人类复核；入库数量不代表质量通过。
 
 - [实验协议与复现命令](docs/V3-可复现对照实验.md)
+- [Alpha28 A/B/C 对照：C 未在覆盖与错误率上优于 B，技术优势未成立](docs/V3-Alpha28-ABC对照-20261015.md)
 - [Alpha27 未见样本事实质量验收：测试 A 通过、测试 B 未通过（执行不完整）](docs/V3-Alpha27-未见过样本事实质量验收.md)
 - [质量优先实验：全部 30 组、失败、部分交付与核查限制](docs/V3-质量优先ABC实验-20261012.md)
 - [公开仓库审查与历史遗留](docs/V3-公开仓库审查-20261012.md)
