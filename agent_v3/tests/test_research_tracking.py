@@ -121,6 +121,12 @@ class ResearchTrackingTests(unittest.TestCase):
         self.assertEqual(reader.call_args.kwargs['method'],'POST');self.assertEqual(rows[0]['title'],'返程安排')
         self.assertEqual(rows[0]['source'],'search:返程')
 
+    def test_key_fact_hints_extract_dates_and_quantities(self):
+        from agent_v3.research_child import key_fact_hints
+        hints=key_fact_hints([{'body':'2026年12月3日发售，售价86元，达成46%，超10万愿望单，12月3日再售'},
+                              {'body':'2027年3月10日正式上线'}])
+        self.assertEqual(hints,['2026年12月3日','46%','10万','12月3日','2027年3月10日'])
+
     def test_background_cache_relinks_without_promoting_search_to_hotspot(self):
         _,tid=self.source();_,other=self.source('另一个待研究线索',identifier='other');before=len(queue(self.store))
         rows=[{'title':'搜索命中背景','url':'https://www.chinanews.com.cn/sh/background.shtml','source':'search:背景'}]
