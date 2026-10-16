@@ -620,9 +620,18 @@ def run_phase(root, phase):
                 run_id = store.create_run('隔离对照实验；不影响正式自动化')
                 model = RecordedModel(profile, ledger, trial_id, phase, directory)
                 with PublicArchive(root / 'public_snapshots' / trial['case_id'], directory):
-                    if arm == 'C':
-                        outcome = process(store, run_id, topic_id=tid, model=model) if tid else {
-                            'status': 'seed_not_eligible', 'reason': '真实发现时效规则未接受该线索'}
+                    if arm in ('C', 'C0'):
+                        import os as _os
+                        if arm == 'C0':
+                            # Graph ablation: the same full chain without graph
+                            # extraction, retrieval or prompts; everything else
+                            # identical. Kept as an explicit comparison arm.
+                            _os.environ['V3_GRAPH_MODE'] = 'off'
+                        try:
+                            outcome = process(store, run_id, topic_id=tid, model=model) if tid else {
+                                'status': 'seed_not_eligible', 'reason': '真实发现时效规则未接受该线索'}
+                        finally:
+                            _os.environ.pop('V3_GRAPH_MODE', None)
                         report = project_full(store, tid, outcome)
                         status = 'returned' if outcome.get('status') in ('completed', 'intelligence_ready', 'no_selected_work', 'no_pending_work', 'seed_not_eligible') else 'partial'
                     else:

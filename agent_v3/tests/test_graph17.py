@@ -49,6 +49,20 @@ class GraphTests(unittest.TestCase):
         self.need(a);self.need(b);kg.refresh(self.s)
         return a,b,retrieval.global_context(self.s)['communities'][0]
 
+    def test_graph_ablation_switch_disables_context_attach_and_prompt(self):
+        _eid,topic_id,_event=self.document('图谱消融开关夹具')
+        with patch.dict('os.environ',{'V3_GRAPH_MODE':'off'},clear=False):
+            self.assertFalse(retrieval.graph_enabled())
+            packet=topic_packet(read_topic(self.s,topic_id),self.s.context())
+            before=list(packet['quote_candidates'])
+            retrieval.attach(self.s,packet,topic_id)
+            self.assertEqual(packet['graph_context']['mode'],'off')
+            self.assertEqual(packet['quote_candidates'],before)
+            self.assertEqual(retrieval.global_context(self.s,limit=2)['mode'],'off')
+        with patch.dict('os.environ',{},clear=False):
+            import os as _os;_os.environ.pop('V3_GRAPH_MODE',None)
+            self.assertTrue(retrieval.graph_enabled())
+
     def test_ambiguous_alias_abstains_without_game_context(self):
         cases=[('方舟','海上方舟',None),('方舟','明日方舟干员','game_arknights'),('悟空','西游记故事',None),
             ('悟空','黑神话游戏科学','game_black_myth_wukong'),('LOL','lolcat',None),('LOL','英雄联盟赛事','game_lol'),('崩铁','','game_star_rail')]

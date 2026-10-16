@@ -161,6 +161,9 @@ def community_context(store,community_id,*,events=None):
 
 def global_context(store,*,limit=4,query=''):
     if type(limit) is not int or not 1<=limit<=12 or not isinstance(query,str) or len(query)>100:raise ValueError('全局检索范围无效')
+    if not graph_enabled():
+        return {'mode':'off','graph_version':kg.graph_version(store),'communities':[],'evidence_ids':[],
+            'note':'图谱按消融开关关闭；本试验不提供全局图谱上下文。'}
     events=active_events(store);communities=[]
     for row in store.conn.execute("SELECT community_id FROM kg_community WHERE state='active' ORDER BY community_id"):
         try:value=community_context(store,row[0],events=events)
@@ -196,7 +199,21 @@ graph_context 是只读图谱检索上下文，不是独立事实证明。source
 事件邻接、时间先后和主题社区都不证明因果或热度。保留事件时间与报道时间、待核查关系及冲突。仅共用游戏/平台不归并事件。图谱提供检索线索，重要结论仍以当前来源引文为准。'''
 
 
+import os
+
+
+def graph_enabled():
+    """Ablation switch for controlled comparisons; default on.
+    Set V3_GRAPH_MODE=off to run the full chain without graph extraction,
+    graph retrieval or graph prompts (cost ablation, same everything else)."""
+    return os.environ.get('V3_GRAPH_MODE','on')!='off'
+
+
 def attach(store,packet,topic_id):
+    if not graph_enabled():
+        packet['graph_context']={'mode':'off','graph_version':None,'communities':[],'evidence_ids':[],
+            'note':'图谱按消融开关关闭；本试验不提供图谱上下文。'}
+        return packet
     value=local_context(store,topic_id=topic_id,limit=4)
     packet['graph_context']=value
     # Retrieved sources become explicitly labelled research leads, with the
