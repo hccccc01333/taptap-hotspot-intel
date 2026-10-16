@@ -388,5 +388,20 @@ class AnalyzeWiringTests(unittest.TestCase):
             fixture.tearDown()
 
 
+    def test_business_packet_carries_key_fact_hints_from_full_excerpts(self):
+        from agent_v3.task_packets import business_packet
+        packet = {
+            'evidence': [{'evidence_id': 'e1', 'title': '标题', 'body': '由某工作室开发，将于10月9日上线。', 'role': 'direct'}],
+            'quote_candidates': [{'ref': 0, 'evidence_id': 'e1', 'quote': '将于10月9日上线。'}],
+            'research_return': {'status': 'ready', 'headline': 'h', 'one_line': 'o', 'core': [
+                {'text': 't', 'facts': [{'evidence_id': 'e1', 'quote': '将于10月9日上线。'}]}],
+                'timeline': [], 'views': [], 'controversies': [], 'background': []},
+        }
+        result = business_packet(packet)
+        self.assertIn('key_fact_hints', result)
+        self.assertIn('10月9日', result['key_fact_hints'])
+        self.assertTrue(any('某工作室' in hint for hint in result['key_fact_hints']))
+
+
 if __name__ == '__main__':
     unittest.main()

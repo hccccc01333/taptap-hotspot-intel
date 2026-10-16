@@ -61,6 +61,12 @@ def business_packet(packet):
     sources={e['evidence_id']:e for e in result['evidence']}
     quotes=result['quote_candidates']
     index={(q['evidence_id'],q['quote']):q['ref'] for q in quotes}
+    # Fact checklist computed from the FULL source excerpts before the bodies
+    # are narrowed to selected quotes, so the business stage still knows what
+    # the announcement contains (dates, quantities, parties) and can request
+    # research follow-ups when its quotes cannot cover a core item.
+    from .research_child import key_fact_hints
+    result['key_fact_hints']=key_fact_hints(result['evidence'])
     def facts_refs(facts):
         refs=[]
         for fact in facts:
