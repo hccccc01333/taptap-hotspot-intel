@@ -95,7 +95,18 @@ def task(store, run_id, model, stage, packet, schema, system, timeout_seconds=18
                     (' 允许上限='+str(e['allowed_max']) if 'allowed_max' in e else '')+
                     (' 允许下限='+str(e['allowed_min']) if 'allowed_min' in e else '')+
                     (' 去重数量='+str(e['distinct_count']) if 'distinct_count' in e else '') for e in errors)
-                message+='。按上述字段重新选择最直接的证据，遵守上限且不重复；不返回原先超限数组。'
+                # Missing required fields and limit violations need different
+                # corrections; a limits-only instruction caused repeated
+                # unchanged re-deliveries when arrays were dropped entirely.
+                advice=[]
+                if any(e['constraint']=='required' for e in errors):
+                    advice.append('缺失的必填字段必须补齐；必填数组即使为空也要显式输出空数组，不得整段缺省')
+                if any(e['constraint'] in ('maxItems','minItems','uniqueItems','additionalProperties') or
+                       'actual_count' in e for e in errors):
+                    advice.append('按上述字段重新选择最直接的证据，遵守上限且不重复；不返回原先超限数组')
+                if not advice:
+                    advice.append('按上述路径修正字段类型与取值后重新交付')
+                message+='。'+'。'.join(advice)+'。'
             store.step(run_id,'validation_error',{'name':stage,'error':message})
             packet['validation_errors']=[message]
             if attempt:

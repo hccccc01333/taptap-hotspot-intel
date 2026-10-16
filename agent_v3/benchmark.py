@@ -732,7 +732,8 @@ def summarize(root, review_path, mapping_path, phase='formal'):
             raise ValueError('必要事实分母必须使用实验前的核验基准')
     totals = {a: {'cases': 0, 'metrics': {m: {v: 0 for v in VERDICTS} for m in METRICS},
                   'claims_reviewed': 0, 'claims_passed': 0, 'claims_failed': 0, 'claims_unverified': 0,
-                  'required_facts_covered': 0, 'required_facts_total': 0, 'deliveries_missing': 0} for a in ARMS}
+                  'required_facts_covered': 0, 'required_facts_total': 0, 'deliveries_missing': 0}
+                  for a in manifest.get('arms', ARMS)}
     rows = []
     coverage_denominators = {}
     for item in items:
@@ -773,7 +774,7 @@ def summarize(root, review_path, mapping_path, phase='formal'):
         costs = ledger.summary()
     finally:
         ledger.close()
-    for arm in ARMS:
+    for arm in manifest.get('arms', ARMS):
         calls = [r for r in costs['records'] if r['phase'] == phase and r['trial_id'].endswith('-' + arm)]
         totals[arm].update(model_calls=len(calls),
                           estimated_peak_cost_yuan=sum(r['charged'] or 0 for r in calls) / 1000000,
