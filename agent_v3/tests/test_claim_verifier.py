@@ -355,5 +355,38 @@ class AnalyzeWiringTests(unittest.TestCase):
             fixture.tearDown()
 
 
+    def test_interpretation_claim_feedback_retries_and_recovers(self):
+        from agent_v3.tests.test_main_agent import MainAgentTests
+        from agent_v3.pipeline import process
+        fixture = MainAgentTests('setUp')
+        fixture.setUp()
+        try:
+            inner = fixture.model('watch')
+            state = {'calls': 0}
+            class FirstBadCite:
+                def __init__(self, inner): self._inner = inner
+                def __getattr__(self, name): return getattr(self._inner, name)
+                def run_task(self, stage, packet, schema, system, **kwargs):
+                    if stage == 'interpretation':
+                        state['calls'] += 1
+                    value = self._inner.run_task(stage, packet, schema, system, **kwargs)
+                    if stage == 'interpretation' and state['calls'] == 1:
+                        value['result']['core'] = [{'text': '完全不在引文中的断言内容', 'basis_refs': [1]}]
+                    return value
+            with patch('agent_v3.research.search_news', side_effect=AssertionError('fixture must not use network')):
+                result = process(fixture.store, fixture.rid, model=FirstBadCite(inner), topic_id=fixture.tid)
+            # one bounded retry with safe interpretation-claim feedback, then recovered
+            self.assertEqual(state['calls'], 2)
+            steps = fixture.store.get_run(fixture.rid)['steps']
+            feedback = [s for s in steps if s['kind'] == 'validation_error' and '解读引用核对' in (s['payload'].get('error') or '')]
+            self.assertEqual(len(feedback), 1)
+            self.assertTrue(result['status'] in ('intelligence_ready', 'completed'))
+            from agent_v3.discovery import read_topic
+            fingerprint = read_topic(fixture.store, fixture.tid)['fingerprint']
+            self.assertIsNotNone(fixture.store.interpretation(fixture.tid, fingerprint))
+        finally:
+            fixture.tearDown()
+
+
 if __name__ == '__main__':
     unittest.main()

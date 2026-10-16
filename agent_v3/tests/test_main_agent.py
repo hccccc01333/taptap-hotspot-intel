@@ -43,8 +43,8 @@ class MainAgentTests(unittest.TestCase):
                 elif stage=='research_plan':value={'reason':'测试中正文已充分，无联网动作','actions':[]}
                 elif stage=='interpretation':
                     value={'status':'ready','headline':'创作者展示地图分享与组队挑战玩法','one_line':'来源介绍邀请朋友分享地图并参与组队挑战。',
-                        'background':[],'core':[{'text':'来源展示地图分享与组队挑战','basis_refs':[1]}],
-                        'timeline':[{'text':'来源描述创作者展示玩法','time_text':'','time_kind':'unknown','basis_refs':[1]}],
+                        'background':[],'core':[{'text':'来源展示地图分享与组队挑战','basis_refs':[2]}],
+                        'timeline':[{'text':'来源描述创作者展示玩法','time_text':'','time_kind':'unknown','basis_refs':[2]}],
                         'views':[{'text':'玩家喜欢这种玩法','kind':'actual_comment','basis_refs':[1]}] if self.bad_view else [],
                         'controversies':[],'unknowns':['没有取得评论样本，不能推断总体需求'],'discussion_review':[],
                         'risk_assessment':{'polarity':'positive','level':'low','reason':'夹具为正常玩法分享，没有负面争议依据','basis_refs':[1]},
