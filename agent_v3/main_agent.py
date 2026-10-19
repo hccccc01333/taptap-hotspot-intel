@@ -81,7 +81,7 @@ def task(store, run_id, model, stage, packet, schema, system, timeout_seconds=18
         try:
             if invalid:raise invalid
             Draft202012Validator(schema).validate(response['result'])
-            if validate is not None:validate(response['result'])
+            if validate is not None:validate(response['result'],final=bool(attempt))
             return response['result'],usage
         except (ValueError,ValidationError) as error:
             # Diagnostic paths, not echoed source values or model reasoning.
@@ -329,10 +329,7 @@ def analyze(store,run_id,job,model):
     from .claim_verifier import verify_material,verify_signal,summarize
     quotes=packet['quote_candidates']
     titles={e['evidence_id']:e['title'] for e in packet.get('evidence',[])}
-    fed_back={'done':False}
-    def claim_feedback(value):
-        if fed_back['done']:
-            return
+    def claim_feedback(value,final=False):
         feedback=[]
         for signal in value.get('game_signals',[]):
             signal_quotes=[quotes[r] for r in signal.get('basis_refs') or [] if 0<=r<len(quotes)]
@@ -344,8 +341,7 @@ def analyze(store,run_id,job,model):
             verdict=verify_material(pattern,pattern_quotes,titles)
             if verdict['status']=='insufficient':
                 feedback.append('patterns：'+'；'.join(r['detail'] for r in verdict['reasons'][:2]))
-        if feedback:
-            fed_back['done']=True
+        if feedback and not final:
             raise SemanticDeliveryError('claims / 引用核对',(' | '.join(feedback[:4]))[:600]+'。修正引文或收窄断言后重新交付；若证据确实不足则删除该断言。')
     value,usage=task(store,run_id,model,'intelligence',packet,schema,BUSINESS_SYSTEM+TAPTAP_PROMPT+PROMPT+(GRAPH_PROMPT if engaged(store,job['topic_id']) else '')+'''
 game_signals尽量填写category和platform以归类。patterns每项填写delivery：选择内容形式，写明人群/发布位置，body交付可编辑的成品正文或逐镜内容（至少60字），adaptation_steps是素材替换步骤，usage_boundary写证据和使用边界。content保留来源原话或表达模式；body为原创用法，不能冒充原话。只适合内部研究引用而没有交付正文的摘录不要放patterns。负面或有争议的事件不交付推广素材。''',validate=claim_feedback)

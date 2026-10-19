@@ -104,11 +104,10 @@ class Delivery24Tests(unittest.TestCase):
             self.assertEqual(saved['timeline'][0]['time_text'],'')
         finally:fixture.tearDown()
 
-    def test_repeated_unsupported_timeline_never_saves_interpretation_or_business(self):
+    def test_repeated_unsupported_timeline_is_dropped_and_never_saved(self):
         from agent_v3.tests.test_main_agent import MainAgentTests
         from agent_v3.pipeline import process
         from agent_v3.discovery import read_topic
-        from agent_v3.main_agent import SemanticDeliveryError
         fixture=MainAgentTests();fixture.setUp()
         try:
             client=fixture.model();original=client.run_task
@@ -118,15 +117,16 @@ class Delivery24Tests(unittest.TestCase):
                     response['result']['timeline'][0].update(time_text='179 小时前',time_kind='report')
                 return response
             client.run_task=run
-            with self.assertRaises(SemanticDeliveryError):
-                process(fixture.store,fixture.rid,model=client,topic_id=fixture.tid)
+            result=process(fixture.store,fixture.rid,model=client,topic_id=fixture.tid)
+            self.assertIn(result['status'],('completed','intelligence_ready'))
             self.assertEqual(client.calls.count('interpretation'),2)
-            self.assertNotIn('intelligence',client.calls)
-            self.assertIsNone(fixture.store.interpretation(fixture.tid,read_topic(fixture.store,fixture.tid)['fingerprint']))
-            self.assertFalse(fixture.store.game_signals())
+            saved=fixture.store.interpretation(fixture.tid,read_topic(fixture.store,fixture.tid)['fingerprint'])
+            import json as _json
+            self.assertNotIn('179 小时前',_json.dumps(saved['payload'],ensure_ascii=False))
+            self.assertFalse(any('179 小时前' in _json.dumps(s['payload'],ensure_ascii=False) for s in fixture.store.game_signals()))
             audit=fixture.store.get_run(fixture.rid)['steps'][-1]['payload']
-            self.assertEqual(audit['resources']['stages']['interpretation']['validation_failures'],2)
-            self.assertEqual(audit['persistence']['game_intelligence'],0)
+            self.assertEqual(audit['resources']['stages']['interpretation']['validation_failures'],1)
+            self.assertEqual(audit['persistence']['game_intelligence'],1)
         finally:fixture.tearDown()
 
 

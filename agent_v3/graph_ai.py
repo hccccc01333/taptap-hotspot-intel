@@ -89,7 +89,7 @@ def extract(store,run_id,model,topic_id):
         'note':'图谱抽取单独执行；本轮最多两次模型交付，共享90秒预算'}
     _replace(store,run_id,topic_id,saved['fingerprint'],previous,claimed,expected)
     value=copy.deepcopy(claimed)
-    def validate(result):
+    def validate(result,final=False):
         proposed={'knowledge':ground(store,copy.deepcopy(result),packet),'source_matches':previous['source_matches']}
         kg.validate_knowledge(store,topic_id,proposed)
     try:

@@ -141,7 +141,15 @@ class MainAgentTests(unittest.TestCase):
         self.assertFalse(self.store.hotspot_feed())
 
     def test_report_cannot_be_misrepresented_as_real_comment(self):
-        model=self.model();model.bad_view=True
+        model=self.model();original=model.run_task
+        def run(stage,packet,schema,system,**kwargs):
+            result=original(stage,packet,schema,system,**kwargs)
+            if stage=='interpretation':
+                # Covered by the source quote but labeled as a real comment: the
+                # provenance rule must still reject it (no claim repair can apply).
+                result['result']['views']=[{'text':'来源展示地图分享与组队挑战','kind':'actual_comment','basis_refs':[2]}]
+            return result
+        model.run_task=run
         with self.assertRaises(ValueError):interpret(self.store,self.rid,model,self.tid)
 
     def test_literal_material_quote_is_checked_against_source(self):

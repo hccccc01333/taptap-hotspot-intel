@@ -39,6 +39,38 @@ class Delivery22Tests(unittest.TestCase):
         with self.s.delivery(self.f.rid):
             self.s.conn.execute('UPDATE topic_interpretation SET payload=? WHERE topic_id=?',(dump(p),self.f.tid))
 
+    def test_interpretation_final_attempt_drops_ungrounded_claims_instead_of_failing(self):
+        m=self.f.model();original=m.run_task
+        def run(stage,packet,schema,system,**kwargs):
+            result=original(stage,packet,schema,system,**kwargs)
+            if stage=='interpretation':
+                result['result']['background'].append({'text':'没有任何引文支持的具体断言','basis_refs':[0]})
+            return result
+        m.run_task=run
+        saved=interpret(self.s,self.f.rid,m,self.f.tid)
+        self.assertTrue(saved)
+        self.assertNotIn('没有任何引文支持的具体断言',[i['text'] for i in saved['payload']['background']])
+        self.assertEqual(m.calls.count('interpretation'),2)
+        steps=self.s.conn.execute("SELECT payload FROM step WHERE kind='interpretation_repair'").fetchall()
+        self.assertEqual(len(steps),1)
+        self.assertGreater(json.loads(steps[0][0])['count'],0)
+
+    def test_interpretation_final_attempt_drops_ungrounded_timeline_items(self):
+        m=self.f.model();original=m.run_task
+        def run(stage,packet,schema,system,**kwargs):
+            result=original(stage,packet,schema,system,**kwargs)
+            if stage=='interpretation':
+                result['result']['timeline'].append({'text':'时间无法由引文支持','time_text':'昨日',
+                    'time_kind':'event','basis_refs':[0]})
+            return result
+        m.run_task=run
+        saved=interpret(self.s,self.f.rid,m,self.f.tid)
+        self.assertTrue(saved)
+        self.assertNotIn('昨日',[i['time_text'] for i in saved['payload']['timeline']])
+        self.assertEqual(m.calls.count('interpretation'),2)
+        steps=self.s.conn.execute("SELECT payload FROM step WHERE kind='interpretation_repair'").fetchall()
+        self.assertEqual(len(steps),1)
+
     def test_invalid_graph_does_not_block_game_intelligence_or_fabricate_extraction(self):
         m=self.model();result=process(self.s,self.f.rid,model=m,topic_id=self.f.tid)
         self.assertEqual(result['status'],'intelligence_ready');self.assertEqual(len(self.s.game_signals()),1)
