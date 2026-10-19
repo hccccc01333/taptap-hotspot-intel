@@ -203,16 +203,35 @@ import os
 
 
 def graph_enabled():
-    """Ablation switch for controlled comparisons; default on.
-    Set V3_GRAPH_MODE=off to run the full chain without graph extraction,
-    graph retrieval or graph prompts (cost ablation, same everything else)."""
-    return os.environ.get('V3_GRAPH_MODE','on')!='off'
+    """Master switch. Default off after the Alpha28d/e comparison showed no
+    demonstrated marginal value and measurable cost/fragility; experiments
+    and populated deployments opt in with V3_GRAPH_MODE=on."""
+    return os.environ.get('V3_GRAPH_MODE','off')!='off'
+
+
+def engaged(store,topic_id):
+    """Graph work is useful only when another interpreted event can contribute
+    cross-event context. Isolated stores (single-topic benchmark trials, cold
+    start) skip retrieval, prompts and the extraction call entirely: there the
+    graph can add no facts, only an extra request and failure point.
+    V3_GRAPH_FORCE=1 bypasses this gate for experiments that need to measure
+    the graph variant inside single-topic stores."""
+    if not graph_enabled():
+        return False
+    if os.environ.get('V3_GRAPH_FORCE')=='1':
+        return True
+    row=store.conn.execute('SELECT 1 FROM topic_interpretation WHERE topic_id<>? LIMIT 1',(topic_id,)).fetchone()
+    return bool(row)
 
 
 def attach(store,packet,topic_id):
     if not graph_enabled():
         packet['graph_context']={'mode':'off','graph_version':None,'communities':[],'evidence_ids':[],
-            'note':'图谱按消融开关关闭；本试验不提供图谱上下文。'}
+            'note':'图谱按开关关闭；不提供图谱上下文。'}
+        return packet
+    if not engaged(store,topic_id):
+        packet['graph_context']={'mode':'isolated','graph_version':None,'communities':[],'evidence_ids':[],
+            'note':'库内无其他已解读事件可关联：图谱不含可用的跨事件上下文，本次跳过检索与提示。'}
         return packet
     value=local_context(store,topic_id=topic_id,limit=4)
     packet['graph_context']=value

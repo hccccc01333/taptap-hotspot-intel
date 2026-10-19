@@ -59,6 +59,12 @@ def extract(store,run_id,model,topic_id):
     """Same child, independent commit. Two bounded rounds, including crash recovery."""
     saved=current_interpretation(store,topic_id)
     if not saved:return None
+    from .graph_retrieval import engaged
+    if not engaged(store,topic_id):
+        # No other interpreted event exists: extraction can only add cost and
+        # a failure point. Leave the pending state for a later populated store.
+        store.step(run_id,'graph_extraction_skipped',{'topic_id':topic_id,'reason':'no_cross_event_content'})
+        return saved
     previous=saved['payload'];state=previous['graph_extraction']
     if state['status'] not in ('pending','deferred') or (state.get('retry_at') or '')>now_iso():return saved
     from .discovery import read_topic

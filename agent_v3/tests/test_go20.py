@@ -272,6 +272,9 @@ class GroundingRetryTests(unittest.TestCase):
                                                               'kind':'GAME','basis_refs':[1]}]
                 return result
             model.run_task=run
+            from unittest.mock import patch
+            env=patch.dict('os.environ',{'V3_GRAPH_MODE':'on','V3_GRAPH_FORCE':'1'},clear=False)
+            env.start();self.addCleanup(env.stop)
             if repair:
                 saved=interpret(fixture.store,fixture.rid,model,fixture.tid)
                 self.assertTrue(saved);self.assertEqual(saved['payload']['knowledge']['entities'],[])

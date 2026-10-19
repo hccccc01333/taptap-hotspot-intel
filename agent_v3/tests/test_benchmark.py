@@ -245,7 +245,7 @@ class BenchmarkTests(unittest.TestCase):
 
         try:
             model = b.RecordedModel(profile(), self.ledger, 'case-C', 'formal', self.root / 'outputs', Client)
-            with patch('agent_v3.research.search_news', side_effect=AssertionError('offline fixture')):
+            with patch.dict('os.environ',{'V3_GRAPH_MODE':'on','V3_GRAPH_FORCE':'1'},clear=False),                     patch('agent_v3.research.search_news', side_effect=AssertionError('offline fixture')):
                 output = process(fixture.store, fixture.rid, topic_id=fixture.tid, model=model)
             self.assertEqual(output['status'], 'completed')
             self.assertEqual(native.calls, ['main_plan', 'research_plan', 'interpretation', 'graph_extraction', 'intelligence', 'creative_plan', 'creative_production'])

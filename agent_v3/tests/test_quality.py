@@ -59,7 +59,9 @@ class QualityTests(unittest.TestCase):
         fp=read_topic(self.s,self.tid)['fingerprint'];old={'headline':'旧测试解读','status':'ready'}
         self.s.conn.execute('INSERT INTO topic_interpretation VALUES(?,?,?,?,?)',(self.tid,fp,self.rid,now_iso(),dump(old)))
         self.s.conn.commit();m=self.f.model()
-        research_child.interpret(self.s,self.rid,m,self.tid);research_child.interpret(self.s,self.rid,m,self.tid)
+        from unittest.mock import patch
+        with patch.dict('os.environ',{'V3_GRAPH_MODE':'on','V3_GRAPH_FORCE':'1'},clear=False):
+            research_child.interpret(self.s,self.rid,m,self.tid);research_child.interpret(self.s,self.rid,m,self.tid)
         self.assertEqual(m.calls,['interpretation','graph_extraction'])
         self.assertEqual(json.loads(self.s.conn.execute('SELECT payload FROM interpretation_revision').fetchone()[0]),old)
 

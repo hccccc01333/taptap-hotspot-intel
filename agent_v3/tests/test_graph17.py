@@ -18,7 +18,10 @@ from agent_v3.tests import test_main_agent as main_fixtures
 
 
 class GraphTests(unittest.TestCase):
-    def setUp(self):self.s=Store(':memory:');self.rid=self.s.create_run('isolated graph fixture')
+    def setUp(self):
+        env=patch.dict('os.environ',{'V3_GRAPH_MODE':'on'},clear=False)
+        env.start();self.addCleanup(env.stop)
+        self.s=Store(':memory:');self.rid=self.s.create_run('isolated graph fixture')
     def tearDown(self):self.s.close()
 
     def document(self,title,body=None):
@@ -61,7 +64,37 @@ class GraphTests(unittest.TestCase):
             self.assertEqual(retrieval.global_context(self.s,limit=2)['mode'],'off')
         with patch.dict('os.environ',{},clear=False):
             import os as _os;_os.environ.pop('V3_GRAPH_MODE',None)
-            self.assertTrue(retrieval.graph_enabled())
+            # Default off: the Alpha28 comparison found no demonstrated marginal
+            # value, so deployments and experiments must opt in explicitly.
+            self.assertFalse(retrieval.graph_enabled())
+
+    def test_isolated_store_skips_graph_until_another_interpreted_event(self):
+        eid,topic_id,_event=self.document('单事件隔离库图谱门控夹具')
+        with patch.dict('os.environ',{'V3_GRAPH_MODE':'on'},clear=False):
+            self.assertFalse(retrieval.engaged(self.s,topic_id))
+            packet=topic_packet(read_topic(self.s,topic_id),self.s.context())
+            before=list(packet['quote_candidates'])
+            retrieval.attach(self.s,packet,topic_id)
+            self.assertEqual(packet['graph_context']['mode'],'isolated')
+            self.assertEqual(packet['quote_candidates'],before)
+            # A pending extraction on a single-event store must return the saved
+            # interpretation without any model call (model=None would explode).
+            item=kg.source(self.s,eid)
+            fingerprint=self.s.conn.execute('SELECT fingerprint FROM topic WHERE topic_id=?',(topic_id,)).fetchone()[0]
+            payload={'status':'ready','source_basis':{eid:{k:item[k] for k in ('content_hash','url','published_at')}},
+                'graph_extraction':{'version':graph_ai.VERSION,'status':'pending','rounds':0,'retry_at':None}}
+            with self.s.conn:
+                self.s.conn.execute('INSERT INTO topic_interpretation VALUES(?,?,?,?,?)',
+                    (topic_id,fingerprint,self.rid,now_iso(),dump(payload)))
+            saved=graph_ai.extract(self.s,self.rid,None,topic_id)
+            self.assertIsNotNone(saved)
+            skipped=self.s.conn.execute("SELECT COUNT(*) FROM step WHERE kind='graph_extraction_skipped'").fetchone()[0]
+            self.assertEqual(skipped,1)
+            self.assertEqual(saved['payload']['graph_extraction']['status'],'pending')
+            with self.s.conn:
+                self.s.conn.execute('INSERT INTO topic_interpretation VALUES(?,?,?,?,?)',
+                    ('fixture-other-topic','fixture-fingerprint',self.rid,now_iso(),dump({'status':'ready'})))
+            self.assertTrue(retrieval.engaged(self.s,topic_id))
 
     def test_ambiguous_alias_abstains_without_game_context(self):
         cases=[('方舟','海上方舟',None),('方舟','明日方舟干员','game_arknights'),('悟空','西游记故事',None),

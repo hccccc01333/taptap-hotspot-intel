@@ -16,6 +16,8 @@ from agent_v3.tests import test_main_agent as fixtures
 
 class Delivery22Tests(unittest.TestCase):
     def setUp(self):
+        env=patch.dict('os.environ',{'V3_GRAPH_MODE':'on','V3_GRAPH_FORCE':'1'},clear=False)
+        env.start();self.addCleanup(env.stop)
         self.f=fixtures.MainAgentTests();self.f.setUp();self.s=self.f.store;self.fp=self.s.conn.execute("SELECT fingerprint FROM topic WHERE topic_id=?",(self.f.tid,)).fetchone()[0]
     def tearDown(self):self.f.tearDown()
 

@@ -622,7 +622,14 @@ def run_phase(root, phase):
                 with PublicArchive(root / 'public_snapshots' / trial['case_id'], directory):
                     if arm in ('C', 'C0'):
                         import os as _os
-                        if arm == 'C0':
+                        if arm == 'C':
+                            # The graph is off by default; this arm opts in and
+                            # forces it past the isolated-store gate so the
+                            # comparison still measures the graph variant.
+                            _os.environ['V3_GRAPH_MODE'] = 'on'
+                            _os.environ['V3_GRAPH_FORCE'] = '1'
+                        else:
+                            _os.environ.pop('V3_GRAPH_FORCE', None)
                             # Graph ablation: the same full chain without graph
                             # extraction, retrieval or prompts; everything else
                             # identical. Kept as an explicit comparison arm.
@@ -632,6 +639,7 @@ def run_phase(root, phase):
                                 'status': 'seed_not_eligible', 'reason': '真实发现时效规则未接受该线索'}
                         finally:
                             _os.environ.pop('V3_GRAPH_MODE', None)
+                            _os.environ.pop('V3_GRAPH_FORCE', None)
                         report = project_full(store, tid, outcome)
                         status = 'returned' if outcome.get('status') in ('completed', 'intelligence_ready', 'no_selected_work', 'no_pending_work', 'seed_not_eligible') else 'partial'
                     else:

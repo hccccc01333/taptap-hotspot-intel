@@ -90,7 +90,7 @@ class MainAgentTests(unittest.TestCase):
 
     def test_one_main_controls_business_and_delegates_child(self):
         model=self.model('opportunity')
-        with patch('agent_v3.research.search_news',side_effect=AssertionError('fixture must not use network')):
+        with patch.dict('os.environ',{'V3_GRAPH_MODE':'on','V3_GRAPH_FORCE':'1'},clear=False),                 patch('agent_v3.research.search_news',side_effect=AssertionError('fixture must not use network')):
             result=process(self.store,self.rid,model=model,topic_id=self.tid)
         self.assertEqual(result['status'],'completed')
         self.assertEqual(model.calls,['main_plan','research_plan','interpretation','graph_extraction','intelligence','creative_plan','creative_production'])
@@ -112,7 +112,8 @@ class MainAgentTests(unittest.TestCase):
 
     def test_decision_and_interpretation_cache_prevents_duplicate_calls(self):
         model=self.model();plan(self.store,self.rid,model,self.tid);plan(self.store,self.rid,model,self.tid)
-        interpret(self.store,self.rid,model,self.tid);interpret(self.store,self.rid,model,self.tid)
+        with patch.dict('os.environ',{'V3_GRAPH_MODE':'on','V3_GRAPH_FORCE':'1'},clear=False):
+            interpret(self.store,self.rid,model,self.tid);interpret(self.store,self.rid,model,self.tid)
         self.assertEqual(model.calls,['main_plan','interpretation','graph_extraction'])
 
     def test_changed_source_does_not_display_old_interpretation(self):
