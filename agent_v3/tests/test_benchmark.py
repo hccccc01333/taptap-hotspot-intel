@@ -302,13 +302,15 @@ class BenchmarkTests(unittest.TestCase):
                     'agent_v3.tool_executor.ToolExecutor.execute', return_value={'calls': 0, 'status': 'fixture'}), redirect_stdout(io.StringIO()):
                 result = b.run_phase(self.root, 'pilot')
                 post.assert_not_called()
-            self.assertEqual(result['calls'], 18)
+            # Production-configuration C (no C0 ablation arm) runs with the
+            # graph off, so it makes 6 calls per case instead of 7.
+            self.assertEqual(result['calls'], 16)
             outputs = list((self.root / 'pilot').glob('*/result.json'))
             self.assertEqual(len(outputs), 6)
             self.assertTrue(all(b.read(p)['status'] == 'returned' for p in outputs))
             paths = b.review_export(self.root, 'pilot')
             summary = b.summarize(self.root, paths['review'], paths['mapping'], 'pilot')
-            self.assertEqual(summary['groups']['C']['model_calls'], 14)
+            self.assertEqual(summary['groups']['C']['model_calls'], 12)
             self.assertEqual(summary['groups']['A']['metrics']['facts']['pass'], 0)
         finally:
             fixture.tearDown()
