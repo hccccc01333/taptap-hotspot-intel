@@ -622,13 +622,15 @@ def run_phase(root, phase):
                 with PublicArchive(root / 'public_snapshots' / trial['case_id'], directory):
                     if arm in ('C', 'C0'):
                         import os as _os
-                        if arm == 'C':
-                            # The graph is off by default; this arm opts in and
-                            # forces it past the isolated-store gate so the
-                            # comparison still measures the graph variant.
+                        graph_ablation = 'C0' in manifest.get('arms', ())
+                        if arm == 'C' and graph_ablation:
+                            # Only a four-arm ablation batch forces the graph on
+                            # (past the isolated-store gate), so C measures the
+                            # graph variant. A production-configuration batch
+                            # leaves C on the deployment default (graph off).
                             _os.environ['V3_GRAPH_MODE'] = 'on'
                             _os.environ['V3_GRAPH_FORCE'] = '1'
-                        else:
+                        elif arm == 'C0':
                             _os.environ.pop('V3_GRAPH_FORCE', None)
                             # Graph ablation: the same full chain without graph
                             # extraction, retrieval or prompts; everything else
