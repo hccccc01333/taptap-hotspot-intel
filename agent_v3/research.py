@@ -4,8 +4,8 @@ import json,re,time
 from datetime import datetime,timedelta,timezone
 
 from jsonschema import Draft202012Validator
-from agent_v2.ingest import normalize
-from agent_v2.store import dump,now_iso,stable_id
+from agent_core.ingest import normalize
+from agent_core.store import dump,now_iso,stable_id
 from . import enrichment,discussion
 from .public_sources import search_news
 from .materials import capture

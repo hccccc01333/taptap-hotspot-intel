@@ -221,7 +221,7 @@ TASKS: dict[str, dict[str, Any]] = {
         "tools": ["l6_ops_run"],
         "outputs": [
             "data/state/l6_execution.sqlite3::alert",
-            "L6_execution/workbench/index.html（生成物，不入 git）",
+            "execution/workbench/index.html（生成物，不入 git）",
         ],
         "artifact_contract": {
             "audience": "运营侧（工作台/通知）",

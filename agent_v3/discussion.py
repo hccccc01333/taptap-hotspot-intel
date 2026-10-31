@@ -3,9 +3,9 @@ import hashlib,json,re
 from datetime import datetime,timedelta,timezone
 from urllib.parse import urlencode
 
-from agent_v2.connectors import legacy,UA
-from agent_v2.ingest import normalize,timestamp,clean
-from agent_v2.store import dump,now_iso,stable_id
+from agent_core.connectors import legacy,UA
+from agent_core.ingest import normalize,timestamp,clean
+from agent_core.store import dump,now_iso,stable_id
 from .public_sources import read_public
 from .materials import capture
 

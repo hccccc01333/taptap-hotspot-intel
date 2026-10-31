@@ -2,7 +2,7 @@
 import copy
 import json
 import unittest
-from agent_v2.store import dump,now_iso
+from agent_core.store import dump,now_iso
 from agent_v3 import discussion,research_child,work
 from agent_v3.discovery import read_topic
 from agent_v3.pipeline import process

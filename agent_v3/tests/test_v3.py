@@ -6,9 +6,9 @@ from unittest.mock import patch
 
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
-from agent_v2.ingest import normalize
-from agent_v2.store import dump, now_iso
-from agent_v2.tests.test_core import ScriptedModel, final
+from agent_core.ingest import normalize
+from agent_core.store import dump, now_iso
+from agent_core.tests.test_core import ScriptedModel, final
 from agent_v3.store import Store
 from agent_v3.discovery import scan, queue, read_topic, title_key
 from agent_v3.connectors import collect, CHANNELS

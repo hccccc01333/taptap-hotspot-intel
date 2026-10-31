@@ -9,8 +9,8 @@ import uuid
 import requests
 from jsonschema import Draft202012Validator
 
-from L4_intelligence.intelligence.llm import LLMUnavailable
-from L4_intelligence.intelligence.chat_response import completion_parts, CompletionError, require_finished
+from intelligence.llm import LLMUnavailable
+from intelligence.chat_response import completion_parts, CompletionError, require_finished
 from .opencode_zen import StructuredDeliveryError
 from .deepseek import STAGE_TOKENS
 from . import providers

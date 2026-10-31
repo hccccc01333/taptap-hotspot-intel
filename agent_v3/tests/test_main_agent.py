@@ -5,7 +5,7 @@ import unittest
 from datetime import datetime,timedelta,timezone
 from unittest.mock import patch
 
-from agent_v2.store import now_iso
+from agent_core.store import now_iso
 from agent_v3.store import Store
 from agent_v3.discovery import scan,queue,read_topic
 from agent_v3.pipeline import process

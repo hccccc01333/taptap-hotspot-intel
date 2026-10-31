@@ -23,8 +23,8 @@ from typing import Any, Callable, Dict, List, Optional
 
 _HERE = os.path.dirname(os.path.abspath(__file__))
 _ROOT = os.path.dirname(_HERE)
-for _p in (_ROOT, _HERE, os.path.join(_ROOT, "L6_execution"),
-           os.path.join(_ROOT, "L5_memory"), os.path.join(_ROOT, "L4_intelligence")):
+for _p in (_ROOT, _HERE, os.path.join(_ROOT, "execution"),
+           os.path.join(_ROOT, "memory"), os.path.join(_ROOT, "intelligence")):
     if _p not in sys.path:
         sys.path.insert(0, _p)
 
@@ -98,7 +98,7 @@ def communities(refresh: bool = False) -> Dict[str, Any]:
 
 
 def _communities_impl(st: WebState, refresh: bool) -> Dict[str, Any]:
-    from intelligence.community_report import generate_all   # L4 模块（sys.path 已含 L4_intelligence）
+    from intelligence.community_report import generate_all   # L4 模块（sys.path 已含 intelligence）
 
     l3_db = os.path.join(_ROOT, "data", "state", "l3_trend.sqlite3")
     out_json = os.path.join(_ROOT, "data", "state", "community_reports.json")

@@ -12,8 +12,8 @@ import uuid
 from urllib.parse import urlparse
 from datetime import datetime,timedelta,timezone
 
-from agent_v2.ingest import normalize,timestamp
-from agent_v2.store import ROOT,dump,now_iso
+from agent_core.ingest import normalize,timestamp
+from agent_core.store import ROOT,dump,now_iso
 
 ARTIFACT_ROOT=ROOT/'data'/'v3'/'research_captures'
 BLOCKED=('验证码','安全验证','人机验证','访问过于频繁','Access Denied','verify you are human')

@@ -5,8 +5,8 @@ import xml.etree.ElementTree as ET
 from urllib.parse import urlencode,urlparse
 from bs4 import BeautifulSoup
 
-from agent_v2.ingest import clean,timestamp,normalize
-from agent_v2.store import now_iso,dump,stable_id
+from agent_core.ingest import clean,timestamp,normalize
+from agent_core.store import now_iso,dump,stable_id
 from .public_sources import read_public,allowed_url,publication_date
 from .materials import capture
 

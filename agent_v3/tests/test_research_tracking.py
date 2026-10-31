@@ -4,7 +4,7 @@ from datetime import datetime,timedelta,timezone
 from unittest.mock import patch
 import requests
 
-from agent_v2.store import now_iso,dump
+from agent_core.store import now_iso,dump
 from agent_v3.store import Store
 from agent_v3.connectors import collect
 from agent_v3.discovery import scan,queue,read_topic
@@ -219,7 +219,7 @@ class ResearchTrackingTests(unittest.TestCase):
         self.assertIn('系统观察顺序',event['note'])
 
     def test_offline_vectors_use_versioned_cache_without_loading_encoder(self):
-        from agent_v2.store import stable_id
+        from agent_core.store import stable_id
         key=stable_id('embedding_','城市散步')
         self.store.conn.execute('INSERT INTO semantic_embedding VALUES(?,?,?)',(key,semantic.VERSION,dump([1.0]+[0.0]*511)));self.store.conn.commit()
         with patch.object(semantic,'_failure','offline unavailable'):

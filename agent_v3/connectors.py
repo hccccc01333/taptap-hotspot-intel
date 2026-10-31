@@ -5,9 +5,9 @@ import json
 from datetime import datetime, timedelta, timezone
 from urllib.parse import quote
 
-from agent_v2 import connectors as adapters
-from agent_v2.ingest import normalize, clean
-from agent_v2.store import now_iso, dump
+from agent_core import connectors as adapters
+from agent_core.ingest import normalize, clean
+from agent_core.store import now_iso, dump
 from .materials import capture
 from .public_sources import fetch_feed
 

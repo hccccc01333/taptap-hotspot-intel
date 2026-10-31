@@ -2,7 +2,7 @@ import argparse
 import json
 import uuid
 
-from agent_v2.store import now_iso, dump
+from agent_core.store import now_iso, dump
 from .store import Store
 from .engine import TASK
 from .service import execute_cycle

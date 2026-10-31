@@ -4,7 +4,7 @@ from __future__ import annotations
 from datetime import datetime, timedelta, timezone
 import json
 
-from agent_v2.store import dump, now_iso
+from agent_core.store import dump, now_iso
 from . import work, intelligence
 from .model import gate, GatedModel
 from .engine import run_agent

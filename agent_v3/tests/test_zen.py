@@ -3,7 +3,7 @@ import copy
 import unittest
 from unittest.mock import patch
 
-from L4_intelligence.intelligence.llm import LLMUnavailable
+from intelligence.llm import LLMUnavailable
 from agent_v3.opencode_zen import OpenCodeModel, StructuredDeliveryError, DEFAULT_MODEL, free_model, configuration, provider_error
 from agent_v3.model import failure, gate, GatedModel, set_zen_quota, zen_quota, QUOTA_REASON
 from agent_v3.store import Store

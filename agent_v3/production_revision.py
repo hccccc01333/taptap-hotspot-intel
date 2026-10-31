@@ -2,7 +2,7 @@
 import copy
 import json
 import time
-from agent_v2.store import dump,now_iso,stable_id
+from agent_core.store import dump,now_iso,stable_id
 from .main_agent import task
 from .task_packets import PLAN_SCHEMA,PRODUCTION_SCHEMA,PRODUCTION_SYSTEM
 from .tools import GrowthTools

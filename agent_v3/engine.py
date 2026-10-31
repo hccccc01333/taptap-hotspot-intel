@@ -1,6 +1,6 @@
 from .contracts import run_task
-from agent_v2.engine import run_agent as bounded_agent, SYSTEM as EVIDENCE_SYSTEM
-from agent_v2.store import dump
+from agent_core.engine import run_agent as bounded_agent, SYSTEM as EVIDENCE_SYSTEM
+from agent_core.store import dump
 import time
 from .tools import GrowthTools
 from .intelligence import native_contract

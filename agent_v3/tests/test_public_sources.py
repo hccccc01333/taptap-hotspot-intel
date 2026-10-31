@@ -5,8 +5,8 @@ from datetime import datetime,timedelta,timezone
 from unittest.mock import patch
 
 import requests
-from agent_v2.ingest import normalize
-from agent_v2.store import now_iso,dump
+from agent_core.ingest import normalize
+from agent_core.store import now_iso,dump
 from agent_v3 import public_sources as public,enrichment,work
 from agent_v3.connectors import collect,coverage
 from agent_v3.discovery import scan,queue,read_topic

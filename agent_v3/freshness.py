@@ -1,6 +1,6 @@
 """Publication, observation and renewed circulation are separate clocks."""
 from datetime import datetime,timedelta,timezone
-from agent_v2.ingest import timestamp
+from agent_core.ingest import timestamp
 import re
 from zoneinfo import ZoneInfo
 

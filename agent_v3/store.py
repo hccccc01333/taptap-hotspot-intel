@@ -4,7 +4,7 @@ import hashlib
 import json
 from pathlib import Path
 
-from agent_v2.store import Store as EvidenceStore, ROOT, dump, now_iso, stable_id
+from agent_core.store import Store as EvidenceStore, ROOT, dump, now_iso, stable_id
 from . import __version__
 from .runtime_guard import RuntimeStore, AtomicConnection
 

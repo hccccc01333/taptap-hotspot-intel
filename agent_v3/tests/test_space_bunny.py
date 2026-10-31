@@ -3,7 +3,7 @@ import json
 import unittest
 from unittest.mock import Mock,patch
 
-from L4_intelligence.intelligence.llm import LLMUnavailable
+from intelligence.llm import LLMUnavailable
 from agent_v3.space_bunny import SpaceBunnyModel,MODEL,API_MODEL,ENDPOINT,api_key
 from agent_v3.opencode_zen import StructuredDeliveryError
 from agent_v3.store import Store

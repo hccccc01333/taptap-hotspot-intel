@@ -10,7 +10,7 @@ from pathlib import PurePosixPath
 
 
 PRIVATE_PREFIXES = ("data/events/", "data/raw/", "data/raw_lake/", "data/event_bus/",
-                    "data/state/", "data/v2/", "data/v3/", "runtime/state/", "L3_trend/state/",
+                    "data/state/", "data/v2/", "data/v3/", "runtime/state/", "trend/state/",
                     ".toolchain/")
 PRIVATE_FILES = {"webapp/auth_users.json", "runtime/reports/scheduler_status_latest.md"}
 IDENTITY_COLUMNS = {"user_name", "user_id", "avatar_url", "author_name", "author_id"}

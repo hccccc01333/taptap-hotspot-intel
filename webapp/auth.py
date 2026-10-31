@@ -21,7 +21,7 @@ import time
 from pathlib import Path
 from typing import Any, Dict, Optional
 
-_execution_root = str(Path(__file__).resolve().parents[1] / "L6_execution")
+_execution_root = str(Path(__file__).resolve().parents[1] / "execution")
 if _execution_root not in sys.path:
     sys.path.insert(0, _execution_root)
 from execution.audit import ROLES  # 同一张角色表（§43）

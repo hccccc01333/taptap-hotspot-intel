@@ -1,4 +1,4 @@
-from agent_v2.reports import brief as evidence_brief
+from agent_core.reports import brief as evidence_brief
 from datetime import datetime, timedelta, timezone
 from .model import gate
 

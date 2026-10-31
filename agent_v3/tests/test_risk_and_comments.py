@@ -3,7 +3,7 @@ import copy
 import json
 import unittest
 from unittest.mock import patch
-from agent_v2.store import dump,now_iso
+from agent_core.store import dump,now_iso
 from agent_v3 import risk,work,browser_tools,discussion,research
 from agent_v3.discovery import read_topic
 from agent_v3.engine import run_agent

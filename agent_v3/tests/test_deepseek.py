@@ -4,12 +4,12 @@ import unittest
 from types import SimpleNamespace
 from unittest.mock import Mock, patch
 
-from L4_intelligence.intelligence.llm import LLMUnavailable, provider_key
-from L4_intelligence.intelligence.chat_response import assistant_history
-from agent_v2.model import LiveModel
-from agent_v2.engine import run_agent
-from agent_v2.store import Store as V2Store
-from agent_v2.tests.test_core import sample, final
+from intelligence.llm import LLMUnavailable, provider_key
+from intelligence.chat_response import assistant_history
+from agent_core.model import LiveModel
+from agent_core.engine import run_agent
+from agent_core.store import Store as V2Store
+from agent_core.tests.test_core import sample, final
 from agent_v3.deepseek import DeepSeekModel, MODEL, ENDPOINT
 from agent_v3.store import Store
 from agent_v3.model import GatedModel, gate, failure, set_zen_quota, task_metadata
@@ -195,7 +195,7 @@ class ContinuationTests(unittest.TestCase):
         data=reply(None,finish='tool_calls')
         data['choices'][0]['message']['tool_calls']=[{'id':'call1','type':'function','function':{'name':'read_evidence','arguments':'{"evidence_ids":[]}'}}]
         model=object.__new__(LiveModel);model.model=MODEL;model.router=SimpleNamespace(reasoning_effort='low')
-        with patch('agent_v2.model.resolve_provider',return_value={'base_url':ENDPOINT}),patch('agent_v2.model.provider_key',return_value='test'),patch('agent_v2.model.requests.post',return_value=response(data)) as post:
+        with patch('agent_core.model.resolve_provider',return_value={'base_url':ENDPOINT}),patch('agent_core.model.provider_key',return_value='test'),patch('agent_core.model.requests.post',return_value=response(data)) as post:
             r=model._chat([], [{'type':'function'}])
         self.assertEqual(r['content'],'');self.assertEqual(r['tool_calls'][0]['name'],'read_evidence')
         self.assertEqual(assistant_history(r)['reasoning_content'],PRIVATE)

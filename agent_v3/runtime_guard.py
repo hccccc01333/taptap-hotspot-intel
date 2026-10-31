@@ -6,7 +6,7 @@ import re
 import sqlite3
 import uuid
 
-from agent_v2.store import now_iso, dump, stable_id
+from agent_core.store import now_iso, dump, stable_id
 
 
 class LeaseLost(RuntimeError):

@@ -14,7 +14,7 @@ from agent_v3.store import Store
 from agent_v3.model import GatedModel, gate, failure, set_provider_hold, model_options
 from agent_v3.contracts import run_task
 from agent_v3.opencode_zen import StructuredDeliveryError
-from L4_intelligence.intelligence.llm import LLMUnavailable
+from intelligence.llm import LLMUnavailable
 from agent_v3.tests.test_deepseek import response
 
 PRIVATE = 'PRIVATE_THINKING_IS_NEVER_A_DELIVERABLE'

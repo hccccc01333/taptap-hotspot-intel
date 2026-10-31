@@ -8,30 +8,30 @@ say() { echo "  -> $*"; }
 mv1() { git mv "$1" "$2" 2>/dev/null || mv "$1" "$2"; say "$1 => $2"; }
 
 echo "== 1. 建新骨架 =="
-mkdir -p L1_data_source/schema L1_data_source/adapters \
-         L1_data_source/collectors/taptap L1_data_source/collectors/bilibili \
-         L1_data_source/collectors/douyin  L1_data_source/collectors/weibo
-mkdir -p L2_signal/cross_channel L2_signal/lab
-mkdir -p L3_semantic/channels/bilibili L3_semantic/channels/douyin L3_semantic/channels/weibo L3_semantic/qc
+mkdir -p data_source/schema data_source/adapters \
+         data_source/collectors/taptap data_source/collectors/bilibili \
+         data_source/collectors/douyin  data_source/collectors/weibo
+mkdir -p signals/cross_channel signals/lab
+mkdir -p semantic/channels/bilibili semantic/channels/douyin semantic/channels/weibo semantic/qc
 mkdir -p L4_decision L5_generation L6_delivery/briefing L6_delivery/dashboard \
          L6_delivery/period_reports L6_delivery/contrast/bilibili L6_delivery/contrast/douyin L6_delivery/contrast/weibo
-mkdir -p runtime/tests L4_decision/tests L5_generation/tests L2_signal/tests
+mkdir -p runtime/tests L4_decision/tests L5_generation/tests signals/tests
 mkdir -p data/raw/taptap data/raw/bilibili data/raw/douyin data/raw/weibo \
          data/events data/annotations/shards data/facts data/processed data/state data/outputs
 
 echo "== 2. L1 信号采集层 =="
 for f in crawl_taptap_community.py crawl_taptap_discovery.py crawl_taptap_reviews.py crawl_taptap_user.py config.example.env 原始提示词.md 提示词工程复盘.md 爬取提示词构建.md; do
-  [ -e "01爬虫/$f" ] && mv1 "01爬虫/$f" "L1_data_source/collectors/taptap/$f"
+  [ -e "01爬虫/$f" ] && mv1 "01爬虫/$f" "data_source/collectors/taptap/$f"
 done
 [ -d "01爬虫/TAPTAP网页数据json" ] && mv1 "01爬虫/TAPTAP网页数据json" "data/raw/taptap/web_json"
-[ -e "01爬虫/pii_hash.py" ] && mv1 "01爬虫/pii_hash.py" "L1_data_source/pii_hash.py"
+[ -e "01爬虫/pii_hash.py" ] && mv1 "01爬虫/pii_hash.py" "data_source/pii_hash.py"
 
-mv1 "06对照_B站/crawl_bili_comments.py"  "L1_data_source/collectors/bilibili/crawl_bili_comments.py"
-mv1 "06对照_B站/config.example.env"      "L1_data_source/collectors/bilibili/config.example.env"
-mv1 "07对照_抖音/crawl_douyin_comments.py" "L1_data_source/collectors/douyin/crawl_douyin_comments.py"
-mv1 "07对照_抖音/config.example.env"       "L1_data_source/collectors/douyin/config.example.env"
-mv1 "08对照_微博/crawl_weibo_posts.py"     "L1_data_source/collectors/weibo/crawl_weibo_posts.py"
-mv1 "08对照_微博/config.example.env"       "L1_data_source/collectors/weibo/config.example.env"
+mv1 "06对照_B站/crawl_bili_comments.py"  "data_source/collectors/bilibili/crawl_bili_comments.py"
+mv1 "06对照_B站/config.example.env"      "data_source/collectors/bilibili/config.example.env"
+mv1 "07对照_抖音/crawl_douyin_comments.py" "data_source/collectors/douyin/crawl_douyin_comments.py"
+mv1 "07对照_抖音/config.example.env"       "data_source/collectors/douyin/config.example.env"
+mv1 "08对照_微博/crawl_weibo_posts.py"     "data_source/collectors/weibo/crawl_weibo_posts.py"
+mv1 "08对照_微博/config.example.env"       "data_source/collectors/weibo/config.example.env"
 
 echo "== 3. L1 原始数据（按平台归湖） =="
 mv1 "02数据_platform/discovery_posts.csv"    "data/raw/taptap/discovery_posts.csv"
@@ -67,48 +67,48 @@ mv1 "08对照_微博/comments_sample.csv" "data/raw/weibo/comments_sample.csv"
 [ -d "08对照_微博/run_logs" ] && mv1 "08对照_微博/run_logs" "data/raw/weibo/run_logs"
 
 echo "== 4. L2 信号计算层 =="
-[ -e "02数据/preprocess_reviews.py" ] && mv1 "02数据/preprocess_reviews.py" "L2_signal/preprocess_reviews.py"
-[ -e "02数据/数据处理提示词.md" ]     && mv1 "02数据/数据处理提示词.md"     "L2_signal/数据处理提示词.md"
+[ -e "02数据/preprocess_reviews.py" ] && mv1 "02数据/preprocess_reviews.py" "signals/preprocess_reviews.py"
+[ -e "02数据/数据处理提示词.md" ]     && mv1 "02数据/数据处理提示词.md"     "signals/数据处理提示词.md"
 for f in build_channel_facts.py synthesize_cross_channel.py facts_cross_channel.json latest_summary.json README.md; do
-  [ -e "09跨渠道AI/$f" ] && mv1 "09跨渠道AI/$f" "L2_signal/cross_channel/$f"
+  [ -e "09跨渠道AI/$f" ] && mv1 "09跨渠道AI/$f" "signals/cross_channel/$f"
 done
-[ -d "09跨渠道AI/raw_llm" ] && mv1 "09跨渠道AI/raw_llm" "L2_signal/cross_channel/raw_llm"
-[ -d "09跨渠道AI/reports" ] && mv1 "09跨渠道AI/reports" "L2_signal/cross_channel/reports"
+[ -d "09跨渠道AI/raw_llm" ] && mv1 "09跨渠道AI/raw_llm" "signals/cross_channel/raw_llm"
+[ -d "09跨渠道AI/reports" ] && mv1 "09跨渠道AI/reports" "signals/cross_channel/reports"
 for f in README.md anomaly_diagnosis.py event_impact.py events.csv model_eval.py _probe_events.py _probe_events2.py; do
-  [ -e "10分析实验室/$f" ] && mv1 "10分析实验室/$f" "L2_signal/lab/$f"
+  [ -e "10分析实验室/$f" ] && mv1 "10分析实验室/$f" "signals/lab/$f"
 done
-[ -d "10分析实验室/outputs" ] && mv1 "10分析实验室/outputs" "L2_signal/lab/outputs"
-[ -d "10分析实验室/reports" ] && mv1 "10分析实验室/reports" "L2_signal/lab/reports"
-mv1 "11情报Agent/features.py" "L2_signal/features.py"
-for t in test_features.py; do [ -e "11情报Agent/tests/$t" ] && mv1 "11情报Agent/tests/$t" "L2_signal/tests/$t"; done
+[ -d "10分析实验室/outputs" ] && mv1 "10分析实验室/outputs" "signals/lab/outputs"
+[ -d "10分析实验室/reports" ] && mv1 "10分析实验室/reports" "signals/lab/reports"
+mv1 "11情报Agent/features.py" "signals/features.py"
+for t in test_features.py; do [ -e "11情报Agent/tests/$t" ] && mv1 "11情报Agent/tests/$t" "signals/tests/$t"; done
 
 echo "== 5. L3 语义理解层 =="
-[ -e "02数据/annotate_reviews.py" ]    && mv1 "02数据/annotate_reviews.py"    "L3_semantic/annotate_reviews.py"
-[ -e "02数据/run_annotate_shards.py" ] && mv1 "02数据/run_annotate_shards.py" "L3_semantic/run_annotate_shards.py"
-mv1 "11情报Agent/announcements.py" "L3_semantic/announcements.py"
+[ -e "02数据/annotate_reviews.py" ]    && mv1 "02数据/annotate_reviews.py"    "semantic/annotate_reviews.py"
+[ -e "02数据/run_annotate_shards.py" ] && mv1 "02数据/run_annotate_shards.py" "semantic/run_annotate_shards.py"
+mv1 "11情报Agent/announcements.py" "semantic/announcements.py"
 for t in test_announcements.py test_comment_parse.py; do
-  [ -e "11情报Agent/tests/$t" ] && mv1 "11情报Agent/tests/$t" "L3_semantic/tests_$t"
+  [ -e "11情报Agent/tests/$t" ] && mv1 "11情报Agent/tests/$t" "semantic/tests_$t"
 done
-mkdir -p L3_semantic/tests
-[ -e "L3_semantic/tests_test_announcements.py" ] && mv "L3_semantic/tests_test_announcements.py" "L3_semantic/tests/test_announcements.py"
-[ -e "L3_semantic/tests_test_comment_parse.py" ] && mv "L3_semantic/tests_test_comment_parse.py"  "L3_semantic/tests/test_comment_parse.py"
+mkdir -p semantic/tests
+[ -e "semantic/tests_test_announcements.py" ] && mv "semantic/tests_test_announcements.py" "semantic/tests/test_announcements.py"
+[ -e "semantic/tests_test_comment_parse.py" ] && mv "semantic/tests_test_comment_parse.py"  "semantic/tests/test_comment_parse.py"
 
-mv1 "06对照_B站/annotate_bili_sample.py"     "L3_semantic/channels/bilibili/annotate_bili_sample.py"
-mv1 "06对照_B站/annotations_bili_sample.csv" "L3_semantic/channels/bilibili/annotations_bili_sample.csv"
-[ -e "06对照_B站/checkpoint_annotate.json" ] && mv1 "06对照_B站/checkpoint_annotate.json" "L3_semantic/channels/bilibili/checkpoint_annotate.json"
-mv1 "07对照_抖音/annotate_douyin_sample.py"     "L3_semantic/channels/douyin/annotate_douyin_sample.py"
-mv1 "07对照_抖音/annotations_douyin_sample.csv" "L3_semantic/channels/douyin/annotations_douyin_sample.csv"
-[ -e "07对照_抖音/checkpoint_annotate.json" ] && mv1 "07对照_抖音/checkpoint_annotate.json" "L3_semantic/channels/douyin/checkpoint_annotate.json"
-mv1 "08对照_微博/annotate_weibo_sample.py"     "L3_semantic/channels/weibo/annotate_weibo_sample.py"
-mv1 "08对照_微博/annotations_weibo_sample.csv" "L3_semantic/channels/weibo/annotations_weibo_sample.csv"
-[ -e "08对照_微博/checkpoint_annotate.json" ] && mv1 "08对照_微博/checkpoint_annotate.json" "L3_semantic/channels/weibo/checkpoint_annotate.json"
+mv1 "06对照_B站/annotate_bili_sample.py"     "semantic/channels/bilibili/annotate_bili_sample.py"
+mv1 "06对照_B站/annotations_bili_sample.csv" "semantic/channels/bilibili/annotations_bili_sample.csv"
+[ -e "06对照_B站/checkpoint_annotate.json" ] && mv1 "06对照_B站/checkpoint_annotate.json" "semantic/channels/bilibili/checkpoint_annotate.json"
+mv1 "07对照_抖音/annotate_douyin_sample.py"     "semantic/channels/douyin/annotate_douyin_sample.py"
+mv1 "07对照_抖音/annotations_douyin_sample.csv" "semantic/channels/douyin/annotations_douyin_sample.csv"
+[ -e "07对照_抖音/checkpoint_annotate.json" ] && mv1 "07对照_抖音/checkpoint_annotate.json" "semantic/channels/douyin/checkpoint_annotate.json"
+mv1 "08对照_微博/annotate_weibo_sample.py"     "semantic/channels/weibo/annotate_weibo_sample.py"
+mv1 "08对照_微博/annotations_weibo_sample.csv" "semantic/channels/weibo/annotations_weibo_sample.csv"
+[ -e "08对照_微博/checkpoint_annotate.json" ] && mv1 "08对照_微博/checkpoint_annotate.json" "semantic/channels/weibo/checkpoint_annotate.json"
 
 echo "== 6. L3 标注资产 =="
 for f in 03标注结果/*; do
   b=$(basename "$f")
   case "$b" in
     README.md|*.csv|*.json) mv1 "$f" "data/annotations/$b" ;;
-    qc)                     mv1 "$f" "L3_semantic/qc_orig" ;;
+    qc)                     mv1 "$f" "semantic/qc_orig" ;;
     *)                      mv1 "$f" "data/annotations/shards/$b" ;;
   esac
 done

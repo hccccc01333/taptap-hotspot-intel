@@ -11,7 +11,7 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from urllib.parse import urlsplit, urlunsplit
 
-from agent_v2.store import ROOT, dump, now_iso
+from agent_core.store import ROOT, dump, now_iso
 
 PRIVATE = {'actor','user_name','user_id','author','author_id','avatar_url','source_path',
     'reading_metadata','content_hash','reasoning_content','reasoning_details','reasoning',

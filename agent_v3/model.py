@@ -2,8 +2,8 @@
 from datetime import datetime, timedelta, timezone
 import json
 
-from agent_v2.model import LiveModel, model_status as legacy_status
-from agent_v2.store import now_iso
+from agent_core.model import LiveModel, model_status as legacy_status
+from agent_core.store import now_iso
 from .opencode_zen import OpenCodeModel, StructuredDeliveryError, ZEN_MODELS, status as zen_status
 from .space_bunny import SpaceBunnyModel, MODEL as SPACE_BUNNY_MODEL, status as bunny_status
 from .deepseek import DeepSeekModel, ALIASES as DEEPSEEK_MODELS, status as deepseek_status
@@ -129,7 +129,7 @@ class GatedModel:
         selected=model_status(store.model_setting(),store)["model"]
         cooldown=gate(store,selected)
         if cooldown["status"]=="deferred":
-            from L4_intelligence.intelligence.llm import LLMUnavailable
+            from intelligence.llm import LLMUnavailable
             raise LLMUnavailable(cooldown["reason"])
         self.profile=providers.get(store,selected)
         if self.profile:self.client=ProfileModel(self.profile)
@@ -163,11 +163,11 @@ class GatedModel:
         if self.store._run_owner:self.store.heartbeat(self.store._run_owner)
         cooldown=gate(self.store,self.model)
         if cooldown['status']=='deferred':
-            from L4_intelligence.intelligence.llm import LLMUnavailable
+            from intelligence.llm import LLMUnavailable
             raise LLMUnavailable(cooldown['reason'])
         try:
             if self.profile and providers.fingerprint(providers.get(self.store,self.model))!=providers.fingerprint(self.profile):
-                from L4_intelligence.intelligence.llm import LLMUnavailable
+                from intelligence.llm import LLMUnavailable
                 raise LLMUnavailable('模型配置已变化，等待新配置下的自动运行')
             if getattr(self.client,'supports_tasks',False):
                 result=self.client.run_task(*args,**kwargs)
@@ -183,7 +183,7 @@ class GatedModel:
     def decide(self,messages,definitions):
         cooldown=gate(self.store,self.model)
         if cooldown['status']=='deferred':
-            from L4_intelligence.intelligence.llm import LLMUnavailable
+            from intelligence.llm import LLMUnavailable
             raise LLMUnavailable(cooldown['reason'])
         try:
             result=self.client.decide(messages,definitions);self.model=self.client.model

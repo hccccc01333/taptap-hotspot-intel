@@ -17,8 +17,8 @@ from pathlib import Path
 
 _HERE = os.path.dirname(os.path.abspath(__file__))
 _ROOT = os.path.dirname(os.path.dirname(_HERE))
-for _p in (_ROOT, os.path.join(_ROOT, "webapp"), os.path.join(_ROOT, "L6_execution"),
-           os.path.join(_ROOT, "L5_memory"), os.path.join(_ROOT, "L4_intelligence")):
+for _p in (_ROOT, os.path.join(_ROOT, "webapp"), os.path.join(_ROOT, "execution"),
+           os.path.join(_ROOT, "memory"), os.path.join(_ROOT, "intelligence")):
     if _p not in sys.path:
         sys.path.insert(0, _p)
 

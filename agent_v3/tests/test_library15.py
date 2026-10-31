@@ -5,7 +5,7 @@ from unittest.mock import Mock, patch
 
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
-from agent_v2.store import dump, now_iso
+from agent_core.store import dump, now_iso
 from agent_v3.api import router
 from agent_v3.discovery import scan, read_topic
 from agent_v3.model import gate, set_provider_hold, GatedModel, failure
@@ -113,7 +113,7 @@ class Library15Tests(unittest.TestCase):
     def test_hold_blocks_an_already_constructed_model_without_calling_client(self):
         model=GatedModel.__new__(GatedModel);model.store=self.s;model.model='deepseek-flash';model.client=Mock()
         set_provider_hold(self.s,model.model,True)
-        from L4_intelligence.intelligence.llm import LLMUnavailable
+        from intelligence.llm import LLMUnavailable
         with self.assertRaises(LLMUnavailable):model.decide([],[])
         with self.assertRaises(LLMUnavailable):model.run_task('test',{}, {},'')
         model.client.decide.assert_not_called();model.client.run_task.assert_not_called()

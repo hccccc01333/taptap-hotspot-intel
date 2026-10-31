@@ -19,7 +19,7 @@ from datetime import datetime, timezone, timedelta
 from contextlib import ExitStack
 from unittest.mock import patch
 
-from agent_v2.store import dump, now_iso
+from agent_core.store import dump, now_iso
 
 VERSION = 'agent-benchmark-v3'
 ARMS = ('A', 'B', 'C')
@@ -395,7 +395,7 @@ class RecordedModel:
             response, status = error.response, 'invalid_final'
             raise
         except Exception as error:
-            from L4_intelligence.intelligence.llm import LLMUnavailable
+            from intelligence.llm import LLMUnavailable
             code=re.match(r'^HTTP ([0-9]{3}):',str(error)) if isinstance(error,LLMUnavailable) else None
             from .provider_adapter import safe_failure_category
             failure={'type':type(error).__name__,'category':'http_'+code[1] if code else safe_failure_category(error)}
@@ -470,7 +470,7 @@ class PublicArchive:
 
 
 def seed_store(store, seed):
-    from agent_v2.ingest import normalize
+    from agent_core.ingest import normalize
     from .discovery import scan
     item = normalize({**seed, 'description': seed['body'], 'observed_at': seed['observed_at']},
                      seed['platform'], 'v3:benchmark:seed')

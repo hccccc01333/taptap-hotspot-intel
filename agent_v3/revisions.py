@@ -1,6 +1,6 @@
 """Keep business content versions separate from changing board observations."""
 import json
-from agent_v2.store import dump,now_iso,stable_id
+from agent_core.store import dump,now_iso,stable_id
 
 def initialize(store):
     store.conn.executescript('''CREATE TABLE IF NOT EXISTS topic_revision_state(

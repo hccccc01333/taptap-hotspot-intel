@@ -2,7 +2,7 @@
 import copy,json,unittest
 from datetime import datetime,timedelta,timezone
 from unittest.mock import patch
-from agent_v2.store import dump,now_iso,stable_id
+from agent_core.store import dump,now_iso,stable_id
 from agent_v3.store import Store
 from agent_v3 import followups,retention
 from agent_v3.service import scheduler_tick,unscreened_count,has_automatic_work

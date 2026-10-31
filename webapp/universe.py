@@ -403,7 +403,7 @@ def build_universe(limit: int = 240, include_ideas: bool = True) -> Dict[str, An
     l4 = _sqlite("l4_intelligence.sqlite3")
     l5 = _sqlite("l5_memory.sqlite3")
     if l3 is None:
-        return {"error": "L3 库不存在：先跑 L3_trend/trend_engine/pipeline.py --run",
+        return {"error": "L3 库不存在：先跑 trend/trend_engine/pipeline.py --run",
                 "planets": [], "core": {}}
 
     events = [dict(r) for r in l3.execute(

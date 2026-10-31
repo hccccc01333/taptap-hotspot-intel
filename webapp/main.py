@@ -30,7 +30,7 @@ from webapp.auth import issue_token, parse_token, verify_login
 
 @asynccontextmanager
 async def lifespan(app):
-    from agent_v2.service import start_scheduler, stop_scheduler
+    from agent_core.service import start_scheduler, stop_scheduler
     from agent_v3 import service as v3_service
     start_scheduler()
     v3_service.start_scheduler()
@@ -136,13 +136,13 @@ def get_pipeline_health(user: Dict[str, Any] = Depends(current_user)):
 
 @app.get("/api/v2/overview")
 def v2_overview(user: Dict[str, Any] = Depends(current_user)):
-    from agent_v2 import service
+    from agent_core import service
     return service.overview()
 
 
 @app.get("/api/v2/candidates")
 def v2_candidates(q: str = "", user: Dict[str, Any] = Depends(current_user)):
-    from agent_v2 import service
+    from agent_core import service
     return service.candidates(q[:100])
 
 
@@ -154,7 +154,7 @@ def v2_operator(user: Dict[str, Any]):
 @app.post("/api/v2/ingest")
 def v2_ingest(user: Dict[str, Any] = Depends(current_user)):
     v2_operator(user)
-    from agent_v2 import service
+    from agent_core import service
     try:
         return service.import_sources()
     except ValueError as error:
@@ -169,7 +169,7 @@ class V2ResearchBody(BaseModel):
 @app.post("/api/v2/runs")
 def v2_start(body: V2ResearchBody, user: Dict[str, Any] = Depends(current_user)):
     v2_operator(user)
-    from agent_v2 import service
+    from agent_core import service
     try:
         return service.start_run(body.task,body.collect_live)
     except ValueError as error:
@@ -178,7 +178,7 @@ def v2_start(body: V2ResearchBody, user: Dict[str, Any] = Depends(current_user))
 
 @app.get("/api/v2/runs/{run_id}")
 def v2_run(run_id: str, user: Dict[str, Any] = Depends(current_user)):
-    from agent_v2 import service
+    from agent_core import service
     result = service.get_run(run_id)
     if result is None:
         raise HTTPException(404, "研究运行不存在")
@@ -187,7 +187,7 @@ def v2_run(run_id: str, user: Dict[str, Any] = Depends(current_user)):
 
 @app.get("/api/v2/events/{event_id}")
 def v2_event(event_id: str, user: Dict[str, Any] = Depends(current_user)):
-    from agent_v2 import service
+    from agent_core import service
     result = service.get_event(event_id)
     if result is None:
         raise HTTPException(404, "事件不存在")
@@ -197,7 +197,7 @@ def v2_event(event_id: str, user: Dict[str, Any] = Depends(current_user)):
 @app.post("/api/v2/collection")
 def v2_collect(user: Dict[str, Any] = Depends(current_user)):
     v2_operator(user)
-    from agent_v2 import service
+    from agent_core import service
     try:
         return service.start_run("采集当前渠道最新公开线索",True,True)
     except ValueError as error:
@@ -206,7 +206,7 @@ def v2_collect(user: Dict[str, Any] = Depends(current_user)):
 
 @app.get("/api/v2/brief")
 def v2_brief(days: int=7, user: Dict[str, Any] = Depends(current_user)):
-    from agent_v2 import service
+    from agent_core import service
     try:
         return service.get_brief(days)
     except ValueError as error:
@@ -223,7 +223,7 @@ class V2FeedbackBody(BaseModel):
 @app.post("/api/v2/feedback")
 def v2_feedback(body: V2FeedbackBody,user: Dict[str,Any]=Depends(current_user)):
     v2_operator(user)
-    from agent_v2 import service
+    from agent_core import service
     try:
         return service.save_feedback(body.creative_id,user["actor"],body.decision,body.reason,body.outcome)
     except ValueError as error:
@@ -233,7 +233,7 @@ def v2_feedback(body: V2FeedbackBody,user: Dict[str,Any]=Depends(current_user)):
 @app.post("/api/v2/context")
 def v2_context(body: Dict[str,Any],user: Dict[str,Any]=Depends(current_user)):
     v2_operator(user)
-    from agent_v2 import service
+    from agent_core import service
     try:
         return service.business_context(body)
     except ValueError as error:
@@ -243,7 +243,7 @@ def v2_context(body: Dict[str,Any],user: Dict[str,Any]=Depends(current_user)):
 @app.post("/api/v2/schedule")
 def v2_schedule(body: Dict[str,Any],user: Dict[str,Any]=Depends(current_user)):
     v2_operator(user)
-    from agent_v2 import service
+    from agent_core import service
     try:
         return service.save_schedule(body)
     except ValueError as error:
@@ -253,7 +253,7 @@ def v2_schedule(body: Dict[str,Any],user: Dict[str,Any]=Depends(current_user)):
 @app.post("/api/v2/model")
 def v2_model(body: V2ModelBody,user: Dict[str,Any]=Depends(current_user)):
     v2_operator(user)
-    from agent_v2 import service
+    from agent_core import service
     try:
         return service.select_model(body.model)
     except ValueError as error:

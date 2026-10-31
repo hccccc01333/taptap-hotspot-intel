@@ -1,6 +1,6 @@
 """Evidence-backed reputation policy shared by prompts, scheduling and delivery."""
 import json
-from agent_v2.store import dump,now_iso,stable_id
+from agent_core.store import dump,now_iso,stable_id
 
 POLICY_VERSION='hotspot-risk-v3.12'
 PROMPT='''

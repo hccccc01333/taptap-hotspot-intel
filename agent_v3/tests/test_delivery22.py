@@ -5,7 +5,7 @@ import sqlite3
 import unittest
 from unittest.mock import patch
 
-from agent_v2.store import dump,now_iso
+from agent_core.store import dump,now_iso
 from agent_v3 import graph_ai
 from agent_v3.pipeline import process
 from agent_v3.research_child import interpret

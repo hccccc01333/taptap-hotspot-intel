@@ -11,9 +11,9 @@ from urllib.parse import urlparse, urljoin
 import requests
 from bs4 import BeautifulSoup
 
-from agent_v2.connectors import read_source as legacy_read
-from agent_v2.ingest import clean, timestamp
-from agent_v2.store import now_iso
+from agent_core.connectors import read_source as legacy_read
+from agent_core.ingest import clean, timestamp
+from agent_core.store import now_iso
 
 FEEDS = {name: f"https://www.chinanews.com.cn/rss/{name}.xml"
          for name in ("society", "culture", "life")}
@@ -163,7 +163,7 @@ def search_news(query):
     """Official public search form, retrieved as background rather than hotness."""
     import json
     from datetime import datetime,timedelta,timezone
-    from agent_v2.ingest import timestamp
+    from agent_core.ingest import timestamp
     if not isinstance(query,str) or not 2<=len(query.strip())<=80:raise ValueError('搜索词需为 2 至 80 字')
     content,_=read_public('https://sou.chinanews.com.cn/search/news',{'sou.chinanews.com.cn'},method='POST',
        data={'q':query.strip(),'sortType':'time','searchField':'all','dateType':'3day','pageNum':1,'channel':'all'})

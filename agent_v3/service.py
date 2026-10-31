@@ -6,8 +6,8 @@ import uuid
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timedelta, timezone
 
-from agent_v2.ingest import ingest
-from agent_v2.store import dump, now_iso
+from agent_core.ingest import ingest
+from agent_core.store import dump, now_iso
 from .store import Store, migrate_v2
 from .discovery import scan, queue, read_topic
 from .connectors import CHANNELS, collect, coverage
@@ -32,7 +32,7 @@ def automatic_work(store):
 
 
 def has_automatic_work(store):
-    from agent_v2.store import stable_id
+    from agent_core.store import stable_id
     context=stable_id('context_',dump(store.context()));cutoff=(datetime.now(timezone.utc)-timedelta(days=7)).isoformat(timespec='seconds')
     from .followups import due
     from .main_agent import PLAN_VERSION
@@ -52,7 +52,7 @@ def has_automatic_work(store):
 
 
 def unscreened_count(store):
-    from agent_v2.store import stable_id
+    from agent_core.store import stable_id
     context=stable_id('context_',dump(store.context()))
     cutoff=(datetime.now(timezone.utc)-timedelta(days=7)).isoformat(timespec='seconds')
     from .main_agent import PLAN_VERSION

@@ -3,8 +3,8 @@ from __future__ import annotations
 import copy
 import json
 
-from agent_v2.tools import ResearchTools, DEFINITIONS, definition, STR, IDS
-from agent_v2.store import dump, now_iso
+from agent_core.tools import ResearchTools, DEFINITIONS, definition, STR, IDS
+from agent_core.store import dump, now_iso
 from .discovery import queue, read_topic
 
 ASSET_KINDS=("source_quote","expression_pattern","game_adaptation","copy","script","visual_brief","production_checklist")

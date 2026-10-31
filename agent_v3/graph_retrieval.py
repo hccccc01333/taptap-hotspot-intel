@@ -4,7 +4,7 @@ from datetime import datetime,timedelta,timezone
 import json
 import math
 
-from agent_v2.store import dump,now_iso,stable_id
+from agent_core.store import dump,now_iso,stable_id
 from . import knowledge_graph as kg,graph_entities
 
 

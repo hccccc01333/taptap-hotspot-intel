@@ -11,7 +11,7 @@ from scripts.public_repo_guard import csv_problem, path_problem
 class PublicationGuardTests(unittest.TestCase):
     def test_runtime_and_account_policy(self):
         for name in ("data/events/x.jsonl", "runtime/state/db.sqlite3", "webapp/auth_users.json",
-                     "L3_trend/state/db.sqlite3", "spatial/.env.local", "data/v3/experiment.json"):
+                     "trend/state/db.sqlite3", "spatial/.env.local", "data/v3/experiment.json"):
             self.assertIsNotNone(path_problem(name), name)
         for name in (".env.example", "docs/evaluations/results.json", "agent_v3/tests/fixture.json"):
             self.assertIsNone(path_problem(name), name)

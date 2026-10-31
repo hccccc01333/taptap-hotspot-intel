@@ -3,8 +3,8 @@ import json
 import re
 from functools import lru_cache
 
-from agent_v2.store import dump,stable_id
-from L2_signal.processing.entities import GameKnowledgeRegistry,ENTITY_DICT
+from agent_core.store import dump,stable_id
+from signals.processing.entities import GameKnowledgeRegistry,ENTITY_DICT
 
 VERSION='entity-link-v3.17'
 AMBIGUOUS={

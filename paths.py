@@ -4,7 +4,7 @@
 
 为什么要有它：分层重排后，同一份代码散在 L1..L6 / runtime / data 里，
 每个文件自己写 `Path(__file__).parents[N]` 上溯找根 —— 层数一变就全部错位
-（2026-10-01 重排时实测踩到：parents[1] 从"项目根"变成了"L1_data_source"）。
+（2026-10-01 重排时实测踩到：parents[1] 从"项目根"变成了"data_source"）。
 
 用法（任何层）：
     import sys; sys.path.insert(0, str(Path(__file__).resolve().parents[3]))  # 到根
@@ -25,25 +25,25 @@ from typing import Dict, Optional
 ROOT = Path(__file__).resolve().parent
 
 # —— 分层目录 ——
-L1 = ROOT / "L1_data_source"
-L2 = ROOT / "L2_signal"
-L3 = ROOT / "L3_semantic"
-L3_TREND = ROOT / "L3_trend"
-L4 = ROOT / "L4_intelligence"
-L5_MEMORY = ROOT / "L5_memory"          # 设计口径的第五层：知识与增长记忆
-L6_EXECUTION = ROOT / "L6_execution"    # 设计口径的第六层：应用、决策与增长执行
+L1 = ROOT / "data_source"
+L2 = ROOT / "signals"
+L3 = ROOT / "semantic"
+L3_TREND = ROOT / "trend"
+L4 = ROOT / "intelligence"
+L5_MEMORY = ROOT / "memory"          # 设计口径的第五层：知识与增长记忆
+L6_EXECUTION = ROOT / "execution"    # 设计口径的第六层：应用、决策与增长执行
 RUNTIME = ROOT / "runtime"
 COMMON = ROOT / "common"
 GAMES = ROOT / "games"
 
 LAYERS: Dict[str, Path] = {
-    "L1": L1, "L1_data_source": L1,
-    "L2": L2, "L2_signal": L2,
-    "L3": L3, "L3_semantic": L3,
-    "L3": L3_TREND, "L3_trend": L3_TREND,
-    "L4": L4, "L4_intelligence": L4,
-    "L5_memory": L5_MEMORY,
-    "L6_execution": L6_EXECUTION,
+    "L1": L1, "data_source": L1,
+    "L2": L2, "signals": L2,
+    "L3": L3, "semantic": L3,
+    "L3": L3_TREND, "trend": L3_TREND,
+    "L4": L4, "intelligence": L4,
+    "memory": L5_MEMORY,
+    "execution": L6_EXECUTION,
     "runtime": RUNTIME,
     "common": COMMON,
     "games": GAMES,

@@ -3,7 +3,7 @@ from datetime import datetime,timedelta,timezone
 import json
 
 from .public_sources import read_source
-from agent_v2.store import now_iso,dump
+from agent_core.store import now_iso,dump
 from .discovery import read_topic
 from .materials import capture
 

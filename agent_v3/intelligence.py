@@ -7,14 +7,14 @@ import time
 import copy
 import re
 
-from agent_v2.store import dump, now_iso
-from agent_v2.tools import definition, STR, IDS
+from agent_core.store import dump, now_iso
+from agent_core.tools import definition, STR, IDS
 from .tools import GrowthTools, ASSET_SCHEMA
 from .work import INTELLIGENCE_VERSION
 from .materials import capture
 from .opencode_zen import StructuredDeliveryError
 from .model import task_metadata
-from L4_intelligence.intelligence.chat_response import assistant_history
+from intelligence.chat_response import assistant_history
 
 TEXTS={"type":"array","items":STR}
 FINISH=definition("finish_intelligence","保存当前话题的情报和参考素材；可以长期观察或归档，不需要凑增长创意。",{

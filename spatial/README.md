@@ -1,6 +1,6 @@
 # V3 Alpha 14 · GitHub Pages
 
-当前默认入口是V3真实成果浏览页。[线上网站](https://hccccc01333.github.io/taptap-hotspot-intel/)，构建与同步见[部署说明](../docs/V3-GitHub部署与成果同步.md)。下方保留早期前端版本记录。
+当前默认入口是V3真实成果浏览页。[线上网站](https://hccccc01333.github.io/taptap-hotspot-intel/)，构建与同步见部署说明。下方保留早期前端版本记录。
 
 ## 默认入口：V3 Alpha 2
 
@@ -8,7 +8,7 @@
 
 # 前端入口与版本
 
-V2 阶段默认入口为 TapTap 热点情报 Agent V2，读取 `/api/v2/`。旧界面通过 `?version=1` 保留。V2 开发和验收说明见 [agent_v2/README.md](../agent_v2/README.md) 与 [V2-验收记录](../docs/V2-验收记录.md)。
+V2 阶段默认入口为 TapTap 热点情报 Agent V2，读取 `/api/v2/`。旧界面通过 `?version=1` 保留。V2 开发和验收说明见 [agent_core/README.md](../agent_core/README.md) 与 V2-验收记录。
 
 以下内容为 V1 历史界面的设计与演示边界。
 

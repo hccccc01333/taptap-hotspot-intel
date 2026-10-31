@@ -5,8 +5,8 @@ from datetime import datetime,timedelta,timezone
 from unittest.mock import patch
 
 from bs4 import BeautifulSoup
-from agent_v2.ingest import normalize
-from agent_v2.store import now_iso,dump
+from agent_core.ingest import normalize
+from agent_core.store import now_iso,dump
 from agent_v3.store import Store
 from agent_v3.discovery import scan,queue,read_topic
 from agent_v3.freshness import assess

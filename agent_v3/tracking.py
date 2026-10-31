@@ -5,7 +5,7 @@ from datetime import datetime,timedelta,timezone
 from urllib.parse import urlsplit,urlunsplit,parse_qsl,urlencode
 
 from jsonschema import Draft202012Validator
-from agent_v2.store import now_iso,dump,stable_id
+from agent_core.store import now_iso,dump,stable_id
 from . import semantic
 
 

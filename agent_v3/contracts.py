@@ -6,7 +6,7 @@ import time
 from dataclasses import dataclass
 
 from jsonschema import Draft202012Validator
-from agent_v2.store import dump, stable_id
+from agent_core.store import dump, stable_id
 from .opencode_zen import StructuredDeliveryError
 
 VERSION = 'agent-contract-v3.17'

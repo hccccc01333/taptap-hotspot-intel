@@ -5,7 +5,7 @@ import ipaddress
 from datetime import datetime, timedelta, timezone
 from urllib.parse import urlparse
 
-from agent_v2.store import stable_id, now_iso
+from agent_core.store import stable_id, now_iso
 
 
 def public_url(value):

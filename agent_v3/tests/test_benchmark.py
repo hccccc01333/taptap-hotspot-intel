@@ -6,7 +6,7 @@ import unittest
 from unittest.mock import patch
 import uuid
 
-from agent_v2.store import now_iso
+from agent_core.store import now_iso
 from agent_v3 import benchmark as b
 from agent_v3.providers import PRESETS
 from agent_v3.provider_adapter import ProfileModel

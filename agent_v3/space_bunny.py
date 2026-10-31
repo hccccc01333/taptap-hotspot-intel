@@ -10,8 +10,8 @@ import uuid
 
 import requests
 from jsonschema import Draft202012Validator
-from agent_v2.store import ROOT
-from L4_intelligence.intelligence.llm import LLMUnavailable
+from agent_core.store import ROOT
+from intelligence.llm import LLMUnavailable
 from .opencode_zen import StructuredDeliveryError
 
 MODEL = "spacebunny/space-bunny-alpha"

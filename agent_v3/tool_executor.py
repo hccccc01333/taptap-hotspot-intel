@@ -4,7 +4,7 @@ import sqlite3
 import time
 import uuid
 
-from agent_v2.store import dump,now_iso
+from agent_core.store import dump,now_iso
 from .runtime_guard import LeaseLost
 
 

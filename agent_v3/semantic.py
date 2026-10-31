@@ -1,6 +1,6 @@
 """Offline cross-domain recall. Similarity proposes a relationship; it never merges."""
 import json,math,re,threading
-from agent_v2.store import stable_id,dump
+from agent_core.store import stable_id,dump
 
 MODEL='BAAI/bge-small-zh-v1.5'
 VERSION='bge-zh-v1.5:cls:256:v1'

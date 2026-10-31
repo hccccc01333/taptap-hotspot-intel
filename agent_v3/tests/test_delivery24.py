@@ -7,7 +7,7 @@ import unittest
 from unittest.mock import patch,MagicMock
 
 import requests
-from L4_intelligence.intelligence.llm import LLMUnavailable
+from intelligence.llm import LLMUnavailable
 from agent_v3.provider_adapter import ProfileModel,safe_failure_category
 from agent_v3.tests.test_providers18 import profile
 from agent_v3.store import Store

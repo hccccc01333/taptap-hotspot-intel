@@ -1,7 +1,7 @@
 """Public publication must preserve deliverables without exposing runtime data."""
 import json,unittest
 from unittest.mock import patch
-from agent_v2.store import dump
+from agent_core.store import dump
 from agent_v3 import public_site as site
 from agent_v3.tests import test_main_agent as fixtures
 

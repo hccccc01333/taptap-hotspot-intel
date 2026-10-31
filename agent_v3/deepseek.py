@@ -7,8 +7,8 @@ import time
 import requests
 from jsonschema import Draft202012Validator
 
-from L4_intelligence.intelligence.llm import LLMUnavailable, PROVIDERS, provider_key
-from L4_intelligence.intelligence.chat_response import CompletionError, completion_parts, require_finished
+from intelligence.llm import LLMUnavailable, PROVIDERS, provider_key
+from intelligence.chat_response import CompletionError, completion_parts, require_finished
 from .opencode_zen import StructuredDeliveryError
 
 MODEL = 'deepseek-flash'

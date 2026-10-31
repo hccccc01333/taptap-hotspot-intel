@@ -9,7 +9,7 @@ import json
 import unittest
 from unittest.mock import patch
 
-from agent_v2.store import dump, now_iso
+from agent_core.store import dump, now_iso
 from agent_v3.store import Store
 from agent_v3.claim_verifier import aggregate, verify_creative, verify_material, verify_signal, summarize
 

@@ -7,7 +7,7 @@ from datetime import datetime
 from zoneinfo import ZoneInfo
 
 from jsonschema import Draft202012Validator,ValidationError
-from agent_v2.store import dump,now_iso,stable_id
+from agent_core.store import dump,now_iso,stable_id
 from .tools import GrowthTools
 from .opencode_zen import StructuredDeliveryError
 from .model import task_metadata

@@ -55,12 +55,12 @@ DEFAULT_TIMEOUT = 600
 LOCK_STALE_SEC = 3600          # 锁文件超过该时长视为陈旧（兜底，正常靠 OS 释放）
 
 # ---- 六层链入口（2026-10-03 重接线：旧探测链脚本随旧舆情平台存量一起移除）----
-L1_PIPELINE = ROOT / "L1_data_source" / "pipeline.py"
-L2_PIPELINE = ROOT / "L2_signal" / "processing" / "pipeline.py"
-L3_PIPELINE = ROOT / "L3_trend" / "trend_engine" / "pipeline.py"
-L4_PIPELINE = ROOT / "L4_intelligence" / "intelligence" / "pipeline.py"
-L5_PIPELINE = ROOT / "L5_memory" / "memory" / "pipeline.py"
-L6_PIPELINE = ROOT / "L6_execution" / "execution" / "pipeline.py"
+L1_PIPELINE = ROOT / "data_source" / "pipeline.py"
+L2_PIPELINE = ROOT / "signals" / "processing" / "pipeline.py"
+L3_PIPELINE = ROOT / "trend" / "trend_engine" / "pipeline.py"
+L4_PIPELINE = ROOT / "intelligence" / "pipeline.py"
+L5_PIPELINE = ROOT / "memory" / "pipeline.py"
+L6_PIPELINE = ROOT / "execution" / "pipeline.py"
 
 L3_DB = ROOT / "data" / "state" / "l3_trend.sqlite3"
 L4_DB = ROOT / "data" / "state" / "l4_intelligence.sqlite3"

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""L1_data_source/collectors/taptap/pii_hash.py — 用户标识脱敏（PII 安全底座）。
+"""data_source/collectors/taptap/pii_hash.py — 用户标识脱敏（PII 安全底座）。
 
 为什么单独成模块：
   三个爬虫（评分区 / 社区 / 平台发现流）都要给「同一个用户」生成同一个哈希，
@@ -16,8 +16,8 @@
   分析与产出（outputs/、reports/、看板，入库）            只存哈希，且只出聚合
   —— 任何公开产出里都不允许出现单用户轨迹。
 
-盐：读 L1_data_source/collectors/taptap/.env 的 TAPTAP_HASH_SALT。缺失时**自动生成并写回 .env**（不静默降级为无盐），
-并打印醒目提示。盐与 .env 一样不入库（L1_data_source/collectors/taptap/.gitignore 已排除 .env）。
+盐：读 data_source/collectors/taptap/.env 的 TAPTAP_HASH_SALT。缺失时**自动生成并写回 .env**（不静默降级为无盐），
+并打印醒目提示。盐与 .env 一样不入库（data_source/collectors/taptap/.gitignore 已排除 .env）。
 """
 from __future__ import annotations
 
@@ -94,7 +94,7 @@ def salt_status() -> dict[str, object]:
     return {
         "salting": "HMAC-SHA256(salt, user_id) 截断 16 位",
         "salt_configured": bool(env_salt),
-        "salt_in_git": False,  # .env 已被 L1_data_source/collectors/taptap/.gitignore 排除
+        "salt_in_git": False,  # .env 已被 data_source/collectors/taptap/.gitignore 排除
         "note": "无盐 sha256 可被彩虹表反推（user_id 为 9 位数字），故必须加盐；盐本身不入库、不进报告",
     }
 

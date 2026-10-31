@@ -64,7 +64,7 @@ def games_from_l3() -> list[str]:
     from collections import Counter
     db = ROOT / "data" / "state" / "l3_trend.sqlite3"
     if not db.exists():
-        sys.exit("L3 库不存在：先跑 L3_trend/trend_engine/pipeline.py --run")
+        sys.exit("L3 库不存在：先跑 trend/trend_engine/pipeline.py --run")
     con = sqlite3.connect(str(db))
     c: Counter = Counter()
     for (e,) in con.execute('SELECT entity_ids FROM trend_event WHERE status="active"'):

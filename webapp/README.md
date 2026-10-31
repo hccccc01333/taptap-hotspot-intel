@@ -23,7 +23,7 @@ python -m uvicorn webapp.main:app --host 127.0.0.1 --port 8202
 - `POST /api/login` 校验账号并发放令牌；`GET /api/me` 验证当前身份。
 - V3 业务与模型接口实现在 `agent_v3/api.py`，路由挂载于 `webapp/main.py`。
 - 自动任务、研究工具、证据校验与业务交付由 `agent_v3/` 执行，不在 Web 层重复实现。
-- 历史权限与审计由 `L6_execution/execution/audit.py` 定义；Agent 服务角色不拥有批准、上线或急停权限。
+- 历史权限与审计由 `execution/audit.py` 定义；Agent 服务角色不拥有批准、上线或急停权限。
 - 账号测试在临时目录生成合成账号，不依赖仓库内的可登录账号文件。
 
 公开仓库检查脚本 `scripts/public_repo_guard.py` 检查当前 Git 索引，即便文件被忽略但强制加入索引也会拦截；它不检查或清除 Git 历史。

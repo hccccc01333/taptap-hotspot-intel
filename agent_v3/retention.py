@@ -1,6 +1,6 @@
 """Reject unrelated candidates; compact only redundant, unreferenced observations."""
 from datetime import datetime,timedelta,timezone
-from agent_v2.store import dump,now_iso,stable_id
+from agent_core.store import dump,now_iso,stable_id
 
 def initialize(store):
     store.conn.execute('''CREATE TABLE IF NOT EXISTS candidate_exclusion(

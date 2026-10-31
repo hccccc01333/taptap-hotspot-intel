@@ -12,7 +12,7 @@ from agent_v3.opencode_go import profile, MODELS, BASE_URL
 from agent_v3.provider_adapter import ProfileModel, request_body
 from agent_v3.tests.test_providers18 import reply, SCHEMA, PRIVATE
 from agent_v3.tests.test_deepseek import response
-from L4_intelligence.intelligence.llm import LLMUnavailable
+from intelligence.llm import LLMUnavailable
 from agent_v3.opencode_go import read_stream
 from agent_v3.opencode_zen import StructuredDeliveryError
 

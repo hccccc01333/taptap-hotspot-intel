@@ -5,7 +5,7 @@ import json
 import uuid
 from datetime import datetime, timedelta, timezone
 
-from agent_v2.store import dump, now_iso, stable_id
+from agent_core.store import dump, now_iso, stable_id
 
 INTELLIGENCE_VERSION = "intelligence-v3.24"
 

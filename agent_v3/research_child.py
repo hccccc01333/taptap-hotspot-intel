@@ -3,7 +3,7 @@ import json
 import re
 from datetime import datetime,timedelta,timezone
 
-from agent_v2.store import dump,now_iso,stable_id
+from agent_core.store import dump,now_iso,stable_id
 from .task_packets import topic_packet,object_schema,references,TEXT,TEXTS
 from .main_agent import task,SemanticDeliveryError
 

@@ -178,7 +178,7 @@ def funnel() -> None:
     ax.text(0.5, y + 0.62, "AI Growth System 转化漏斗（§34）—— 全真实库计数",
             ha="center", fontsize=17, fontweight="bold", color=INK)
     ax.text(0.5, 0.06, "0 就是 0：漏斗断点如实可见（Won=0 是因为没有已完成的实验，不是缺数据）"
-                       "  |  python L6_execution/execution/pipeline.py --funnel",
+                       "  |  python execution/pipeline.py --funnel",
             ha="center", fontsize=9, color=DIM)
     fig.savefig(ASSETS / "funnel.png", facecolor=BG, bbox_inches="tight")
     plt.close(fig)

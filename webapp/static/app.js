@@ -419,7 +419,7 @@ async function loadCreatives() {
 
   $("cre-list").innerHTML = cs.length ? cs.map(creativeCard).join("")
     : `<div class="empty">还没有生成创意。<br>
-       先跑 <code>python L4_intelligence/intelligence/hotspot_to_creative.py</code></div>`;
+       先跑 <code>python intelligence/intelligence/hotspot_to_creative.py</code></div>`;
 }
 
 function creativeCard(c) {

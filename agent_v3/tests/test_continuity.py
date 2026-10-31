@@ -4,8 +4,8 @@ import unittest
 from datetime import datetime, timedelta, timezone
 from unittest.mock import patch
 
-from agent_v2.store import now_iso
-from agent_v2.tests.test_core import ScriptedModel
+from agent_core.store import now_iso
+from agent_core.tests.test_core import ScriptedModel
 from agent_v3.store import Store
 from agent_v3.connectors import collect
 from agent_v3.discovery import scan, queue

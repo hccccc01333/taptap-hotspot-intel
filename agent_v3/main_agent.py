@@ -6,7 +6,7 @@ import time
 from datetime import datetime,timedelta,timezone
 
 from jsonschema import Draft202012Validator, ValidationError
-from agent_v2.store import dump, now_iso, stable_id
+from agent_core.store import dump, now_iso, stable_id
 from .task_packets import object_schema, references, TEXT, TEXTS, topic_packet, intelligence_schema, intelligence_result
 from .model import task_metadata
 from .opencode_zen import StructuredDeliveryError

@@ -30,6 +30,7 @@ env/
 
 # Local drafts (not for public)
 docs/prompt_engineering/
+docs_local/
 **/原始提示词.md
 **/提示词工程复盘.md
 **/原始数据处理提示词.md
@@ -38,7 +39,7 @@ docs/prompt_engineering/
 **/raw/
 **/raw_llm/
 **/checkpoint*.json
-L1_data_source/collectors/taptap/runs/
+data_source/collectors/taptap/runs/
 data/raw/taptap/raw/
 **/run_logs/
 
@@ -49,19 +50,6 @@ data/annotations/annotations_v1_1.csv
 data/annotations/annotations_v1_2.csv
 data/annotations/annotations_v1_3.csv
 data/annotations/v1_2_reannotate_ids.txt
-02数据/compare_v1_1_v1_2.py
-02数据/compare_v1_2_v1_3.py
-02数据/compare_v1_3_v1_4.py
-02数据/diag_sentiment_mislabels.py
-02数据/pick_v1_2_reannotate_ids.py
-02数据/build_v1_1_compare_report.py
-02数据/watch_shards_then_merge.py
-02数据/build_sample_report.py
-
-# Disposable probes / prototypes
-L2_signal/lab/_probe_events.py
-L2_signal/lab/_probe_events2.py
-L6_delivery/dashboard/ui_prototype.html
 
 # Extra timestamped report spam (keep *_latest and final skill reports)
 data/annotations/reports/annotate_run_*.md
@@ -70,15 +58,6 @@ data/annotations/reports/annotate_v1_1_*.md
 data/annotations/reports/annotate_qc_*.md
 data/annotations/reports/method_v1_3_*.md
 data/annotations/reports/sentiment_*.md
-L2_signal/lab/reports/model_eval_2026*.md
-L2_signal/lab/reports/anomaly_diagnosis_2026*.md
-L2_signal/lab/reports/event_impact_2026*.md
-L6_delivery/contrast/bilibili/reports/annotate_bili_2026*.md
-L6_delivery/contrast/bilibili/reports/crawl_bili_2026*.md
-L6_delivery/contrast/douyin/reports/annotate_douyin_2026*.md
-L6_delivery/contrast/douyin/reports/crawl_douyin_2026*.md
-L6_delivery/contrast/weibo/reports/annotate_weibo_2026*.md
-L6_delivery/contrast/weibo/reports/crawl_weibo_2026*.md
 data/processed/reviews/reports/crawl_qc_*.md
 data/processed/reviews/reports/preprocess_qc_*.md
 data/raw/taptap/run_logs/
@@ -104,7 +83,7 @@ data/annotations/wuthering-waves/
 # 并暴露约两个月。以下改为**显式路径**，不再依赖目录名巧合。
 #
 # reviews.csv 必须保留明文 user_id：U1 用户流动采集
-# （L1_data_source/collectors/taptap/crawl_taptap_user.py）需要它作为接口入参，而加盐哈希不可逆。
+# （data_source/collectors/taptap/crawl_taptap_user.py）需要它作为接口入参，而加盐哈希不可逆。
 # 所以它属于原始域、只留本地；对外只发布分析域的 user_id_hash 版本。
 # ============================================================
 data/raw/taptap/reviews.csv
@@ -119,8 +98,6 @@ data/raw/taptap/raw_llm/
 # 想复现：跑 `python L4_decision/topic_tracker.py --sample` 即可从零重建。
 # ============================================================
 data/state/
-L6_delivery/briefing/reports/topic_tracker_2026*.md
-L6_delivery/briefing/reports/community_ops_2026*.md
 
 # ============================================================
 # L1 运行时产物（2026-10-01 加入）
@@ -136,7 +113,7 @@ l3_run_out.json
 data/state/l4_intelligence.sqlite3
 
 # L6 离线工作台：--workbench 生成物，内嵌运行时数据快照，不入 git
-L6_execution/workbench/
+execution/workbench/
 
 # runtime 运行时状态（调度/轨迹/checkpoint，不入 git）
 runtime/state/
@@ -156,7 +133,7 @@ data/v3/
 
 # Collected event bodies and machine-specific state are runtime data.
 data/events/
-L3_trend/state/
+trend/state/
 runtime/reports/scheduler_status_latest.md
 webapp/auth_users.json
 

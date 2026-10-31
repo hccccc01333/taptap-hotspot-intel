@@ -66,13 +66,13 @@ flowchart TD
 | LangGraph | 保留的旧版分析图与巡检图；当前 V3 业务编排使用自己的持久队列 |
 | GitHub Actions + Pages | 工程检查、静态网页部署，与独立成果数据分支配合更新网站 |
 
-**GraphRAG**：借用实体关联、局部检索和社区摘要的思想，为两个 Agent 提供有出处的上下文。它是定制实现，没有安装完整 Microsoft GraphRAG，也未实现完整层级报告或 Global map-reduce。主题分组大小不等于热度，同游戏名不等于同事件。[图谱设计与边界](docs/V3-实体事件图谱与GraphRAG检索.md)。
+**GraphRAG**：借用实体关联、局部检索和社区摘要的思想，为两个 Agent 提供有出处的上下文。它是定制实现，没有安装完整 Microsoft GraphRAG，也未实现完整层级报告或 Global map-reduce。主题分组大小不等于热度，同游戏名不等于同事件。[图谱设计与边界](docs/V3-技术栈与历史编排.md)。
 
 **LangGraph / LangChain**：旧版 L4 用 `StateGraph`、节点、条件边与有限修订组织分析；历史巡检图另有 SQLite 检查点与中断恢复。未安装依赖时明确记录标准库回退。LangChain 的完整链式应用不是当前 V3 主链路，不能把依赖关系写成已使用全部框架能力。详细用法、模块位置和状态保存方式见[技术栈与历史编排](docs/V3-技术栈与历史编排.md#langgraph-在项目中怎么用)。
 
 ## 本地运行
 
-需要 Python 3.11+、Node.js 与 npm；浏览器工具和 Windows 中文 OCR 需另行配置。当前 OCR 不是多模态大模型识图。[研究工具配置](docs/V3-研究工具与自动队列.md)。
+需要 Python 3.11+、Node.js 与 npm；浏览器工具和 Windows 中文 OCR 需另行配置。当前 OCR 不是多模态大模型识图。
 
 ```bash
 git clone https://github.com/hccccc01333/taptap-hotspot-intel.git
@@ -104,7 +104,7 @@ npm run dev -- --host 127.0.0.1 --port 5182 --strictPort
 
 前端相关源码推送到 `main` 后，Actions 构建并部署 GitHub Pages。本地后台每五分钟检查成果变化，同步整理后的字段到 `site-data`；网站定期读取这些成果。
 
-GitHub Pages 只托管静态页面，不执行采集或模型任务。目前生产后台运行在本机；电脑关闭后，网站保留最后一次成果，并在同步过期时提示。推送 Python 源码仍需更新实际后台，不能让 Pages 自动执行它。[运行与部署](docs/V3-GitHub部署与成果同步.md)。
+GitHub Pages 只托管静态页面，不执行采集或模型任务。目前生产后台运行在本机；电脑关闭后，网站保留最后一次成果，并在同步过期时提示。推送 Python 源码仍需更新实际后台，不能让 Pages 自动执行它。
 
 公开成果导出采用字段白名单，仅发布整理后的成果、短引用和来源链接。完整原文、评论、截图、运行库、账号配置和模型调用档案应留本地。仓库文件与历史提交的审查是另一个步骤，不能用导出校验代替它。
 
@@ -117,12 +117,6 @@ GitHub Pages 只托管静态页面，不执行采集或模型任务。目前生�
 最新质量优先实验已执行 10 例、30 组：完整系统入库 5 条情报、2 条业务素材和 1 个创意，但连接失败与引用、参与路径错误仍存在。当前没有证明系统优于基线，也没有证明实际增长效果。来源核查由 Codex 完成，已知组别，未经开发者本人或独立人类复核；入库数量不代表质量通过。
 
 - [实验协议与复现命令](docs/V3-可复现对照实验.md)
-- [Alpha28 A/B/C 对照：C 未在覆盖与错误率上优于 B，技术优势未成立](docs/V3-Alpha28-ABC对照-20261015.md)
-- [Alpha27 未见样本事实质量验收：测试 A 通过、测试 B 未通过（执行不完整）](docs/V3-Alpha27-未见过样本事实质量验收.md)
-- [质量优先实验：全部 30 组、失败、部分交付与核查限制](docs/V3-质量优先ABC实验-20261012.md)
-- [公开仓库审查与历史遗留](docs/V3-公开仓库审查-20261012.md)
-- [全部 Alpha20 A/B 自评](docs/V3-Alpha20-全部AB质量核验.md)
-- [Alpha23 新样本停止记录](docs/V3-Alpha23-新样本对照停止记录.md)
 - [版本记录与各阶段验收](docs/版本记录.md)
 
 项目处于 Alpha。来源覆盖有限，动态正文与评论可能读取失败，OCR 可能误识别，热点、引用语义和创意适配仍需真实样本打磨。增长创意是附带依据、假设与执行条件的草案。
@@ -132,9 +126,8 @@ GitHub Pages 只托管静态页面，不执行采集或模型任务。目前生�
 - [`agent_v3/`](agent_v3/)：当前主／子 Agent、研究工具、图谱、契约、业务库与调度。
 - [`spatial/`](spatial/)：当前 React 工作台，保留 V1／V2 入口。
 - [`webapp/`](webapp/)：FastAPI 与本地认证。
-- [`L1_data_source/`](L1_data_source/)、[`L4_intelligence/`](L4_intelligence/)、[`runtime/`](runtime/)：保留的采集与历史分析／巡检实现。
+- [`data_source/`](data_source/)、[`signals/`](signals/)、[`trend/`](trend/)、[`intelligence/`](intelligence/)、[`memory/`](memory/)、[`execution/`](execution/)、[`runtime/`](runtime/)：分层实现——采集、事件加工、事件趋势、AI 情报、记忆回填、告警与工作台，由 `runtime/harness.py` 按层编排。
 - [技术栈、数据如何变成成果、GraphRAG 与 LangGraph 详解](docs/V3-技术栈与历史编排.md)
-- [主 Agent 与研究子 Agent](docs/V3-主Agent与研究子Agent.md)
 - [热点解读与游戏交付契约](docs/V3-热点解读与游戏交付契约.md)
 
 代码许可见 [LICENSE](LICENSE)。第三方报道、游戏画面、商标与素材不因本仓库代码许可而获得转载或商业使用授权。

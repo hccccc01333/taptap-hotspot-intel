@@ -1,7 +1,7 @@
 """Grounded optional extraction and cached community summaries by the existing child."""
 import copy
 from datetime import datetime,timedelta,timezone
-from agent_v2.store import dump,now_iso
+from agent_core.store import dump,now_iso
 from .task_packets import object_schema,references,TEXT
 from . import knowledge_graph as kg,graph_retrieval as retrieval
 

@@ -7,8 +7,8 @@ import json
 import re
 from urllib.parse import urlsplit
 
-from agent_v2.store import dump, stable_id
-from L4_intelligence.intelligence.llm import provider_key
+from agent_core.store import dump, stable_id
+from intelligence.llm import provider_key
 
 VERSION = 'provider-profile-v3.18'
 SETTING = 'model_profiles_v18'

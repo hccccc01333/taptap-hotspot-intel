@@ -5,7 +5,7 @@ import unittest
 from datetime import datetime,timedelta,timezone
 from unittest.mock import patch
 
-from agent_v2.store import now_iso,dump,stable_id
+from agent_core.store import now_iso,dump,stable_id
 from agent_v3.store import Store
 from agent_v3 import knowledge_graph as kg,graph_retrieval as retrieval,graph_entities,graph_ai,tracking
 from agent_v3.discovery import scan,read_topic

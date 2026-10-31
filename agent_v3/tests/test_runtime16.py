@@ -10,7 +10,7 @@ import unittest
 from concurrent.futures import ThreadPoolExecutor
 from unittest.mock import patch
 
-from agent_v2.store import now_iso
+from agent_core.store import now_iso
 from agent_v3.store import Store
 from agent_v3 import work
 from agent_v3.discovery import scan,queue,read_topic

@@ -50,7 +50,7 @@ def game_coverage(store):
         interpretation=store.interpretation(tid,topicrow[0])
         if not interpretation or interpretation['payload']['status']!='ready':continue
         p=interpretation['payload'];topic=read_topic(store,tid,include_tracking=False)
-        from agent_v2.store import stable_id,dump
+        from agent_core.store import stable_id,dump
         decisionrow=store.conn.execute('SELECT payload FROM main_decision WHERE topic_id=? AND fingerprint=? AND context_version=?',
             (tid,topicrow[0],stable_id('context_',dump(store.context())))).fetchone()
         decision=json.loads(decisionrow[0]) if decisionrow else {}

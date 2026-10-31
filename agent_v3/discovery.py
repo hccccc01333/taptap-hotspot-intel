@@ -5,7 +5,7 @@ import json
 import unicodedata
 from datetime import datetime, timedelta, timezone
 
-from agent_v2.store import stable_id, dump, now_iso
+from agent_core.store import stable_id, dump, now_iso
 
 
 def title_key(title):

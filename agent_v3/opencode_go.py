@@ -5,15 +5,17 @@ from .providers import preset, validate
 import json
 import time
 
-from L4_intelligence.intelligence.llm import LLMUnavailable
-from L4_intelligence.intelligence.chat_response import usage_counts
+from intelligence.llm import LLMUnavailable
+from intelligence.chat_response import usage_counts
 
 BASE_URL = 'https://opencode.ai/zen/go/v1'
 # Bounded runaway streams; paired with the per-task wall clock (up to 600s).
 # Long default-reasoning streams measured up to 2.0MB at 526s, so the byte
 # budget must exceed 2MB while staying finite.
 STREAM_BYTES_BUDGET = 5_000_000
-MODELS = ('step-5-preview-free', 'longcat-2.5-preview-free')
+MODELS = ('step-5-preview-free', 'longcat-2.5-preview-free', 'deepseek-v4.1-flash')
+# DeepSeek V4.1 is authorized for exactly one decisive batch (user allowance);
+# after that experiment completes it must not be called again.
 PRICING = {'currency': 'CNY', 'input_per_million': 0, 'output_per_million': 0,
            'source': 'https://opencode.ai/docs/go/', 'checked_at': '2026-10-10',
            'basis': 'limited_time_free_marginal_tokens_subscription_excluded'}
@@ -21,15 +23,19 @@ PRICING = {'currency': 'CNY', 'input_per_million': 0, 'output_per_million': 0,
 
 def profile(model, output_limit=8192, reasoning_effort=None):
     if model not in MODELS:
-        raise ValueError('只授权 Step 5 / LongCat 2.5 Preview Free；不能切换付费模型')
+        raise ValueError('只授权 Step 5 / LongCat 2.5 Preview Free / DeepSeek V4.1（单次实验授权）；不能切换其他付费模型')
     effort=reasoning_effort or ('high' if model==MODELS[0] else 'default')
     if effort not in (('low','medium','high') if model==MODELS[0] else ('default','none')):
-        raise ValueError('Step支持low/medium/high；LongCat使用供应商默认推理或明确关闭，不移植其他模型强度参数')
+        raise ValueError('Step支持low/medium/high；其他Go模型使用供应商默认推理或明确关闭，不移植其他模型强度参数')
+    if model == MODELS[0]:
+        preset_id, reasoning = 'go-step5', 'reasoning_effort'
+    elif model == MODELS[1]:
+        preset_id, reasoning = 'go-longcat', 'thinking'
+    else:
+        preset_id, reasoning = 'go-deepseek', 'thinking'
     return validate(preset(
-        'go-step5' if model == MODELS[0] else 'go-longcat',
-        'OpenCode Go / ' + model, BASE_URL, model, 'OPENCODE_GO_API_KEY',
-        reasoning='reasoning_effort' if model == MODELS[0] else 'thinking',
-        effort=effort, output_limit=output_limit))
+        preset_id, 'OpenCode Go / ' + model, BASE_URL, model, 'OPENCODE_GO_API_KEY',
+        reasoning=reasoning, effort=effort, output_limit=output_limit))
 
 
 def headers(session):

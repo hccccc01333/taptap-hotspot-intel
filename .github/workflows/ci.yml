@@ -38,9 +38,9 @@ jobs:
           agent_v3.tests.test_research_tracking agent_v3.tests.test_public_sources
           agent_v3.tests.test_space_bunny agent_v3.tests.test_delivery
           agent_v3.tests.test_zen agent_v3.tests.test_continuity agent_v3.tests.test_v3
-          agent_v2.tests.test_core agent_v2.tests.test_operations agent_v2.tests.test_model
-          runtime.tests.test_pipeline_health L4_intelligence.tests.test_creative_delivery
-          L4_intelligence.tests.test_llm -q
+          agent_core.tests.test_core agent_core.tests.test_operations agent_core.tests.test_model
+          runtime.tests.test_pipeline_health intelligence.tests.test_creative_delivery
+          intelligence.tests.test_llm -q
   test:
     runs-on: ubuntu-latest
     steps:
@@ -57,11 +57,11 @@ jobs:
       # Optional LangGraph integration is skipped when its runtime is absent.
       - name: Run unit tests per layer
         run: |
-          python -m unittest discover -s L3_semantic/tests -p "test_*.py"
-          python -m unittest discover -s L3_trend/tests -p "test_*.py"
-          python -m unittest discover -s L4_intelligence/tests -p "test_*.py"
-          python -m unittest discover -s L5_memory/tests -p "test_*.py"
-          python -m unittest discover -s L6_execution/tests -p "test_*.py"
+          python -m unittest discover -s semantic/tests -p "test_*.py"
+          python -m unittest discover -s trend/tests -p "test_*.py"
+          python -m unittest discover -s intelligence/tests -p "test_*.py"
+          python -m unittest discover -s memory/tests -p "test_*.py"
+          python -m unittest discover -s execution/tests -p "test_*.py"
           python -m unittest discover -s runtime/tests -p "test_*.py"
           python -m unittest discover -s games/tests -p "test_*.py"
 
