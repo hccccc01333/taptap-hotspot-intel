@@ -2,11 +2,11 @@
 
 **持续从全网热点中，为 TapTap 积累游戏情报、可用素材，并识别增长创意的 AI 自动化系统。**
 
-[![版本](https://img.shields.io/badge/version-3.0.0--alpha.28-087f8c)](docs/版本记录.md)
+[![版本](https://img.shields.io/badge/version-3.0.0--alpha.28-087f8c)](CHANGELOG.md)
 [![CI](https://github.com/hccccc01333/taptap-hotspot-intel/actions/workflows/ci.yml/badge.svg)](https://github.com/hccccc01333/taptap-hotspot-intel/actions/workflows/ci.yml)
 [![网站部署](https://github.com/hccccc01333/taptap-hotspot-intel/actions/workflows/pages.yml/badge.svg)](https://github.com/hccccc01333/taptap-hotspot-intel/actions/workflows/pages.yml)
 
-[打开网站](https://hccccc01333.github.io/taptap-hotspot-intel/) · [架构详解](docs/V3-技术栈与历史编排.md) · [模型配置](docs/V3-模型供应商与自定义配置.md) · [实验方法](docs/V3-可复现对照实验.md) · [版本记录](docs/版本记录.md)
+[打开网站](https://hccccc01333.github.io/taptap-hotspot-intel/) · [架构详解](docs/V3-技术栈与历史编排.md) · [模型配置](docs/V3-模型供应商与自定义配置.md) · [实验方法](docs/V3-可复现对照实验.md) · [更新日志](CHANGELOG.md)
 
 这是面向 TapTap 内容与运营场景的个人开源项目，非 TapTap 官方项目，不使用其内部业务数据。项目的目标是让使用者打开网站就能阅读分类成果；有疑问时，可以沿创意、情报、热点解读回到原始来源，而无需自己启动采集或生成任务。
 
@@ -117,9 +117,29 @@ GitHub Pages 只托管静态页面，不执行采集或模型任务。目前生�
 最新质量优先实验已执行 10 例、30 组：完整系统入库 5 条情报、2 条业务素材和 1 个创意，但连接失败与引用、参与路径错误仍存在。当前没有证明系统优于基线，也没有证明实际增长效果。来源核查由 Codex 完成，已知组别，未经开发者本人或独立人类复核；入库数量不代表质量通过。
 
 - [实验协议与复现命令](docs/V3-可复现对照实验.md)
-- [版本记录与各阶段验收](docs/版本记录.md)
+- [更新日志（各版本变化）](CHANGELOG.md)
 
-项目处于 Alpha。来源覆盖有限，动态正文与评论可能读取失败，OCR 可能误识别，热点、引用语义和创意适配仍需真实样本打磨。增长创意是附带依据、假设与执行条件的草案。
+## 当前状态与路线图
+
+当前版本 `3.0.0-alpha.28`（[更新日志](CHANGELOG.md)）。生产后台在本机持续运行自动周期；模型按已授权的供应商额度运行，额度暂停时页面如实显示等待状态。
+
+**已验证**
+
+- 证据门禁的确定性价值：两轮 A/B/C 对照中，门禁后可用成果 0% 错误放行；无门禁的对照组约半数不支持断言直接交付。
+- 负面与争议纪律：多批次真实样本中，负面事件零推广素材、零增长创意，中立风险情报照常产出。
+- 自动执行可靠性：租约、崩溃恢复、幂等写入与来源版本守卫经过故障注入测试。
+
+**已知边界**
+
+- 实体图谱默认关闭：两组对照实验未证明其边际价值（成本占比 6%~20%），`V3_GRAPH_MODE=on` 可启用。
+- 交付率明显受免费模型窗口传输波动影响；必要事实覆盖率仍是当前最大质量缺口。
+- 来源覆盖有限，动态正文与评论可能读取失败；OCR 为本地识别（非多模态模型）可能误识别；热点、引用语义和创意适配仍需真实样本打磨。
+
+**下一步**
+
+- 干净传输窗口下的四臂对照复测，裁决图谱边际价值。
+- 业务阶段事实清单扩展与覆盖率针对性优化。
+- 跨平台语义跟踪、讨论样本与真实完整创意验收。
 
 ## 代码与文档入口
 

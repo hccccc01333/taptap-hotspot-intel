@@ -8,7 +8,7 @@ Alpha 9 新增 `main_agent.py`、`research_child.py` 与 `web_research.py`：业
 
 Alpha 8 新增 `deepseek.py`：官方 Flash 紧凑 JSON 任务，最终回答/推理隔离、阶段预算、独立推理设置和输出上限。认证清单实际为 V4.1 Flash；生产默认 low、单次总上限 16,384 token。真实非游戏情报任务通过，判断持续观察并保存两项素材，未生成自动创意。响应契约与实测。
 
-全网热点情报与素材系统，主要交付可执行的增长创意。当前版本 `3.0.0-alpha.10`，完成状态见 [架构与验收](../docs/V3-架构与验收.md) 和 [版本记录](../docs/版本记录.md)。
+全网热点情报与素材系统，主要交付可执行的增长创意。当前版本 `3.0.0-alpha.28`，完成状态见 [架构与验收](../docs/V3-架构与验收.md) 和 [更新日志](../CHANGELOG.md)。
 
 ```powershell
 python -X utf8 -m uvicorn webapp.main:app --host 127.0.0.1 --port 8202
