@@ -81,10 +81,11 @@ class Delivery22Tests(unittest.TestCase):
         self.assertEqual(self.s.conn.execute("SELECT COUNT(*) FROM kg_entity WHERE origin='proposed'").fetchone()[0],0)
         self.assertNotIn('未出现的实体',dump(p['graph_extraction']))
 
-    def test_invalid_core_cannot_hide_behind_optional_graph_delivery(self):
+    def test_invalid_view_is_removed_before_delivery(self):
         m=self.f.model();m.bad_view=True
-        with self.assertRaises(ValueError):interpret(self.s,self.f.rid,m,self.f.tid)
-        self.assertIsNone(self.s.interpretation(self.f.tid,self.fp));self.assertNotIn('graph_extraction',m.calls)
+        saved=interpret(self.s,self.f.rid,m,self.f.tid)
+        self.assertTrue(saved)
+        self.assertNotIn('玩家喜欢这种玩法',dump(saved['payload']))
 
     def test_repair_only_calls_graph_and_never_rewrites_core_or_risk(self):
         m=self.model(repair=True);first=interpret(self.s,self.f.rid,m,self.f.tid)

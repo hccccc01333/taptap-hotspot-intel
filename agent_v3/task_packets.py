@@ -33,7 +33,19 @@ def topic_packet(topic,context):
         if source.get('sample'):evidence[-1]['sample']={k:source['sample'][k] for k in ('parent_evidence_id','flags','methods','published_at','observed_at')}
         # Comment titles are labels generated from the parent, never a user's words.
         pieces=([] if evidence[-1]['role']=='discussion' else [source['title']])+[p.strip() for p in re.findall(r'[^。！？\n]+[。！？]?',text) if len(p.strip())>=4]
-        for piece in list(dict.fromkeys(pieces))[:8]:
+        primary=list(dict.fromkeys(pieces))
+        # Widening: long articles place dated, quantified or attributed facts
+        # after the first sentences. Without these candidates neither the
+        # research child nor the business stage can cite them, which was the
+        # measured coverage bottleneck (facts lost at the research stage).
+        # Bounded per source and globally; verbatim sentences only.
+        extra=[]
+        if len(quotes)<80:
+            fact_marker=re.compile(r'\d|：|由|宣布|公布|推出|发行|开发|出品|售价|上线|发售|定档|更新')
+            for sentence in primary[8:]:
+                if len(sentence)>=6 and fact_marker.search(sentence):
+                    extra.append(sentence)
+        for piece in primary[:8]+extra[:6]:
             quote=piece[:300]
             if len(quote)<4:continue
             quotes.append({'ref':len(quotes),'evidence_id':source['evidence_id'],'quote':quote})

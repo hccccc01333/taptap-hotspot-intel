@@ -146,11 +146,16 @@ class MainAgentTests(unittest.TestCase):
             result=original(stage,packet,schema,system,**kwargs)
             if stage=='interpretation':
                 # Covered by the source quote but labeled as a real comment: the
-                # provenance rule must still reject it (no claim repair can apply).
+                # provenance rule removes it deterministically instead of failing
+                # the whole event, so it can never be delivered as a comment.
                 result['result']['views']=[{'text':'来源展示地图分享与组队挑战','kind':'actual_comment','basis_refs':[2]}]
             return result
         model.run_task=run
-        with self.assertRaises(ValueError):interpret(self.store,self.rid,model,self.tid)
+        saved=interpret(self.store,self.rid,model,self.tid)
+        self.assertTrue(saved)
+        self.assertFalse(saved['payload']['views'])
+        repair=self.store.conn.execute("SELECT payload FROM step WHERE kind='discussion_review_repair'").fetchone()
+        self.assertIsNotNone(repair)
 
     def test_literal_material_quote_is_checked_against_source(self):
         model=self.model();model.bad_quote=True

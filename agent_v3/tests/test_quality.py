@@ -78,6 +78,51 @@ class QualityTests(unittest.TestCase):
             return out
         m.run_task=response;return m
 
+    def test_unreviewed_comment_is_completed_as_excluded_not_fatal(self):
+        p=self.s.evidence([self.f.item['evidence_id']])[0]
+        # Two quotable comments; the model reviews only the first.
+        discussion.save_samples(self.s,self.tid,p,[{'id':'1','text':'想要联机','published_at':now_iso()},
+                                                   {'id':'2','text':'想找朋友一起玩','published_at':now_iso()}],'hot')
+        m=self.f.model();run=m.run_task
+        def response(stage,packet,*args,**kwargs):
+            out=run(stage,packet,*args,**kwargs)
+            if stage=='interpretation':
+                ref=next(q['ref'] for q in packet['quote_candidates'] if q['quote']=='想要联机')
+                out['result']['discussion_review']=[{'basis_refs':[ref],'decision':'keep','reason':'表达具体联机需求'}]
+                out['result']['views']=[{'text':'一条采样评论希望支持联机。','kind':'actual_comment','basis_refs':[ref]}]
+            return out
+        m.run_task=response
+        saved=research_child.interpret(self.s,self.rid,m,self.tid)
+        reviews=saved['payload']['discussion_review']
+        self.assertEqual(len(reviews),2)
+        self.assertEqual({r['decision'] for r in reviews},{'keep','exclude'})
+        excluded=next(r for r in reviews if r['decision']=='exclude')
+        self.assertIn('系统补齐',excluded['reason'])
+        repair=self.s.conn.execute("SELECT payload FROM step WHERE kind='discussion_review_repair'").fetchone()
+        self.assertIsNotNone(repair)
+        self.assertEqual(json.loads(repair[0])['count']>0,True)
+
+    def test_historical_comment_keep_is_downgraded_and_view_dropped(self):
+        p=self.s.evidence([self.f.item['evidence_id']])[0]
+        discussion.save_samples(self.s,self.tid,p,[{'id':'1','text':'想要联机','published_at':now_iso()}],'hot')
+        with self.s.conn:
+            # Age the comment beyond the freshness window without touching text.
+            self.s.conn.execute("UPDATE evidence SET published_at='2020-01-01T00:00:00+00:00' WHERE body='想要联机'")
+        m=self.f.model();run=m.run_task
+        def response(stage,packet,*args,**kwargs):
+            out=run(stage,packet,*args,**kwargs)
+            if stage=='interpretation':
+                ref=next(q['ref'] for q in packet['quote_candidates'] if q['quote']=='想要联机')
+                out['result']['discussion_review']=[{'basis_refs':[ref],'decision':'keep','reason':'表达具体联机需求'}]
+                out['result']['views']=[{'text':'一条采样评论希望支持联机。','kind':'actual_comment','basis_refs':[ref]}]
+            return out
+        m.run_task=response
+        saved=research_child.interpret(self.s,self.rid,m,self.tid)
+        review=saved['payload']['discussion_review'][0]
+        self.assertEqual(review['decision'],'background')
+        self.assertIn('系统降级',review['reason'])
+        self.assertFalse(saved['payload']['views'])
+
     def test_comment_theme_retains_exact_quote_and_computed_sample_count(self):
         result=research_child.interpret(self.s,self.rid,self.comment_model(),self.tid)['payload']
         self.assertEqual(result['views'][0]['sample_count'],1)

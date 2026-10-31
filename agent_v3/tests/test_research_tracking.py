@@ -121,6 +121,16 @@ class ResearchTrackingTests(unittest.TestCase):
         self.assertEqual(reader.call_args.kwargs['method'],'POST');self.assertEqual(rows[0]['title'],'返程安排')
         self.assertEqual(rows[0]['source'],'search:返程')
 
+    def test_fact_bearing_late_sentence_becomes_quotable(self):
+        body=('第一句介绍背景。第二句描述玩法。第三句说明角色。第四句介绍画面。第五句描述音乐。'
+              '第六句讲系统。第七句提社区。第八句结尾。本作将于2026年12月3日正式发售，售价86元。')
+        eid,tid=self.source('长文测试：事实在文末','taptap','late',body)
+        packet=topic_packet(read_topic(self.store,tid),self.store.context())
+        quotes=[q['quote'] for q in packet['quote_candidates']]
+        # The late fact sentence is beyond the first eight pieces but must be
+        # quotable, otherwise neither research nor business can ever cite it.
+        self.assertTrue(any('2026年12月3日正式发售' in q for q in quotes))
+
     def test_key_fact_hints_extract_dates_and_quantities(self):
         from agent_v3.research_child import key_fact_hints
         hints=key_fact_hints([{'body':'2026年12月3日发售，售价86元，达成46%，超10万愿望单，12月3日再售'},

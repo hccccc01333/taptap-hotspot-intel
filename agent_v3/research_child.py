@@ -45,7 +45,7 @@ def schema(packet):
         'timeline':{'type':'array','items':timeline,'maxItems':6},'views':{'type':'array','items':view,'maxItems':3},
         'controversies':{'type':'array','items':claim,'maxItems':3},'unknowns':TEXTS,
         'risk_assessment':risk_schema(len(packet['quote_candidates'])),
-        'discussion_review':{'type':'array','minItems':comment_count,'maxItems':comment_count,'items':object_schema({
+        'discussion_review':{'type':'array','minItems':0,'maxItems':comment_count,'items':object_schema({
           'basis_refs':comment_ref_schema,
           'decision':{'enum':['keep','background','exclude']},'reason':{'type':'string','minLength':2,'maxLength':100}})},
         'recency':object_schema({'kind':{'enum':['recent_event','revival','historical','unknown']},
@@ -215,24 +215,57 @@ unknowns不是任务终点。对可通过公开证据核查的缺口填写next_a
         for e in packet['evidence'] if e['evidence_id'] in direct|matched)):
         raise ValueError('完整事件解读需要直接来源正文与核心依据')
     if value['status']=='ready' and not any(c.isalpha() for c in value['headline']):raise ValueError('解读标题不能只有数字与时间')
-    reviewed=set();kept=set()
+    reviewed=set();kept=set();repairs=[]
+    settled=[]
     for review in value['discussion_review']:
-        q=quotes[review['basis_refs'][0]];source=sources[q['evidence_id']]
-        if source['role']!='discussion' or q['quote'] not in source['body']:raise ValueError('评论评估须引用真实评论正文')
-        if q['evidence_id'] in reviewed:raise ValueError('同条评论不可重复评估')
-        reviewed.add(q['evidence_id'])
+        ref=review['basis_refs'][0] if review.get('basis_refs') else None
+        q=quotes[ref] if type(ref) is int and 0<=ref<len(quotes) else None
+        source=sources[q['evidence_id']] if q else None
+        if not q or source['role']!='discussion' or q['quote'] not in source['body']:
+            # An invented or non-comment citation cannot become a review; drop it
+            # deterministically instead of failing the whole event.
+            repairs.append({'action':'drop_invalid_review','detail':'引用不是真实评论正文'})
+            continue
+        eid=q['evidence_id']
+        if eid in reviewed:
+            repairs.append({'action':'drop_duplicate_review','evidence_id':eid})
+            continue
+        reviewed.add(eid)
         if review['decision']=='keep':
-            if source.get('sample',{}).get('flags'):raise ValueError('标记无效的评论不能作为有效观点')
-            if source.get('published_at') and source['published_at']<freshness['cutoff']:raise ValueError('历史评论只能保留为背景')
-            kept.add(q['evidence_id'])
-        review.update(evidence_id=q['evidence_id'],facts=[{k:q[k] for k in ('evidence_id','quote')}]);review.pop('basis_refs')
+            if source.get('sample',{}).get('flags'):
+                review['decision']='background';review['reason']='系统降级：低信息量评论仅作背景'
+                repairs.append({'action':'keep_to_background','evidence_id':eid,'reason':'comment_flags'})
+            elif source.get('published_at') and source['published_at']<freshness['cutoff']:
+                review['decision']='background';review['reason']='系统降级：历史评论仅作背景'
+                repairs.append({'action':'keep_to_background','evidence_id':eid,'reason':'older_than_cutoff'})
+            else:
+                kept.add(eid)
+        review.update(evidence_id=eid,facts=[{k:q[k] for k in ('evidence_id','quote')}]);review.pop('basis_refs')
+        settled.append(review)
     available={q['evidence_id'] for q in quotes if sources[q['evidence_id']]['role']=='discussion' and q['quote'] in sources[q['evidence_id']]['body']}
-    if reviewed!=available:raise ValueError('须对每条可引用评论评估采用或排除原因')
+    for eid in sorted(available-reviewed):
+        # Deterministic completion: every quotable comment is accounted for;
+        # unassessed ones are excluded (never silently admitted as a viewpoint).
+        quote=next(q for q in quotes if q['evidence_id']==eid and q['quote'] in sources[eid]['body'])
+        settled.append({'decision':'exclude','reason':'系统补齐：未评估的可引用评论按排除处理',
+            'evidence_id':eid,'facts':[{k:quote[k] for k in ('evidence_id','quote')}]})
+        repairs.append({'action':'auto_exclude_unreviewed','evidence_id':eid})
+    value['discussion_review']=settled
+    kept_views=[]
     for view in value['views']:
-        if view['kind']=='actual_comment' and any(sources[quotes[i]['evidence_id']]['role']!='discussion' or
-            sources[quotes[i]['evidence_id']].get('sample',{}).get('flags') or quotes[i]['evidence_id'] not in kept for i in view['basis_refs']):
-            raise ValueError('真实观点只可引用有效评论样本')
-        if view['kind']=='actual_comment':view['sample_count']=len({quotes[i]['evidence_id'] for i in view['basis_refs']})
+        if view['kind']=='actual_comment':
+            bad=any(sources[quotes[i]['evidence_id']]['role']!='discussion' or
+                sources[quotes[i]['evidence_id']].get('sample',{}).get('flags') or
+                quotes[i]['evidence_id'] not in kept for i in view['basis_refs'])
+            if bad:
+                repairs.append({'action':'drop_invalid_comment_view','text':view['text'][:40]})
+                continue
+            view['sample_count']=len({quotes[i]['evidence_id'] for i in view['basis_refs']})
+        kept_views.append(view)
+    value['views']=kept_views
+    if repairs:
+        store.step(run_id,'discussion_review_repair',{'actions':repairs[:8],'count':len(repairs),
+            'note':'评论逐条评估改为确定性补齐/降级；未评估按排除、无效引用剔除、无效观点不进入交付'})
     for section in ('background','core','timeline','views','controversies'):
         for item in value[section]:
             item['facts']=[{k:quotes[i][k] for k in ('evidence_id','quote')} for i in item.pop('basis_refs')]
