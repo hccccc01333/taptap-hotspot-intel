@@ -1,0 +1,81 @@
+{
+  "schema": "acquisition-fixture-v0.1",
+  "page_id": "static_article",
+  "label": "静态文章页：日期与规则都在 DOM 正文（合成样本）",
+  "source_note": "合成样本：按 browser_worker 输出结构构造，不是真实站点录制",
+  "url": "https://www.taptap.cn/example/static-article-001",
+  "title": "活动公告（合成）",
+  "viewport": [1440, 1000],
+  "scroll_height": 3000,
+  "blocked_reason": null,
+  "dom_text": "社区 首页 活动 我的\n合成活动「海风与灯塔」公告\n本次活动完全虚构，仅用于离线机制评测。\n报名截止：2026年11月12日 23:59。\n活动开启：报名结束后次日。\n活动规则（合成）：\n每日登录可获得一次抽取机会；奖励发放时间以公告正文为准。\n玩家评论（合成）：\n期待这次活动。\n希望奖励更丰富一些。\n© 合成样本，仅用于离线机制评测",
+  "regions": [
+    {
+      "region_id": "nav",
+      "role": "navigation",
+      "bbox": [0, 0, 1440, 80],
+      "text": "社区 首页 活动 我的",
+      "visual_text": "",
+      "lazy": false,
+      "requires": null,
+      "blocked": false,
+      "scroll_y": 0
+    },
+    {
+      "region_id": "article",
+      "role": "article_body",
+      "bbox": [160, 100, 1120, 760],
+      "text": "合成活动「海风与灯塔」公告\n本次活动完全虚构，仅用于离线机制评测。\n报名截止：2026年11月12日 23:59。\n活动开启：报名结束后次日。",
+      "visual_text": "",
+      "lazy": false,
+      "requires": null,
+      "blocked": false,
+      "scroll_y": 100
+    },
+    {
+      "region_id": "rules",
+      "role": "activity_rules",
+      "bbox": [160, 900, 1120, 700],
+      "text": "活动规则（合成）：\n每日登录可获得一次抽取机会；奖励发放时间以公告正文为准。",
+      "visual_text": "",
+      "lazy": false,
+      "requires": null,
+      "blocked": false,
+      "scroll_y": 900
+    },
+    {
+      "region_id": "comments",
+      "role": "comments",
+      "bbox": [160, 1700, 1120, 900],
+      "text": "玩家评论（合成）：\n期待这次活动。\n希望奖励更丰富一些。",
+      "visual_text": "",
+      "lazy": false,
+      "requires": null,
+      "blocked": false,
+      "scroll_y": 1700
+    },
+    {
+      "region_id": "footer",
+      "role": "footer",
+      "bbox": [0, 2700, 1440, 100],
+      "text": "© 合成样本，仅用于离线机制评测",
+      "visual_text": "",
+      "lazy": false,
+      "requires": null,
+      "blocked": false,
+      "scroll_y": 2700
+    }
+  ],
+  "objectives": [
+    {
+      "objective_id": "deadline",
+      "question": "确认合成活动的报名截止日期",
+      "answer_kind": "date",
+      "region_hints": ["article_body"],
+      "required": true,
+      "expected_answer": "2026年11月12日",
+      "expected_region_role": "article_body"
+    }
+  ],
+  "skill_ref": "taptap-activity-rules"
+}

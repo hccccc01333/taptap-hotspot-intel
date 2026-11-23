@@ -1,0 +1,81 @@
+{
+  "schema": "acquisition-fixture-v0.1",
+  "page_id": "poster_image_only",
+  "label": "期限只存在于海报图片、且位于固定三屏之后（合成样本）",
+  "source_note": "合成样本：按 browser_worker 输出结构构造，不是真实站点录制",
+  "url": "https://www.taptap.cn/example/poster-only-003",
+  "title": "活动海报（合成）",
+  "viewport": [1440, 1000],
+  "scroll_height": 5600,
+  "blocked_reason": null,
+  "dom_text": "社区 首页 活动 我的\n活动海报（合成）：完整规则与截止时间见下方海报图。\n玩家评论（合成）：\n海报做得很漂亮。\n已经参加了。\n© 合成样本，仅用于离线机制评测",
+  "regions": [
+    {
+      "region_id": "nav",
+      "role": "navigation",
+      "bbox": [0, 0, 1440, 80],
+      "text": "社区 首页 活动 我的",
+      "visual_text": "",
+      "lazy": false,
+      "requires": null,
+      "blocked": false,
+      "scroll_y": 0
+    },
+    {
+      "region_id": "intro",
+      "role": "article_body",
+      "bbox": [160, 100, 1120, 760],
+      "text": "活动海报（合成）：完整规则与截止时间见下方海报图。",
+      "visual_text": "",
+      "lazy": false,
+      "requires": null,
+      "blocked": false,
+      "scroll_y": 100
+    },
+    {
+      "region_id": "poster",
+      "role": "poster",
+      "bbox": [320, 3200, 800, 1000],
+      "text": "",
+      "visual_text": "活动截止：2026年11月30日\n参与方式：完成合成任务后领取限定徽章",
+      "lazy": false,
+      "requires": null,
+      "blocked": false,
+      "scroll_y": 3200
+    },
+    {
+      "region_id": "comments",
+      "role": "comments",
+      "bbox": [160, 4400, 1120, 900],
+      "text": "玩家评论（合成）：\n海报做得很漂亮。\n已经参加了。",
+      "visual_text": "",
+      "lazy": false,
+      "requires": null,
+      "blocked": false,
+      "scroll_y": 4400
+    },
+    {
+      "region_id": "footer",
+      "role": "footer",
+      "bbox": [0, 5400, 1440, 100],
+      "text": "© 合成样本，仅用于离线机制评测",
+      "visual_text": "",
+      "lazy": false,
+      "requires": null,
+      "blocked": false,
+      "scroll_y": 5400
+    }
+  ],
+  "objectives": [
+    {
+      "objective_id": "deadline",
+      "question": "确认合成活动的截止日期",
+      "answer_kind": "date",
+      "region_hints": ["poster"],
+      "required": true,
+      "expected_answer": "2026年11月30日",
+      "expected_region_role": "poster"
+    }
+  ],
+  "skill_ref": null
+}

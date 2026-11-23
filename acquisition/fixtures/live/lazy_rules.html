@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>合成活动说明｜雾港回声（本地场景）</title>
+<!-- 本地合成场景，不是真实站点：无外部资源、无网络请求，仅用于真实 Chromium/Edge 上的机制验收。 -->
+<!--
+  懒加载约定（供 browser_session_worker.cjs 识别，见 V4 切片 2 接口冻结 §2/§4）：
+  - #rules-section 在点击展开前被显式声明为懒加载区域；
+  - 展开前规则正文不在 DOM 中（#rules-body 为空，规则文字由点击后的内联脚本写入），
+    因此隐藏文本也不能被任何观察通道读到；
+  - 点击“展开规则”后 #rules-body 出现规则正文，region 文本与 page_version 必须改变。
+-->
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #f5f6f8; color: #1c2430;
+         font-family: "Microsoft YaHei", "PingFang SC", sans-serif; line-height: 1.7; }
+  nav.top { height: 64px; display: flex; align-items: center; gap: 32px;
+            padding: 0 48px; background: #1c2430; color: #ffffff; font-size: 20px; }
+  nav.top a { color: #ffffff; text-decoration: none; }
+  main { max-width: 1120px; margin: 0 auto; padding: 32px 0 64px; }
+  h1 { margin: 0 0 16px; font-size: 36px; }
+  h2 { margin: 0 0 16px; font-size: 30px; padding-left: 14px; border-left: 8px solid #2f6fed; }
+  article p { margin: 8px 0; font-size: 22px; }
+  .spacer { height: 1300px; }
+  #rules-section { margin-top: 40px; }
+  #expand-rules { margin: 8px 0 0; padding: 14px 34px; font-size: 24px; font-weight: 700;
+                  color: #ffffff; background: #2f6fed; border: 0; border-radius: 8px;
+                  font-family: inherit; cursor: pointer; }
+  #rules-body { margin-top: 20px; padding: 20px 24px; background: #ffffff; border-radius: 8px;
+                font-size: 24px; white-space: pre-line; }
+  #rules-body[hidden] { display: none; }
+  section.comments { margin-top: 64px; }
+  section.comments p { margin: 8px 0; font-size: 22px; }
+  footer { padding: 28px 48px; background: #1c2430; color: #cfd8e3; font-size: 18px; }
+</style>
+</head>
+<body>
+<header>
+  <nav class="top" aria-label="主导航">
+    <a href="#home">社区</a>
+    <a href="#activity">活动</a>
+    <a href="#news">资讯</a>
+    <a href="#mine">我的</a>
+  </nav>
+</header>
+<main>
+  <article class="article-body" aria-label="活动说明正文">
+    <h1>合成活动「雾港回声」说明</h1>
+    <p>本次活动完全虚构，仅用于本地真实浏览器机制评测，不是真实站点内容。</p>
+    <p>活动围绕虚构的雾港灯船展开：玩家需要按页面说明完成三件纪念任务，并在活动期内回到本页确认。</p>
+    <p>参与入口在页面下方；具体时间安排与奖励说明收在下方可展开的区域里。</p>
+    <p>本页故意做得较长，用于验证动态观察是否会先定位到目标区域，而不是从头逐屏截图。</p>
+  </article>
+  <div class="spacer"></div>
+  <section id="rules-section" class="activity-rules" aria-label="活动规则"
+           data-region-lazy="true" data-region-requires="click:展开规则">
+    <h2>活动规则</h2>
+    <button id="expand-rules" type="button" aria-expanded="false">展开规则</button>
+    <div id="rules-body" hidden></div>
+  </section>
+  <section class="comments" aria-label="玩家评论">
+    <h2>玩家评论</h2>
+    <p>「规则终于放出来了，等了好久。」</p>
+    <p>「记得定好闹钟，别错过时间。」</p>
+  </section>
+</main>
+<footer>© 本地合成场景，不是真实站点｜仅用于机制评测</footer>
+<script>
+(function () {
+  // 规则正文以 base64 形式保存在内联脚本里，展开前不会出现在 DOM 文本中。
+  var payload = '5rS75Yqo6KeE5YiZ77yI5pys5Zyw5ZCI5oiQ77yJ77yaCuaKpeWQjeaIquatou+8mjIwMjblubQxMeaciDIw5pelIDIzOjU544CCCua0u+WKqOaXtumXtO+8mjIwMjblubQxMeaciDIx5pel6IezMjAyNuW5tDEy5pyIMDXml6XjgIIK5Y+C5LiO5pa55byP77ya5a6M5oiQ5ZCI5oiQ5Lu75Yqh44CM5a6I5aGU5LiD5pel44CN77yM5aWW5Yqx5Li66Jma5p6E55qE6ZmQ5a6a5b6956ug44CCCuacrOmhteWGheWuueWFqOmDqOiZmuaehO+8jOS7heeUqOS6juacrOWcsOecn+Wunua1j+iniOWZqOacuuWItuivhOa1i+OAgg==';
+  var section = document.getElementById('rules-section');
+  var button = document.getElementById('expand-rules');
+  var body = document.getElementById('rules-body');
+  button.addEventListener('click', function () {
+    var bytes = Uint8Array.from(atob(payload), function (ch) { return ch.charCodeAt(0); });
+    body.textContent = new TextDecoder('utf-8').decode(bytes);
+    body.hidden = false;
+    button.textContent = '规则已展开';
+    button.setAttribute('aria-expanded', 'true');
+    // 展开后不再声明懒加载，重新观察时该区域可直接读取 DOM 文本。
+    section.removeAttribute('data-region-lazy');
+    section.removeAttribute('data-region-requires');
+  });
+})();
+</script>
+</body>
+</html>

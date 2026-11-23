@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>安全验证（本地合成场景）</title>
+<!-- 本地合成场景，不是真实站点：无外部资源、无网络请求，仅用于真实 Chromium/Edge 上的机制验收。 -->
+<!--
+  阻塞约定（见 V4 切片 2 接口冻结 §2/§4）：本页是整页验证码阻塞场景，
+  页面上没有任何可引用的活动证据；任何策略在阻塞页上都不得把证据写入存储。
+-->
+<meta name="acq-blocked" content="captcha">
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #eef1f5; color: #1c2430;
+         font-family: "Microsoft YaHei", "PingFang SC", sans-serif; }
+  nav.top { height: 64px; display: flex; align-items: center; gap: 32px;
+            padding: 0 48px; background: #1c2430; color: #ffffff; font-size: 20px; }
+  main { max-width: 760px; margin: 72px auto; padding: 56px 48px; background: #ffffff;
+         border-radius: 16px; box-shadow: 0 10px 32px rgba(28, 36, 48, 0.12); text-align: center; }
+  h1 { margin: 0 0 20px; font-size: 40px; }
+  main p { margin: 12px 0; font-size: 24px; color: #46536a; }
+  button { margin-top: 28px; padding: 16px 44px; font-size: 24px; font-weight: 700;
+           color: #ffffff; background: #2f6fed; border: 0; border-radius: 10px;
+           font-family: inherit; cursor: pointer; }
+  footer { position: fixed; left: 0; right: 0; bottom: 0; padding: 24px 48px;
+           background: #1c2430; color: #cfd8e3; font-size: 18px; }
+</style>
+</head>
+<body data-acq-blocked="captcha">
+<header>
+  <nav class="top" aria-label="主导航">
+    <a href="#home">社区</a>
+    <a href="#activity">活动</a>
+    <a href="#mine">我的</a>
+  </nav>
+</header>
+<main>
+  <section class="captcha" aria-label="安全验证" data-region-blocked="true">
+    <h1>安全验证</h1>
+    <p>请完成人机验证后继续访问。</p>
+    <p>本页面为本地合成场景，不是真实站点的人机验证页面。</p>
+    <button type="button">开始验证</button>
+  </section>
+</main>
+<footer>© 本地合成场景，不是真实站点｜仅用于机制评测</footer>
+</body>
+</html>

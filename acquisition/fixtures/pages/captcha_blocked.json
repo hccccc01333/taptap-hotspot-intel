@@ -1,0 +1,59 @@
+{
+  "schema": "acquisition-fixture-v0.1",
+  "page_id": "captcha_blocked",
+  "label": "全页验证码阻塞：任何证据不得入库（合成样本）",
+  "source_note": "合成样本：按 browser_worker 输出结构构造，不是真实站点录制",
+  "url": "https://www.taptap.cn/example/captcha-007",
+  "title": "安全验证（合成）",
+  "viewport": [1440, 1000],
+  "scroll_height": 2000,
+  "blocked_reason": "captcha",
+  "dom_text": "",
+  "regions": [
+    {
+      "region_id": "nav",
+      "role": "navigation",
+      "bbox": [0, 0, 1440, 80],
+      "text": "",
+      "visual_text": "",
+      "lazy": false,
+      "requires": null,
+      "blocked": true,
+      "scroll_y": 0
+    },
+    {
+      "region_id": "captcha",
+      "role": "captcha",
+      "bbox": [160, 100, 1120, 800],
+      "text": "",
+      "visual_text": "请完成安全验证后继续访问",
+      "lazy": false,
+      "requires": null,
+      "blocked": true,
+      "scroll_y": 100
+    },
+    {
+      "region_id": "footer",
+      "role": "footer",
+      "bbox": [0, 1900, 1440, 100],
+      "text": "",
+      "visual_text": "",
+      "lazy": false,
+      "requires": null,
+      "blocked": true,
+      "scroll_y": 1900
+    }
+  ],
+  "objectives": [
+    {
+      "objective_id": "deadline",
+      "question": "确认合成活动的报名截止日期",
+      "answer_kind": "date",
+      "region_hints": ["activity_rules"],
+      "required": true,
+      "expected_answer": "2026年12月01日",
+      "expected_region_role": "activity_rules"
+    }
+  ],
+  "skill_ref": null
+}

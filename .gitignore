@@ -131,6 +131,9 @@ data/v2/
 # V3 candidate ledger, material library and growth packs are local runtime data.
 data/v3/
 
+# V4 acquisition harness runtime data (live browser captures, stores, evaluation output).
+data/v4/
+
 # Collected event bodies and machine-specific state are runtime data.
 data/events/
 trend/state/

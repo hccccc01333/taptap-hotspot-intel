@@ -134,6 +134,34 @@ def get_pipeline_health(user: Dict[str, Any] = Depends(current_user)):
     return S.pipeline_health()
 
 
+def _v4_delivery_root():
+    from pathlib import Path
+    return Path(os.environ.get(
+        "V4_DELIVERY_DIR",
+        str(Path(__file__).resolve().parents[1] / "data" / "v4" / "deliveries")))
+
+
+@app.get("/api/v4/deliveries")
+def v4_deliveries(user: Dict[str, Any] = Depends(current_user)):
+    """Shared-frontend delivery index; V4 output is not owned by the V3 pages."""
+    from context.delivery import load_delivery_index
+    return load_delivery_index(_v4_delivery_root())
+
+
+@app.get("/api/v4/deliveries/{event_id}")
+def v4_delivery(event_id: str, user: Dict[str, Any] = Depends(current_user)):
+    """One V4 delivery package (draft) for the shared frontend."""
+    import json
+    import re
+    if not re.fullmatch(r'[A-Za-z0-9_.-]{1,120}', event_id):
+        raise HTTPException(400, "invalid event_id")
+    path = _v4_delivery_root() / event_id / "delivery.json"
+    if not path.is_file():
+        raise HTTPException(404, "delivery not found")
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+
 @app.get("/api/v2/overview")
 def v2_overview(user: Dict[str, Any] = Depends(current_user)):
     from agent_core import service

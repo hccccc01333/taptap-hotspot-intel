@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>合成活动讨论区｜潮汐留言板（本地场景）</title>
+<!-- 本地合成场景，不是真实站点：无外部资源、无网络请求，仅用于真实 Chromium/Edge 上的机制验收。 -->
+<!--
+  登录墙约定（见 V4 切片 2 接口冻结 §2/§4）：
+  - 评论区是区域级登录墙（region.requires="login"），不是整页登录页；
+  - 登录前的可见文字只有提示语，评论区正文不会出现在 DOM 中；
+  - 自适应策略应记录 login_required 缺口并停止，不得伪造评论证据。
+-->
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #f5f6f8; color: #1c2430;
+         font-family: "Microsoft YaHei", "PingFang SC", sans-serif; line-height: 1.7; }
+  nav.top { height: 64px; display: flex; align-items: center; gap: 32px;
+            padding: 0 48px; background: #1c2430; color: #ffffff; font-size: 20px; }
+  nav.top a { color: #ffffff; text-decoration: none; }
+  main { max-width: 1120px; margin: 0 auto; padding: 32px 0 64px; }
+  h1 { margin: 0 0 16px; font-size: 36px; }
+  h2 { margin: 0 0 16px; font-size: 30px; padding-left: 14px; border-left: 8px solid #2f6fed; }
+  article p { margin: 8px 0; font-size: 22px; }
+  #comments { margin-top: 72px; padding: 36px 40px; background: #ffffff; border-radius: 12px;
+              border: 1px solid #d8dee8; }
+  .login-gate { margin: 8px 0 20px; font-size: 26px; color: #46536a; }
+  .login-button { padding: 14px 40px; font-size: 24px; font-weight: 700; color: #ffffff;
+                  background: #2f6fed; border: 0; border-radius: 10px; font-family: inherit;
+                  cursor: pointer; }
+  footer { padding: 28px 48px; background: #1c2430; color: #cfd8e3; font-size: 18px; }
+</style>
+</head>
+<body>
+<header>
+  <nav class="top" aria-label="主导航">
+    <a href="#home">社区</a>
+    <a href="#activity">活动</a>
+    <a href="#news">资讯</a>
+    <a href="#mine">我的</a>
+  </nav>
+</header>
+<main>
+  <article class="article-body" aria-label="活动讨论正文">
+    <h1>合成活动「潮汐留言板」讨论区</h1>
+    <p>本次活动完全虚构，仅用于本地真实浏览器机制评测，不是真实站点内容。</p>
+    <p>以下玩家留言仅在登录后加载，未登录时不会显示任何留言内容。</p>
+    <p>登录仅用于本地机制演示，页面不会请求任何网络接口。</p>
+  </article>
+  <section id="comments" class="comments login-wall" aria-label="玩家评论"
+           data-region-role="comments" data-region-requires="login">
+    <h2>玩家评论</h2>
+    <p class="login-gate">登录后查看评论</p>
+    <button class="login-button" type="button">登录</button>
+  </section>
+</main>
+<footer>© 本地合成场景，不是真实站点｜仅用于机制评测</footer>
+</body>
+</html>

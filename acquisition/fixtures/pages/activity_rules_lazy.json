@@ -1,0 +1,81 @@
+{
+  "schema": "acquisition-fixture-v0.1",
+  "page_id": "activity_rules_lazy",
+  "label": "活动规则在懒加载区域（合成样本）",
+  "source_note": "合成样本：按 browser_worker 输出结构构造，不是真实站点录制",
+  "url": "https://www.taptap.cn/example/activity-lazy-002",
+  "title": "活动规则公告（合成）",
+  "viewport": [1440, 1000],
+  "scroll_height": 5200,
+  "blocked_reason": null,
+  "dom_text": "社区 首页 活动 我的\n活动介绍（合成）：本次虚构活动围绕海风与灯塔展开，参与方式见下方规则。\n玩家评论（合成）：\n规则终于出来了。\n记得定好闹钟。\n© 合成样本，仅用于离线机制评测",
+  "regions": [
+    {
+      "region_id": "nav",
+      "role": "navigation",
+      "bbox": [0, 0, 1440, 80],
+      "text": "社区 首页 活动 我的",
+      "visual_text": "",
+      "lazy": false,
+      "requires": null,
+      "blocked": false,
+      "scroll_y": 0
+    },
+    {
+      "region_id": "intro",
+      "role": "article_body",
+      "bbox": [160, 100, 1120, 760],
+      "text": "活动介绍（合成）：本次虚构活动围绕海风与灯塔展开，参与方式见下方规则。",
+      "visual_text": "",
+      "lazy": false,
+      "requires": null,
+      "blocked": false,
+      "scroll_y": 100
+    },
+    {
+      "region_id": "rules",
+      "role": "activity_rules",
+      "bbox": [160, 1500, 1120, 700],
+      "text": "活动规则（合成）：\n报名截止：2026年11月20日 23:59。\n活动时间：2026年11月21日至2026年12月05日。\n奖励为虚构的限定徽章。",
+      "visual_text": "",
+      "lazy": true,
+      "requires": "click:展开规则",
+      "blocked": false,
+      "scroll_y": 1500
+    },
+    {
+      "region_id": "comments",
+      "role": "comments",
+      "bbox": [160, 2600, 1120, 1000],
+      "text": "玩家评论（合成）：\n规则终于出来了。\n记得定好闹钟。",
+      "visual_text": "",
+      "lazy": false,
+      "requires": null,
+      "blocked": false,
+      "scroll_y": 2600
+    },
+    {
+      "region_id": "footer",
+      "role": "footer",
+      "bbox": [0, 3800, 1440, 100],
+      "text": "© 合成样本，仅用于离线机制评测",
+      "visual_text": "",
+      "lazy": false,
+      "requires": null,
+      "blocked": false,
+      "scroll_y": 3800
+    }
+  ],
+  "objectives": [
+    {
+      "objective_id": "deadline",
+      "question": "确认合成活动的报名截止日期",
+      "answer_kind": "date",
+      "region_hints": ["activity_rules"],
+      "required": true,
+      "expected_answer": "2026年11月20日",
+      "expected_region_role": "activity_rules"
+    }
+  ],
+  "skill_ref": "taptap-activity-rules"
+}

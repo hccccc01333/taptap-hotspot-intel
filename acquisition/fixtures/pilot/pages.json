@@ -1,0 +1,38 @@
+{
+  "schema": "acquisition-live-pilot-pages-v0.1",
+  "frozen_at": "2026-11-13",
+  "scope": "V4 切片 3 外部试点固定页面集合：只允许公开、无需登录、静态或简单懒加载的页面；禁止 TapTap/站内、登录态、受限内容。host 字段即该页 driver 的 egress_allowlist（精确 hostname 或子域后缀由 EgressProxy 规则解释）。",
+  "collection_note": "本清单是运行前固定的页面集合，不允许按结果挑选或替换页面；试点必须保留全部失败（加载失败/4xx/5xx/代理拒绝/无区域/无证据/预算耗尽），不重试到成功、不剔除页面。",
+  "conclusion_scope": "出网隔离与驱动在指定公开页面上是否按设计工作（不写采集成功率、事实正确率、OCR 准确率或平台适配结论）",
+  "pages": [
+    {
+      "page_id": "example_com_root",
+      "url": "https://example.com/",
+      "host": "example.com",
+      "objective_question": "example.com 页面标题与域名用途说明是什么？",
+      "answer_kind": "text",
+      "region_hints": [],
+      "note": "2026-11-13 可达性核查：requests 返回 HTTP 200，577 字节，最终 URL 未跳转，title=Example Domain；页面只有 h1/p，无 nav/main/article/section 等语义容器，驱动预期报 0 个语义区域，adaptive 会回退 dom:body（这是预期路径，不是伪造成功）。同机 urllib 对该页报证书链错误（requests 正常），若 Chromium 也失败则按失败样本原样保留。"
+    },
+    {
+      "page_id": "iana_example_domains",
+      "url": "https://www.iana.org/help/example-domains",
+      "host": "www.iana.org",
+      "objective_question": "IANA 如何说明 example 域名（example.com/example.org）的用途与注册限制？",
+      "answer_kind": "text",
+      "region_hints": [
+        "article_body"
+      ],
+      "note": "2026-11-13 可达性核查：requests 返回 HTTP 200，6774 字节，最终 URL 未跳转，title=Example Domains；HTML 含 nav/header/main/article/footer，预期存在 article_body 语义区域。页面自带 Last revised 2026-09-27，属于可能缓慢变化的公开说明页（变化时按新 page_version 保留，不改清单）。"
+    },
+    {
+      "page_id": "rfc2606_reserved_names",
+      "url": "https://www.rfc-editor.org/rfc/rfc2606.html",
+      "host": "www.rfc-editor.org",
+      "objective_question": "RFC 2606 为文档与测试保留了哪四个顶级域名？",
+      "answer_kind": "text",
+      "region_hints": [],
+      "note": "2026-11-13 可达性核查：requests 返回 HTTP 200，9569 字节，最终 URL 未跳转，无 <title> 元素（RFC 原文 pre 布局）；无 nav/main/article 等语义容器，驱动预期报 0 个语义区域，adaptive 会回退 dom:body。RFC 2606 为 1999 年发布的标准文本，内容稳定；响应 Content-Type 未带 charset，按 ISO-8859-1 解码，若 Chromium 解码异常按失败样本原样保留。"
+    }
+  ]
+}

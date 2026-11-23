@@ -6,7 +6,7 @@
 [![CI](https://github.com/hccccc01333/taptap-hotspot-intel/actions/workflows/ci.yml/badge.svg)](https://github.com/hccccc01333/taptap-hotspot-intel/actions/workflows/ci.yml)
 [![网站部署](https://github.com/hccccc01333/taptap-hotspot-intel/actions/workflows/pages.yml/badge.svg)](https://github.com/hccccc01333/taptap-hotspot-intel/actions/workflows/pages.yml)
 
-[打开网站](https://hccccc01333.github.io/taptap-hotspot-intel/) · [架构详解](docs/V3-技术栈与历史编排.md) · [模型配置](docs/V3-模型供应商与自定义配置.md) · [实验方法](docs/V3-可复现对照实验.md) · [更新日志](CHANGELOG.md)
+[打开网站](https://hccccc01333.github.io/taptap-hotspot-intel/) · [架构详解](docs/V3-技术栈与历史编排.md) · [V4 架构](docs/V4_ARCHITECTURE.md) · [模型配置](docs/V3-模型供应商与自定义配置.md) · [实验方法](docs/V3-可复现对照实验.md) · [更新日志](CHANGELOG.md)
 
 这是面向 TapTap 内容与运营场景的个人开源项目，非 TapTap 官方项目，不使用其内部业务数据。项目的目标是让使用者打开网站就能阅读分类成果；有疑问时，可以沿创意、情报、热点解读回到原始来源，而无需自己启动采集或生成任务。
 
@@ -128,6 +128,9 @@ GitHub Pages 只托管静态页面，不执行采集或模型任务。目前生�
 - 证据门禁的确定性价值：两轮 A/B/C 对照中，门禁后可用成果 0% 错误放行；无门禁的对照组约半数不支持断言直接交付。
 - 负面与争议纪律：多批次真实样本中，负面事件零推广素材、零增长创意，中立风险情报照常产出。
 - 自动执行可靠性：租约、崩溃恢复、幂等写入与来源版本守卫经过故障注入测试。
+- V4 Acquisition Harness 首个切片（仅合成冻结样本的机制对照）：动态观察在懒加载、纯图片与布局改版样本上取得固定三屏取不到的可定位证据；阻塞页证据泄漏为 0；恢复不重复执行已完成动作。它不代表真实网页采集质量，也不构成事实核验。
+- V4 切片 2（仅本地合成 HTML 的真实 Chromium/Edge 机制验证）：持久浏览器会话复用同一浏览器；懒加载页面点击展开后由动态观察命中规则、纯图片区域定点截图 OCR 命中，固定三屏/现状基线在相同页面漏读；验证码零证据、登录墙只记缺口。尚未在真实外部网站试点。
+- V4 切片 3（出网隔离 + 首轮外部试点）：URL 模式收紧为「显式 allow_network + 固定 allowlist + 本地 CONNECT 过滤代理（公网 IP 校验、DNS IP pinning、WebSocket/WebRTC 通道禁用）」；固定 3 个公开页面共 9 次运行全部完成、加载失败 0、egress 拒绝 63 次（含浏览器后台域名），证据仍全部未核验、51 项缺口/失败原样保留。页面内容与人工核查项待人工判定，不构成采集能力或事实准确率结论。
 
 **已知边界**
 
@@ -140,13 +143,19 @@ GitHub Pages 只托管静态页面，不执行采集或模型任务。目前生�
 - 干净传输窗口下的四臂对照复测，裁决图谱边际价值。
 - 业务阶段事实清单扩展与覆盖率针对性优化。
 - 跨平台语义跟踪、讨论样本与真实完整创意验收。
+- V4 Acquisition Harness：切片 3 已完成出网隔离与首轮外部试点报告；下一步先完成逐页人工核查（目标语义区域/证据定位/阻塞判定），修正区域推断与交互后再评估外部试点扩面，最后才讨论把动态驱动接入 V3 生产默认截图路径。当前结论不代表真实网页收益。
 
 ## 代码与文档入口
 
 - [`agent_v3/`](agent_v3/)：当前主／子 Agent、研究工具、图谱、契约、业务库与调度。
+- [`acquisition/`](acquisition/)：V4 Acquisition Harness——结构化收据、动态观察策略、证据与任务恢复、可选 Skill 适配、离线对照评测、真实 Chromium/Edge 持久会话与本地合成页面 live 验收，以及出网隔离代理与外部试点 runner；V3 生产链路不依赖它。
+- [`context/`](context/)：V4 事件/时间线/Context 与交付层 MVP——事件版本、事实与引文、过期检测、时间线、Context Card、同游戏分组与冲突候选、条件修复编排、模型预检/路由与回退，以及三类型交付包（情报/素材/增长创意）与共享前端契约；不替代事实核验。
 - [`spatial/`](spatial/)：当前 React 工作台，保留 V1／V2 入口。
 - [`webapp/`](webapp/)：FastAPI 与本地认证。
 - [`data_source/`](data_source/)、[`signals/`](signals/)、[`trend/`](trend/)、[`intelligence/`](intelligence/)、[`memory/`](memory/)、[`execution/`](execution/)、[`runtime/`](runtime/)：分层实现——采集、事件加工、事件趋势、AI 情报、记忆回填、告警与工作台，由 `runtime/harness.py` 按层编排。
+- [V4 架构冻结稿：TapTap Context-Aware Intelligence & Adaptive Harness](docs/V4_ARCHITECTURE.md)：设计冻结、实现分期，含 V3 兼容边界、Acquisition Harness 契约与切片评测口径。
+- [V4 业务事件包流程](docs/V4-业务事件包流程.md) 与 `scripts/business_event_pack.py`：公开 HTTP 证据 → 草稿自检 → 最终稿 → 引文核对与人工核查清单；只产出草稿，不自动发布。
+- [V4 交付层与共享前端契约](docs/V4-交付层与共享前端契约.md)：三类型交付包（情报/素材/增长创意）、`GET /api/v4/deliveries` 与共享前端约定；前端不归 V3 独占。
 - [技术栈、数据如何变成成果、GraphRAG 与 LangGraph 详解](docs/V3-技术栈与历史编排.md)
 - [热点解读与游戏交付契约](docs/V3-热点解读与游戏交付契约.md)
 

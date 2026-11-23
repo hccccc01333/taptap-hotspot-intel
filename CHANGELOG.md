@@ -6,7 +6,34 @@
 
 ## [未发布]
 
-- 暂无。
+### Added
+
+- V4 架构冻结稿 [`docs/V4_ARCHITECTURE.md`](docs/V4_ARCHITECTURE.md)：TapTap Context-Aware Intelligence & Adaptive Harness 的分层、V3 保留/迁移边界、Acquisition Harness 契约（动作空间、结构化收据、动态观察、会话恢复、后端矩阵、Skill 双层验证）、四臂反事实基线与分阶段验收。旧草案保留为时点材料并标注已被取代。
+- `acquisition/`：V4 Acquisition Harness 首个纵向切片。包含冻结契约、回放驱动与 V3 固定三屏输出适配、SQLite 任务/会话/证据/租约与恢复、固定三屏与现状 V3 基线及自适应观察策略、Skill 门禁与流程完成验证、7 个合成冻结样本上的四策略离线对照。切片与 V3 生产链路并行，不修改 `agent_v3/` 行为。
+- V4 切片 2：真实浏览器持久会话与动态观察后端。新增 `browser_session_worker.cjs`（Node+Playwright/Edge 持久会话；本地夹具模式拦截 HTTP(S) 与 WebSocket 通道（进程内纵深防御，非 OS 级隔离），URL 模式默认关闭、需显式开启且尚未做对抗性出网隔离）、`live_driver.py`（`PlaywrightDriver`：真实 DOM 语义区域、点击展开懒加载、定点区域截图、按需 OCR；不伪造文本）、`live_acceptance.py` 与 5 个本地合成 HTML 场景（静态、懒加载规则、纯图片海报、验证码、登录墙）。不修改 `agent_v3/` 浏览器工具与生产调用方。
+- `.gitignore` 与发布守卫增加 `data/v4/`；CI 的 `acquisition/tests` 发现自动覆盖新旧切片（真实浏览器用例在缺少 Node/Playwright/Edge 的环境自动 skip）。
+- V4 切片 3：出网隔离与外部试点。新增 `egress_proxy.py`（本地 CONNECT 过滤代理：固定 allowlist、只允许 443、全部解析 IP 必须公网、DNS IP pinning、连接记录）；URL 模式必须显式 `allow_network` + 非空 allowlist，worker 强制 Chromium 代理参数并禁用 QUIC/WebRTC 非代理 UDP，页面内禁用 WebSocket/EventSource/WebRTC/sendBeacon；新增 `live_pilot.py` 与固定 3 页公开页面清单（example.com、IANA example-domains、RFC 2606），保留全部失败与人工核查项。不修改 `agent_v3/`。
+- 新增 `scripts/business_event_pack.py` 与[业务事件包流程](docs/V4-业务事件包流程.md)：公开 HTTP 证据 → Beam 草稿自检 → LongCat 每事件最多 1 次的最终稿 → 引文核对与人工核查清单；只产出草稿，不自动发布；LongCat 调用账本硬上限 100 次。
+- 业务事件包新增 `--orchestrate` 可选模式：草稿 → 确定性门槛 → 失败时最多一次修复 → 只有通过门槛才写 accepted/final；门槛可配置 `--min-facts`。3 事件实跑被 Beam Free 区域限制（HTTP 403）阻塞，0/3 失败保留，未自动换模型。
+- 事件层新增 `context/event_match.py`：同组内同事件候选（标题/日期/引文重合）与事实冲突候选（文本相似但数字/日期原子不同），只给候选、不自动合并/裁决；真实两篇 THE FINALS 不同主题报道 0 候选，阳性 case 由合成测试覆盖。 真实第二来源受 Cloudflare/网络限制未取得；用同一真实正文+改写标题的合成第二来源验证，命中 1 个 same-event 候选（0.55，日期/引文各 1.0），合成来源在报告中明确标注、不可引用。 新增发布日期邻近信号与 `add_event_stub` 元数据来源登记：真实 3DM 全文 + Steam 新闻 API 标题/日期（正文抓取超时）命中 1 个跨语言元数据候选（0.35，metadata_only，不自动合并），不能当作已验证第二全文来源。 新增 `context/embedding.py` 可插拔多语言语义候选接口（默认不配置、不发外部请求）与[设计文档](docs/V4-多语言同事件匹配.md)；当前只有假 embedder 测试，真实跨语言全文对未验证。
+- 新增 V4 交付层 MVP：`context/delivery.py` 固定三类型交付包（情报/素材/增长创意）与质量检查；`scripts/v4_delivery_pack.py` 生成 `index.json`/`delivery.json`/本地预览；共享前端新增 `GET /api/v4/deliveries` 与单事件只读接口，明确前端不归 V3 独占。增长创意目前为确定性结构模板，未使用 TapTap 参考库，未发布。
+- 新增最小 TapTap 公开参考库与三类型交付 MVP：5 条公开 TapTap 样本 + 5 个原创结构模式（只迁移结构，不复制原文）；真实事件《鹅鸭杀×葫芦兄弟联动》产出 4 条事实/4/4 引文/情报+素材+增长创意，交付包写入 `data/v4/deliveries/`；共享前端 `GET /api/v4/deliveries` 可读；增长创意为确定性结构生成，未调用模型，未发布、未做独立事实核验。
+- 新增模型预检/路由：`scripts/model_preflight.py`（小 JSON 健康检查，默认不调用 LongCat）与 `context/model_router.py`（按能力/策略选择健康候选，route 与传输失败回退写入编排 trace）。实测 hy4-flash-free/beam-free 健康、Iceman 因训练条款跳过；路由 demo 选择 hy4，草稿 8 条事实、8/8 引文、ready_for_final（LongCat 0、Iceman 0）。 业务包 `--auto-model` 已接入：3 事件实跑预检 hy4=ok、beam=403，自动选 hy4，3/3 ready_for_final（事实 11/11/7、引文全支持、0 修复，LongCat 0）。 单事件再加 1 次 LongCat 最终稿（不重试）：hy4 草稿 8 条直接通过，LongCat 最终稿 8 条、8/8 引文、素材完整，`final_delivered`，完成预检→路由→编排→最终稿闭环。 扩到 3 事件（每事件最多 1 次 LongCat）后 3/3 `final_delivered`（事实 7/10/13、引文全支持、0 修复，LongCat 3 次）。 另用缓存证据回放（`--replay-dir`）做同模型 Context Card 对照：baseline 3/3/23 条事实，context 3/3/35 条，引文均 100%、未支持数字 0、素材 3/3（unknowns 19→29）；单次代理指标，未做事实核验。 重复一轮后 baseline 3/3/27 条，context 0/3（hy4 最终稿空 content/reasoning 截断），23→35 未复现；不晋升 Context 提示。 仅把 max_tokens 提到 24000 后，baseline 2/3（7/8 条）、context 2/3（10/11 条），COD 两组均空 content；提高预算未消除 hy4 空输出，仍不晋升。
+- 新增 `context/` 事件/时间线/Context MVP 与自动评估：事件版本、事实逐字引文、页面版本变化后的 stale 检测、时间线、公开 HTTP Context Card、同游戏多来源分组与日期/价格冲突候选、条件修复编排（草稿→门槛→最多一次修复→复检→可选最终稿），以及业务事件包的确定性代理评分（引文支持、未支持数字/日期、素材完整性、unknowns、Context 覆盖）。不写 V3 生产库，不启用 GraphRAG。
+- CI 增加 `context/tests` 发现；README 增加 V4 架构与切片入口。
+
+### 实验结论
+
+- 在 7 个合成冻结页面上：自适应观察在懒加载规则、纯图片海报与布局改版样本上取得固定三屏与现状 V3 基线取不到的可定位证据；静态正文样本的动作成本低于现状 V3 基线；阻塞页四种策略证据泄漏均为 0；中断恢复不重复执行已完成动作，页面版本变化判 stale。以上是合成样本上的机制对照，不代表真实网页采集质量，也不构成事实核验或增长效果。
+- Skill 先验在本轮样本中未降低动作成本；已建立 host、结构签名、平台规则复核与权限门禁，以及「Skill 完成验证 ≠ 事实核验」边界。复用收益列为下一阶段试点验证项，当前不宣称。
+- 切片 2 在 5 个本地合成 HTML 场景、真实 Edge+Playwright+Windows OCR 上：懒加载页面 adaptive 点击展开后命中规则、fixed_frames/legacy_v3 未命中；纯图片海报 adaptive 定点 OCR 命中、两基线未命中；静态页 adaptive 成本低于 legacy；验证码三策略证据 0；登录评论区 adaptive 只记 `login_required` 缺口；20 张截图 sha256/路径校验、证据版本绑定、两次运行页面版本稳定、同一浏览器会话复用（`session_launches=1`）、夹具模式 WebSocket 禁连负例均通过，live checks 24/24。以上是本地合成页面上的机制验证，不代表真实网站采集成功率、OCR 准确率或事实正确性。
+- 切片 3 首轮外部试点（固定 3 个公开页面 × 3 策略，共 9 次运行）：加载失败 0、阻塞 0；egress 允许连接 10 次、拒绝 63 次（被拒主要为浏览器后台遥测/搜索域名，说明 allowlist 生效）；证据 16 条且全部 `verified=False`；51 项缺口/失败（无语义区域、egress 拒绝等）与逐页人工核查项原样保留，未重试到成功、未剔除页面。结论仅限「出网隔离与驱动在指定公开页面上是否按设计工作」，页面内容与人工核查未完成，不构成采集成功率、事实正确率、OCR 准确率或平台适配结论。
+- 切片 4 的两轮 Context 策略实验（3 个冻结事件、Beam only、LongCat 0 次）：初版候选事实数 30→21，按「事实覆盖不得下降」规则拒绝；改进 Context 抽取与提示后复测，基线 25 条、候选 35 条，引文支持均 100%、未支持数字 0、素材完整 3/3，候选通过预注册门槛，作为可选 `--context-card` 接入业务事件包，默认不开启；LongCat 最终稿验证（1 事件、1 次调用）返回无效 JSON，失败保留且不重试，因此 Context Card 仍为可选、默认关闭；自动评估是代理指标，不是事实核验。
+- 切片 5 条件修复编排（Beam only、LongCat 0 次）：3 个冻结事件中 2 个草稿未过门槛并触发 1 次修复（事实 5→9、6→8），1 个草稿直接通过（14 条）；3/3 达到 `ready_for_final`，0 次 `needs_review`。代理指标通过不等于事实正确；随后 1 次 LongCat 最终稿验证（同一事件、不重试）只产出 6 条事实（< 预注册 8 条），虽引文 6/6、未支持数字 0、素材完整，仍判 `needs_review`，未放宽门槛。另开 min_facts=6 预注册批次复验时，v1/v2 均在模型请求阶段遭遇连接错误/代理错误，未返回模型输出；该验证 inconclusive，不记为通过或失败，未再重试。Beam 区域受限期间改用 Iceman 草稿重跑编排（3/3 ready_for_final）；另开新预注册批次 `iceman-longcat-min6-v1`，Iceman 草稿 8 条直接通过，LongCat 1 次最终稿产出 8 条事实、8/8 引文、未支持数字 0、素材完整，首次 `final_delivered`。同策略扩到 3 个冻结事件后 3/3 `final_delivered`（事实 6/7/8、0 修复、LongCat 3 次）。 2026-11-18 用新可用的 `hy4-flash-free`（免费、cost=0）做同包 baseline/context 对照：baseline 2/3 交付（THE FINALS 7 条、COD 8 条；初音最终稿 JSON 截断），context 1/3 交付（THE FINALS 12 条且引文全支持；初音/COD 连接中断）；失败类型不同、未重试，不能据此声称 Context Card 普遍增益。旧 min_facts=8 失败保留；Iceman 训练条款只用于公开内容，代理指标不等于事实核验。
+
+### Unchanged
+
+- V3 生产链路、自动调度、浏览器工具与业务契约未修改；分层测试与发布守卫继续通过。
 
 ## [3.0.0-alpha.28] - 2026-10-15
 

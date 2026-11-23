@@ -1,0 +1,16 @@
+{
+  "schema": "acquisition-skill-manifest-v0.1",
+  "skill_id": "taptap-activity-rules",
+  "name": "TapTap 活动规则取证",
+  "version": "0.1.0",
+  "description": "在 TapTap 活动公告页定位活动规则区域，优先展开懒加载折叠区，再按内容形态用 DOM 或截图 OCR 读取报名截止等规则文本。只提供区域先验与流程完成验证，不核验事实。",
+  "allowed_hosts": ["www.taptap.cn"],
+  "structural_signatures": ["struct:535e798153acf543"],
+  "signature_note": "由 model.structural_signature 对 layout_changed_v1 / layout_changed_v2 的区域角色序列计算；两者角色序列相同，去重后合并为一项。布局位置与承载方式变化不改变签名。",
+  "region_roles": ["activity_rules", "comments"],
+  "permissions": {
+    "site_rules_reviewed": true,
+    "login_required": false
+  },
+  "verify": "verify.json"
+}

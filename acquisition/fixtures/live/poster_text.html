@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>合成活动海报｜星轨远航（本地场景）</title>
+<!-- 本地合成场景，不是真实站点：无外部资源、无网络请求，仅用于真实 Chromium/Edge 上的机制验收。 -->
+<!--
+  海报约定（供 browser_session_worker.cjs 识别，见 V4 切片 2 接口冻结 §2/§4）：
+  - 截止日期只画在 <img> 内联 SVG 图像里，DOM 全文没有任何日期文字；
+  - 海报位于页面第三屏（固定 0/850/1700 偏移的三屏）之后，固定三屏基线看不到它；
+  - 图片为 data: URL，浏览器不会发起任何网络请求。
+-->
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #f5f6f8; color: #1c2430;
+         font-family: "Microsoft YaHei", "PingFang SC", sans-serif; line-height: 1.7; }
+  nav.top { height: 64px; display: flex; align-items: center; gap: 32px;
+            padding: 0 48px; background: #1c2430; color: #ffffff; font-size: 20px; }
+  nav.top a { color: #ffffff; text-decoration: none; }
+  main { max-width: 1120px; margin: 0 auto; padding: 32px 0 64px; }
+  h1 { margin: 0 0 16px; font-size: 36px; }
+  h2 { margin: 0 0 16px; font-size: 30px; padding-left: 14px; border-left: 8px solid #2f6fed; }
+  article p { margin: 8px 0; font-size: 22px; }
+  .spacer { height: 2700px; }
+  figure.poster { margin: 40px auto 0; text-align: center; }
+  figure.poster img { display: block; width: 900px; height: 520px; margin: 0 auto;
+                      border-radius: 12px; box-shadow: 0 8px 28px rgba(10, 23, 48, 0.25); }
+  section.comments { margin-top: 64px; }
+  section.comments p { margin: 8px 0; font-size: 22px; }
+  footer { padding: 28px 48px; background: #1c2430; color: #cfd8e3; font-size: 18px; }
+</style>
+</head>
+<body>
+<header>
+  <nav class="top" aria-label="主导航">
+    <a href="#home">社区</a>
+    <a href="#activity">活动</a>
+    <a href="#news">资讯</a>
+    <a href="#mine">我的</a>
+  </nav>
+</header>
+<main>
+  <article class="article-body" aria-label="活动说明正文">
+    <h1>合成活动「星轨远航」海报说明</h1>
+    <p>本次活动完全虚构，仅用于本地真实浏览器机制评测，不是真实站点内容。</p>
+    <p>完整的截止时间与参与方式都画在下方图片里，页面文字中不会重复这些信息。</p>
+    <p>图片使用内联 SVG data URL 渲染中文，用于验证定点截图 + 本地 OCR 的读取链路。</p>
+  </article>
+  <div class="spacer"></div>
+  <figure class="poster" aria-label="活动海报" id="poster-figure">
+    <img id="poster-image" class="poster-image" alt="活动海报（本地合成）" width="900" height="520"
+         src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPScxODAwJyBoZWlnaHQ9JzEwNDAnIHZpZXdCb3g9JzAgMCAxODAwIDEwNDAnPjxkZWZzPjxsaW5lYXJHcmFkaWVudCBpZD0nc2t5JyB4MT0nMCcgeTE9JzAnIHgyPScxJyB5Mj0nMSc+PHN0b3Agb2Zmc2V0PScwJyBzdG9wLWNvbG9yPScjMGExNzMwJy8+PHN0b3Agb2Zmc2V0PScxJyBzdG9wLWNvbG9yPScjMTIzYTYzJy8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PHJlY3Qgd2lkdGg9JzE4MDAnIGhlaWdodD0nMTA0MCcgZmlsbD0ndXJsKCNza3kpJy8+PGNpcmNsZSBjeD0nMzAwJyBjeT0nMTcwJyByPSc2JyBmaWxsPScjZmZmZmZmJyBvcGFjaXR5PScwLjg1Jy8+PGNpcmNsZSBjeD0nNTIwJyBjeT0nMTEwJyByPSc0JyBmaWxsPScjZmZmZmZmJyBvcGFjaXR5PScwLjcnLz48Y2lyY2xlIGN4PScxNjQwJyBjeT0nMTUwJyByPSc1JyBmaWxsPScjZmZmZmZmJyBvcGFjaXR5PScwLjgnLz48Y2lyY2xlIGN4PScxNDIwJyBjeT0nOTAnIHI9JzMnIGZpbGw9JyNmZmZmZmYnIG9wYWNpdHk9JzAuNicvPjxjaXJjbGUgY3g9JzE3MDAnIGN5PSc0MjAnIHI9JzQnIGZpbGw9JyNmZmZmZmYnIG9wYWNpdHk9JzAuNicvPjxjaXJjbGUgY3g9JzE4MCcgY3k9Jzc2MCcgcj0nNCcgZmlsbD0nI2ZmZmZmZicgb3BhY2l0eT0nMC41Jy8+PHRleHQgeD0nMTEwJyB5PScyMjAnIGZvbnQtZmFtaWx5PSdNaWNyb3NvZnQgWWFIZWksIFNpbUhlaSwgc2Fucy1zZXJpZicgZm9udC1zaXplPScxMDQnIGZvbnQtd2VpZ2h0PSdib2xkJyBmaWxsPScjZmZmZmZmJz7mmJ/ovajov5zoiKrvvIjmnKzlnLDlkIjmiJDmtbfmiqXvvIk8L3RleHQ+PHRleHQgeD0nMTEwJyB5PSc1MjAnIGZvbnQtZmFtaWx5PSdNaWNyb3NvZnQgWWFIZWksIFNpbUhlaSwgc2Fucy1zZXJpZicgZm9udC1zaXplPSc5MicgZm9udC13ZWlnaHQ9J2JvbGQnIGZpbGw9JyNmZmQxNjYnPua0u+WKqOaIquatou+8mjIwMjblubQxMeaciDMw5pelPC90ZXh0Pjx0ZXh0IHg9JzExMCcgeT0nNzAwJyBmb250LWZhbWlseT0nTWljcm9zb2Z0IFlhSGVpLCBTaW1IZWksIHNhbnMtc2VyaWYnIGZvbnQtc2l6ZT0nNzYnIGZpbGw9JyNlNmYwZmYnPuWPguS4juaWueW8j++8muWujOaIkOWQiOaIkOS7u+WKoeWQjumihuWPlumZkOWumuW+veeroDwvdGV4dD48dGV4dCB4PScxMTAnIHk9Jzg3MCcgZm9udC1mYW1pbHk9J01pY3Jvc29mdCBZYUhlaSwgU2ltSGVpLCBzYW5zLXNlcmlmJyBmb250LXNpemU9JzYwJyBmaWxsPScjOWZiN2Q5Jz7mnKzlm77ku4XnlKjkuo7mnKzlnLDmtY/op4jlmajmnLrliLbor4TmtYvvvIzkuI3mmK/nnJ/lrp7nq5nngrnntKDmnZA8L3RleHQ+PC9zdmc+">
+  </figure>
+  <section class="comments" aria-label="玩家评论">
+    <h2>玩家评论</h2>
+    <p>「海报做得很漂亮，星轨的构图很有氛围。」</p>
+    <p>「已经参加了，等开奖。」</p>
+  </section>
+</main>
+<footer>© 本地合成场景，不是真实站点｜仅用于机制评测</footer>
+</body>
+</html>

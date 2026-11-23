@@ -1,0 +1,70 @@
+{
+  "schema": "acquisition-fixture-v0.1",
+  "page_id": "login_comments",
+  "label": "评论区需要登录：只保留缺口，不伪造评论证据（合成样本）",
+  "source_note": "合成样本：按 browser_worker 输出结构构造，不是真实站点录制",
+  "url": "https://www.taptap.cn/example/login-comments-006",
+  "title": "活动讨论区（合成）",
+  "viewport": [1440, 1000],
+  "scroll_height": 4200,
+  "blocked_reason": null,
+  "dom_text": "社区 首页 活动 我的\n活动讨论（合成）：以下玩家评论仅登录后可见。\n© 合成样本，仅用于离线机制评测",
+  "regions": [
+    {
+      "region_id": "nav",
+      "role": "navigation",
+      "bbox": [0, 0, 1440, 80],
+      "text": "社区 首页 活动 我的",
+      "visual_text": "",
+      "lazy": false,
+      "requires": null,
+      "blocked": false,
+      "scroll_y": 0
+    },
+    {
+      "region_id": "article",
+      "role": "article_body",
+      "bbox": [160, 100, 1120, 760],
+      "text": "活动讨论（合成）：以下玩家评论仅登录后可见。",
+      "visual_text": "",
+      "lazy": false,
+      "requires": null,
+      "blocked": false,
+      "scroll_y": 100
+    },
+    {
+      "region_id": "comments",
+      "role": "comments",
+      "bbox": [160, 3000, 1120, 900],
+      "text": "玩家评论（合成，登录后可见）：\n「限定徽章预约已开启」\n「这次活动很有趣」",
+      "visual_text": "",
+      "lazy": false,
+      "requires": "login",
+      "blocked": false,
+      "scroll_y": 3000
+    },
+    {
+      "region_id": "footer",
+      "role": "footer",
+      "bbox": [0, 4000, 1440, 100],
+      "text": "© 合成样本，仅用于离线机制评测",
+      "visual_text": "",
+      "lazy": false,
+      "requires": null,
+      "blocked": false,
+      "scroll_y": 4000
+    }
+  ],
+  "objectives": [
+    {
+      "objective_id": "comments_signal",
+      "question": "确认合成活动评论区的玩家反馈内容",
+      "answer_kind": "text",
+      "region_hints": ["comments"],
+      "required": true,
+      "expected_answer": "限定徽章预约已开启",
+      "expected_region_role": "comments"
+    }
+  ],
+  "skill_ref": "taptap-activity-rules"
+}

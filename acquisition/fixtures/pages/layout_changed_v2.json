@@ -1,0 +1,81 @@
+{
+  "schema": "acquisition-fixture-v0.1",
+  "page_id": "layout_changed_v2",
+  "label": "布局版本 v2：规则收进折叠区且区域 id 变化（合成样本）",
+  "source_note": "合成样本：按 browser_worker 输出结构构造，不是真实站点录制",
+  "url": "https://www.taptap.cn/example/layout-v2-005",
+  "title": "活动规则折叠区（合成）",
+  "viewport": [1440, 1000],
+  "scroll_height": 3600,
+  "blocked_reason": null,
+  "dom_text": "社区 首页 活动 我的\n活动介绍（合成，布局 v2）：活动规则收纳在折叠区中。\n玩家评论（合成）：\n折叠区藏得挺深。\n已经报名了。\n© 合成样本，仅用于离线机制评测",
+  "regions": [
+    {
+      "region_id": "nav",
+      "role": "navigation",
+      "bbox": [0, 0, 1440, 80],
+      "text": "社区 首页 活动 我的",
+      "visual_text": "",
+      "lazy": false,
+      "requires": null,
+      "blocked": false,
+      "scroll_y": 0
+    },
+    {
+      "region_id": "intro_v2",
+      "role": "article_body",
+      "bbox": [160, 100, 1120, 760],
+      "text": "活动介绍（合成，布局 v2）：活动规则收纳在折叠区中。",
+      "visual_text": "",
+      "lazy": false,
+      "requires": null,
+      "blocked": false,
+      "scroll_y": 100
+    },
+    {
+      "region_id": "collapsed_rules_v2",
+      "role": "activity_rules",
+      "bbox": [160, 900, 1120, 700],
+      "text": "活动规则（合成，v2 布局）：\n报名截止：2026年11月25日 23:59。\n参与方式：完成每日任务后领取奖励。",
+      "visual_text": "",
+      "lazy": true,
+      "requires": "click:展开活动规则",
+      "blocked": false,
+      "scroll_y": 900
+    },
+    {
+      "region_id": "comments_v2",
+      "role": "comments",
+      "bbox": [160, 1800, 1120, 900],
+      "text": "玩家评论（合成）：\n折叠区藏得挺深。\n已经报名了。",
+      "visual_text": "",
+      "lazy": false,
+      "requires": null,
+      "blocked": false,
+      "scroll_y": 1800
+    },
+    {
+      "region_id": "footer",
+      "role": "footer",
+      "bbox": [0, 3400, 1440, 100],
+      "text": "© 合成样本，仅用于离线机制评测",
+      "visual_text": "",
+      "lazy": false,
+      "requires": null,
+      "blocked": false,
+      "scroll_y": 3400
+    }
+  ],
+  "objectives": [
+    {
+      "objective_id": "deadline",
+      "question": "确认合成活动的报名截止日期",
+      "answer_kind": "date",
+      "region_hints": ["activity_rules"],
+      "required": true,
+      "expected_answer": "2026年11月25日",
+      "expected_region_role": "activity_rules"
+    }
+  ],
+  "skill_ref": "taptap-activity-rules"
+}

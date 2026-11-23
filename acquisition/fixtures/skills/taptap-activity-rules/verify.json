@@ -1,0 +1,36 @@
+{
+  "schema": "acquisition-skill-verify-v0.1",
+  "skill_id": "taptap-activity-rules",
+  "version": "0.1.0",
+  "note": "只检查流程完成条件：区域存在、提取非空、文本模式命中、页面未阻塞、证据版本是当前版本。全部通过也不等于事实已核验，更不会把 Evidence.verified 置真。",
+  "checks": [
+    {
+      "id": "region_present",
+      "kind": "region_present",
+      "roles": ["activity_rules"],
+      "note": "页面仍然存在 activity_rules 语义区域"
+    },
+    {
+      "id": "extraction_non_empty",
+      "kind": "extraction_non_empty",
+      "min_chars": 10,
+      "note": "轨迹中至少一条非空提取证据"
+    },
+    {
+      "id": "text_pattern",
+      "kind": "text_pattern",
+      "patterns": ["报名截止"],
+      "note": "证据文本命中活动规则字段模式"
+    },
+    {
+      "id": "page_not_blocked",
+      "kind": "page_not_blocked",
+      "note": "页面未被验证码/登录墙/访问拒绝整体阻塞"
+    },
+    {
+      "id": "page_version_current",
+      "kind": "page_version_current",
+      "note": "证据绑定的页面版本等于当前版本，旧版本证据不能算流程完成"
+    }
+  ]
+}
