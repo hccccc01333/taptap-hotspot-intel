@@ -1,0 +1,158 @@
+{
+  "schema": "v4-delivery-v0.1",
+  "event": {
+    "event_id": "tga2026_nominations",
+    "title": "TGA2026提名公布，谁才是你心目中的最佳游戏？",
+    "url": "https://www.taptap.cn/moment/872533100523948404",
+    "source": "TapTap 发现页公开观察（2026-11-23 采集）",
+    "published_at": "2026-11-19T17:35:02+08:00"
+  },
+  "intelligence": {
+    "headline": "",
+    "one_line": "",
+    "summary": "TapTap 公开帖列出 TGA 2026 提名：恭喜《影之刃零》《明日方舟：终末地》《异环》《燕云十六声》获得提名；其中《影之刃零》被提名 5 个奖项；投票期间部分游戏在 Steam 和 TapTap 同步开启折扣。",
+    "why_taptap": "判断：TGA 提名与 TapTap 同步折扣是玩家可参与的话题，适合做“你心目中的最佳”讨论；帖子未提供完整奖项名单与折扣范围，不能替玩家下结论。",
+    "watch_next": [
+      "完整提名与获奖名单",
+      "投票截止时间",
+      "TapTap 折扣范围"
+    ],
+    "facts": [
+      {
+        "text": "《影之刃零》《明日方舟：终末地》《异环》《燕云十六声》获得 TGA 2026 提名",
+        "quote": "恭喜《影之刃零》、《明日方舟：终末地》、《异环》、《燕云十六声》获得 TGA 2026 提名。"
+      },
+      {
+        "text": "《影之刃零》被提名 5 个奖项，刷新国产单机游戏记录",
+        "quote": "其中《影之刃零》更是被提名 5 个奖项，刷新了国产单机游戏记录"
+      },
+      {
+        "text": "投票期间部分游戏在 Steam 和 TapTap 同步开启折扣",
+        "quote": "投票期间，部分游戏在 Steam 和 TapTap 也同步开启了折扣活动"
+      }
+    ],
+    "unknowns": [
+      "完整奖项名单与投票截止未提供",
+      "折扣游戏与折扣力度未说明",
+      "帖子为社区整理，非 TGA 官方公告"
+    ]
+  },
+  "material": {
+    "title": "TGA 2026 提名：你会把票投给谁？",
+    "channel": "社区动态",
+    "draft": "TGA 2026 提名公布，《影之刃零》《明日方舟：终末地》《异环》《燕云十六声》等入围。你心目中的最佳是哪一款？",
+    "usage_boundary": "只使用帖子列出的提名与折扣信息；不补写完整名单、获奖结果、投票截止或折扣力度。"
+  },
+  "growth_creative": {
+    "title": "TGA2026提名公布：你心目中的最佳是哪一款？",
+    "hook": "用已公布提名和《影之刃零》5 个奖项的提名信息做内容钩子，引导用户在已提及的入围游戏中表达偏好。",
+    "audience_need": "为关注 TGA 2026 提名的社区用户提供一个表达“最佳游戏”偏好与理由的讨论切口；这是运营假设，需通过互动表现验证。",
+    "proposed_action": "发布一条资讯互动帖：先呈现提名事实与重点数据，再抛出“最佳是哪一款/理由是什么”的追问；不补写完整名单、奖项结果、折扣范围、折扣力度、活动入口或奖励。",
+    "copy_draft": "TGA 2026 提名公布：《影之刃零》《明日方舟：终末地》《异环》《燕云十六声》获得提名。其中，《影之刃零》被提名 5 个奖项，刷新国产单机游戏记录。投票期间，部分游戏在 Steam 和 TapTap 同步开启折扣活动。看到这份提名信息，你心目中的最佳是哪一款？你会选《影之刃零》《明日方舟：终末地》《异环》还是《燕云十六声》？理由是什么？",
+    "preconditions": [
+      "发布前确认四款游戏名称与事实引文一致，不扩展为完整提名名单。",
+      "确认《影之刃零》被提名 5 个奖项、刷新国产单机游戏记录的表述与引文一致，不扩展为获奖结果或排名结论。",
+      "若提及折扣，仅保留“部分游戏在 Steam 和 TapTap 同步开启折扣活动”，不写具体游戏、折扣力度、起止时间或入口。",
+      "确认互动文案不设置奖励承诺，不写未给出的投票机制或官方承诺。"
+    ],
+    "unknowns": [
+      "完整提名名单与具体奖项名称未给出。",
+      "折扣涉及的具体游戏、折扣力度、起止时间、参与入口未给出。",
+      "社区投票机制、奖励与官方承诺未给出。"
+    ],
+    "status": "draft_needs_operational_confirmation",
+    "quality": {
+      "checks": {
+        "required_fields": true,
+        "preconditions": true,
+        "copy_length": true,
+        "unsupported_numbers": true,
+        "patterns_recorded": true,
+        "references_recorded": true,
+        "no_reference_copy": true,
+        "status_declared": true
+      },
+      "passed": true,
+      "unsupported_numbers": [],
+      "reference_overlap": []
+    },
+    "schema": "growth-creative-model-v0.1",
+    "type": "growth_creative",
+    "used_patterns": [
+      "品牌联合叙事",
+      "新旧对比怀旧",
+      "具体体验追问",
+      "自嘲共鸣短句",
+      "资讯+玩家反应",
+      "名单/福利清单",
+      "线索→玩家推测→待确认"
+    ],
+    "reference_samples": [
+      {
+        "ref_id": "moment_873288708546102212",
+        "url": "https://www.taptap.cn/moment/873288708546102212",
+        "title": "星布谷地×新华网｜云果和她的二十四个朋友",
+        "rights_status": "公开观察样本；引用/二创前需核查授权，仅迁移结构，不复用原文与画面。"
+      },
+      {
+        "ref_id": "moment_870609292590318997",
+        "url": "https://www.taptap.cn/moment/870609292590318997",
+        "title": "为什么还要从头到尾再玩一遍？",
+        "rights_status": "公开观察样本；引用/二创前需核查授权，仅迁移结构，不复用原文与画面。"
+      },
+      {
+        "ref_id": "moment_867764974578041752",
+        "url": "https://www.taptap.cn/moment/867764974578041752",
+        "title": "以前的萌新入坑用的是玫兰莎，现在的萌新入坑用的是塔露拉",
+        "rights_status": "公开观察样本；引用/二创前需核查授权，仅迁移结构，不复用原文与画面。"
+      },
+      {
+        "ref_id": "moment_855134160224783728",
+        "url": "https://www.taptap.cn/moment/855134160224783728",
+        "title": "你粥真是个神奇的游戏",
+        "rights_status": "公开观察样本；引用/二创前需核查授权，仅迁移结构，不复用原文与画面。"
+      },
+      {
+        "ref_id": "moment_873335949520538459",
+        "url": "https://www.taptap.cn/moment/873335949520538459",
+        "title": "全服就送五抽？燕云TGA提名",
+        "rights_status": "公开观察样本；引用/二创前需核查授权，仅迁移结构，不复用原文与画面。"
+      }
+    ],
+    "generator": "model",
+    "model": "hy4-flash-free",
+    "note": "模型生成草案，受参考结构约束；未做事实核验，引用/发布前核查授权。"
+  },
+  "evidence": {
+    "source_url": "https://www.taptap.cn/moment/872533100523948404",
+    "article_title": "TGA2026提名公布，谁才是你心目中的最佳游戏？",
+    "fetched_at": "2026-11-23T18:14:54+08:00"
+  },
+  "checks": {
+    "checks": {
+      "intelligence": true,
+      "material": true,
+      "growth_creative": true,
+      "all_types_present": true,
+      "facts_have_quotes": true,
+      "quote_support": true,
+      "unknowns_present": true,
+      "creative_has_boundary": true
+    },
+    "passed": true,
+    "quote_supported": 3,
+    "quote_total": 3
+  },
+  "reference_library": {
+    "schema": "taptap-reference-library-v0.1",
+    "samples": 7,
+    "patterns": 7
+  },
+  "creative_generation": {
+    "generator": "model",
+    "ok": true,
+    "model": "hy4-flash-free"
+  },
+  "status": "draft",
+  "note": "草稿交付包：三类型齐全，但未发布、未做独立事实核验；增长创意的入口与运营资源需确认。"
+}

@@ -48,41 +48,17 @@
     "usage_boundary": "只使用帖子已公开的事实；不补写TGA结果、五抽领取条件或官方后续承诺。"
   },
   "growth_creative": {
-    "title": "《燕云十六声》提名答谢：五抽之后的第一反应与第二追问",
-    "hook": "用“谢谢”到“那要是得奖了呢”的反应转折，承接提名与五抽答谢资讯，把讨论点放在玩家如何看待加码追问上。",
-    "audience_need": "假设关注提名资讯与全服答谢的玩家，需要一个轻量表达窗口：先回应五抽答谢，再讨论对得奖后福利追问的看法；该需求为创意假设，需运营确认。",
-    "proposed_action": "发布资讯互动帖：按“提名与答谢事实—第一反应—二次追问”顺序组织内容，结尾抛出开放问题；不设置奖励机制，不补写奖项结果、福利条件或入口。",
-    "copy_draft": "《燕云十六声》获得了TGA 2026“最佳移动游戏”的提名，官方随后宣布向全服玩家发放「袅袅之音·绑」*5作为答谢。五抽到手，第一反应是“谢谢”，第二反应是“那要是得奖了呢？”你觉得这种“提名发五抽，得奖是不是该翻倍”的追问，更像期待、玩笑，还是想继续聊福利？欢迎聊聊你的第一反应。",
-    "preconditions": [
-      "发布前确认仅使用已给事实：TGA 2026“最佳移动游戏”提名、全服「袅袅之音·绑」*5答谢、玩家第一反应与第二反应。",
-      "确认文案不写奖项结果、得奖后福利、翻倍安排、领取时间、领取条件或具体入口。",
-      "确认互动问题只征集玩家看法，不把“得奖是不是该翻倍”表述为官方承诺或已确认计划。",
-      "确认不补写玩家数量、情绪比例或未给出的玩家原话。"
-    ],
-    "status": "draft_needs_operational_confirmation",
-    "quality": {
-      "checks": {
-        "required_fields": true,
-        "preconditions": true,
-        "copy_length": true,
-        "unsupported_numbers": true,
-        "patterns_recorded": true,
-        "references_recorded": true,
-        "no_reference_copy": true,
-        "status_declared": true
-      },
-      "passed": true,
-      "unsupported_numbers": [],
-      "reference_overlap": []
-    },
-    "schema": "growth-creative-model-v0.1",
+    "schema": "growth-creative-reference-v0.1",
     "type": "growth_creative",
+    "title": "《燕云十六声》获得 TGA 2026“最佳移动游戏”提名，官方随后宣布通过邮件向全服玩家发放「袅袅之音·绑」*5 作为答谢。玩家社区在感谢之外，很快把话题转到“得奖后福利会不会加码”。｜玩家互动角度草案",
+    "hook": "《燕云十六声》获得 TGA 2026“最佳移动游戏”提名，官方随后宣布通过邮件向全服玩家发放「袅袅之音·绑」*5 作为答谢。玩家社区在感谢之外，很快把话题转到“得奖后福利会不会加码”。",
+    "audience_need": "判断：TGA 提名与全服福利是 TapTap 玩家社区高讨论度话题，适合做“得奖后会不会再加码”的互动讨论；但不能据此宣称玩家需求或增长效果已获验证。",
+    "proposed_action": "在 TapTap 对应游戏社区发起“最期待哪个能力进入对局”的讨论；入口与运营资源待确认。",
+    "copy_draft": "【标题】《燕云十六声》获得 TGA 2026“最佳移动游戏”提名，官方随后宣布通过邮件向全服玩家发放「袅袅之音·绑」*5 作为答谢。玩家社区在感谢之外，很快把话题转到“得奖后福利会不会加码”。\n\n【开头·童年记忆/官宣节奏】《燕云十六声》获得 TGA 2026“最佳移动游戏”提名，官方随后宣布通过邮件向全服玩家发放「袅袅之音·绑」*5 作为答谢。玩家社区在感谢之外，很快把话题转到“得奖后福利会不会加码”。\n\n【三项信息速览】\n- 《燕云十六声》获得 TGA 2026“最佳移动游戏”提名\n- 官方宣布通过邮件向全服发放「袅袅之音·绑」*5 作为答谢\n- 玩家第一反应是谢谢，第二反应是得奖后是否加码\n\n【互动问题】如果联动真的落地，你最想先看到哪个角色能力进入对局？\n\n【边界】只使用帖子已公开的事实；不补写TGA结果、五抽领取条件或官方后续承诺。",
     "used_patterns": [
       "品牌联合叙事",
-      "新旧对比怀旧",
-      "具体体验追问",
-      "自嘲共鸣短句",
-      "资讯+玩家反应"
+      "资讯+玩家反应",
+      "新旧对比怀旧"
     ],
     "reference_samples": [
       {
@@ -92,9 +68,9 @@
         "rights_status": "公开观察样本；引用/二创前需核查授权，仅迁移结构，不复用原文与画面。"
       },
       {
-        "ref_id": "moment_870609292590318997",
-        "url": "https://www.taptap.cn/moment/870609292590318997",
-        "title": "为什么还要从头到尾再玩一遍？",
+        "ref_id": "moment_873335949520538459",
+        "url": "https://www.taptap.cn/moment/873335949520538459",
+        "title": "全服就送五抽？燕云TGA提名",
         "rights_status": "公开观察样本；引用/二创前需核查授权，仅迁移结构，不复用原文与画面。"
       },
       {
@@ -102,23 +78,49 @@
         "url": "https://www.taptap.cn/moment/867764974578041752",
         "title": "以前的萌新入坑用的是玫兰莎，现在的萌新入坑用的是塔露拉",
         "rights_status": "公开观察样本；引用/二创前需核查授权，仅迁移结构，不复用原文与画面。"
-      },
-      {
-        "ref_id": "moment_855134160224783728",
-        "url": "https://www.taptap.cn/moment/855134160224783728",
-        "title": "你粥真是个神奇的游戏",
-        "rights_status": "公开观察样本；引用/二创前需核查授权，仅迁移结构，不复用原文与画面。"
-      },
-      {
-        "ref_id": "moment_873335949520538459",
-        "url": "https://www.taptap.cn/moment/873335949520538459",
-        "title": "全服就送五抽？燕云TGA提名",
-        "rights_status": "公开观察样本；引用/二创前需核查授权，仅迁移结构，不复用原文与画面。"
       }
     ],
-    "generator": "model",
-    "model": "hy4-flash-free",
-    "note": "模型生成草案，受参考结构约束；未做事实核验，引用/发布前核查授权。"
+    "preconditions": [
+      "确认 TapTap 游戏页/社区话题与可发布位置",
+      "取得讨论样本或运营确认，避免把判断写成玩家需求",
+      "核查参考样本与素材授权，不复制原文/画面"
+    ],
+    "status": "draft_needs_operational_confirmation",
+    "source_facts": [
+      "《燕云十六声》获得 TGA 2026“最佳移动游戏”提名",
+      "官方宣布通过邮件向全服发放「袅袅之音·绑」*5 作为答谢",
+      "玩家第一反应是谢谢，第二反应是得奖后是否加码",
+      "玩家追问得奖后福利是否翻倍"
+    ],
+    "pattern_sources": [
+      [
+        "moment_873288708546102212"
+      ],
+      [
+        "moment_873335949520538459"
+      ],
+      [
+        "moment_867764974578041752"
+      ]
+    ],
+    "note": "结构参考来自公开 TapTap 观察样本；不是官方规范，未复制原文。",
+    "quality": {
+      "checks": {
+        "required_fields": true,
+        "preconditions": true,
+        "copy_length": true,
+        "unsupported_numbers": true,
+        "patterns_recorded": true,
+        "references_recorded": true,
+        "no_reference_copy": false,
+        "status_declared": true
+      },
+      "passed": false,
+      "unsupported_numbers": [],
+      "reference_overlap": [
+        "moment_872533100523948404"
+      ]
+    }
   },
   "evidence": {
     "source_url": "https://www.taptap.cn/moment/873335949520538459",
@@ -142,13 +144,13 @@
   },
   "reference_library": {
     "schema": "taptap-reference-library-v0.1",
-    "samples": 5,
-    "patterns": 5
+    "samples": 7,
+    "patterns": 7
   },
   "creative_generation": {
     "generator": "model",
-    "ok": true,
-    "model": "hy4-flash-free"
+    "ok": false,
+    "error": "quality_failed: no_reference_copy"
   },
   "status": "draft",
   "note": "草稿交付包：三类型齐全，但未发布、未做独立事实核验；增长创意的入口与运营资源需确认。"

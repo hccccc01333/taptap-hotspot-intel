@@ -1,6 +1,6 @@
 {
   "schema": "v4-delivery-index-v0.1",
-  "generated_at": "2026-11-23T16:03:14+0800",
+  "generated_at": "2026-11-23T18:17:57+0800",
   "deliveries": [
     {
       "event_id": "xingbugudi_xinhua_farm",
@@ -25,6 +25,22 @@
       "checks_passed": true,
       "delivery": "arknights_newbie_contrast/delivery.json",
       "preview": "arknights_newbie_contrast/preview.html"
+    },
+    {
+      "event_id": "tga2026_nominations",
+      "title": "TGA2026提名公布，谁才是你心目中的最佳游戏？",
+      "status": "draft",
+      "checks_passed": true,
+      "delivery": "tga2026_nominations/delivery.json",
+      "preview": "tga2026_nominations/preview.html"
+    },
+    {
+      "event_id": "endfield_rhodes_island_rumor",
+      "title": "【终末地罗德岛篇】卫星干员一览",
+      "status": "draft",
+      "checks_passed": true,
+      "delivery": "endfield_rhodes_island_rumor/delivery.json",
+      "preview": "endfield_rhodes_island_rumor/preview.html"
     }
   ],
   "note": "公开静态交付索引；草稿，未发布。"
