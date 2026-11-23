@@ -11,6 +11,8 @@ import json
 from pathlib import Path
 from typing import Any
 
+from .creative_quality import evaluate_creative
+
 REFERENCE_SCHEMA = 'taptap-reference-library-v0.1'
 
 
@@ -47,11 +49,14 @@ def build_creative_with_references(intel: dict[str, Any], material: dict[str, An
     one_line = str(intel.get('one_line') or intel.get('summary') or '')[:160]
     summary = str(intel.get('summary') or '')[:400]
     fact_texts = [str(fact.get('text') or '') for fact in facts if fact.get('text')]
-    used = [pattern for pattern in (
-        _pattern(library, 'official_3items'),
-        _pattern(library, 'nostalgia_hook'),
-        _pattern(library, 'community_question'),
-    ) if pattern]
+    preferred_ids = ('official_3items', 'official_brand_story', 'nostalgia_hook',
+                     'news_reaction', 'player_contrast', 'community_emotion',
+                     'community_question', 'complaint_question')
+    available = {pattern.get('id'): pattern for pattern in (library.get('patterns') or [])}
+    used = [available[pattern_id] for pattern_id in preferred_ids
+            if pattern_id in available][:3]
+    if not used:
+        used = list(library.get('patterns') or [])[:3]
     pattern_names = [pattern.get('name') for pattern in used]
     refs = []
     for pattern in used:
@@ -71,7 +76,7 @@ def build_creative_with_references(intel: dict[str, Any], material: dict[str, An
         f"\n\n【互动问题】如果联动真的落地，你最想先看到哪个角色能力进入对局？\n\n"
         f"【边界】{boundary or '不补写未确认信息，不复制参考原文与画面，不承诺联动内容之外的东西。'}"
     )
-    return {
+    creative = {
         'schema': 'growth-creative-reference-v0.1',
         'type': 'growth_creative',
         'title': f"{one_line}｜玩家互动角度草案",
@@ -93,3 +98,6 @@ def build_creative_with_references(intel: dict[str, Any], material: dict[str, An
         'pattern_sources': [pattern.get('source_refs') for pattern in used],
         'note': '结构参考来自公开 TapTap 观察样本；不是官方规范，未复制原文。',
     }
+    creative['quality'] = evaluate_creative(creative, facts, library,
+                                               event_url=str(event.get('url') or ''))
+    return creative

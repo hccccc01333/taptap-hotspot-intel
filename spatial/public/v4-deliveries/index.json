@@ -1,0 +1,31 @@
+{
+  "schema": "v4-delivery-index-v0.1",
+  "generated_at": "2026-11-23T16:03:14+0800",
+  "deliveries": [
+    {
+      "event_id": "xingbugudi_xinhua_farm",
+      "title": "星布谷地×新华网｜云果和她的二十四个朋友",
+      "status": "draft",
+      "checks_passed": true,
+      "delivery": "xingbugudi_xinhua_farm/delivery.json",
+      "preview": "xingbugudi_xinhua_farm/preview.html"
+    },
+    {
+      "event_id": "yanyun_tga_nomination",
+      "title": "全服就送五抽？燕云TGA提名",
+      "status": "draft",
+      "checks_passed": true,
+      "delivery": "yanyun_tga_nomination/delivery.json",
+      "preview": "yanyun_tga_nomination/preview.html"
+    },
+    {
+      "event_id": "arknights_newbie_contrast",
+      "title": "以前的萌新入坑用的是玫兰莎，现在的萌新入坑用的是塔露拉",
+      "status": "draft",
+      "checks_passed": true,
+      "delivery": "arknights_newbie_contrast/delivery.json",
+      "preview": "arknights_newbie_contrast/preview.html"
+    }
+  ],
+  "note": "公开静态交付索引；草稿，未发布。"
+}

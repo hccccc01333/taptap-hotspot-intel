@@ -185,12 +185,23 @@ export type V4DeliverySummary = {
 };
 export type V4DeliveryIndex = { schema: string; deliveries: V4DeliverySummary[]; note?: string };
 
+const publicV4Base = `${import.meta.env.BASE_URL.replace(/\/?$/, '/')}v4-deliveries/`;
+async function publicV4<T>(path: string): Promise<T> {
+  const response = await fetch(publicV4Base + path, { cache: 'no-store' });
+  if (!response.ok) throw new Error(`V4 交付静态数据不可用（HTTP ${response.status}）。`);
+  return await response.json() as T;
+}
+
 export const v4Api = {
-  deliveries: (): Promise<V4DeliveryIndex> => isDemoMode
+  deliveries: (): Promise<V4DeliveryIndex> => isPublicResults
+    ? publicV4<V4DeliveryIndex>('index.json')
+    : isDemoMode
     ? Promise.resolve({ schema: 'v4-delivery-index-v0.1', deliveries: [],
         note: '演示模式没有接入 V4 交付 API。' })
     : request<V4DeliveryIndex>('/api/v4/deliveries'),
-  delivery: (id: string): Promise<any> => isDemoMode
+  delivery: (id: string): Promise<any> => isPublicResults
+    ? publicV4<any>(encodeURIComponent(id) + '/delivery.json')
+    : isDemoMode
     ? Promise.reject(new Error('演示模式没有接入 V4 交付 API。'))
     : request<any>('/api/v4/deliveries/' + encodeURIComponent(id)),
 };

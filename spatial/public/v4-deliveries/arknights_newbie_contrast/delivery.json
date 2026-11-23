@@ -1,0 +1,146 @@
+{
+  "schema": "v4-delivery-v0.1",
+  "event": {
+    "event_id": "arknights_newbie_contrast",
+    "title": "以前的萌新入坑用的是玫兰莎，现在的萌新入坑用的是塔露拉",
+    "url": "https://www.taptap.cn/moment/867764974578041752",
+    "source": "TapTap 发现页公开观察（2026-11-23 采集）",
+    "published_at": "2026-11-06T13:48:12+08:00"
+  },
+  "intelligence": {
+    "headline": "",
+    "one_line": "",
+    "summary": "TapTap 公开帖以“以前的萌新入坑用的是玫兰莎，现在的萌新入坑用的是塔露拉”对比新手环境，并用“7年半了，大人，时代变了”表达时间跨度。这是玩家讨论观察，不是游戏版本事实。",
+    "why_taptap": "判断：这是 TapTap 玩家社区可参与的怀旧/对比话题，适合做“你入坑时用谁”的互动讨论；帖子没有数据，不能代表全体玩家。",
+    "watch_next": [
+      "后续是否出现更多同类对比帖",
+      "新手环境是否有官方调整",
+      "评论样本与互动数据"
+    ],
+    "facts": [
+      {
+        "text": "帖子对比过去萌新用玫兰莎、现在萌新用塔露拉",
+        "quote": "以前的萌新入坑用的是玫兰莎，现在的萌新入坑用的是塔露拉"
+      },
+      {
+        "text": "帖子用“7年半了，大人，时代变了”表达时代变化",
+        "quote": "7年半了，大人，时代变了"
+      }
+    ],
+    "unknowns": [
+      "帖子没有提供版本时间、角色强度或数据",
+      "未采集评论样本，不能外推玩家总体观点",
+      "属于玩家观察，不是官方信息"
+    ]
+  },
+  "material": {
+    "title": "你入坑时用的谁？玫兰莎还是塔露拉",
+    "channel": "社区动态",
+    "draft": "“以前的萌新入坑用的是玫兰莎，现在的萌新入坑用的是塔露拉。”7年半，时代变了。你入坑时用的第一个主力是谁？",
+    "usage_boundary": "只作为玩家讨论观察；不写成版本事实、强度结论或全体玩家观点。"
+  },
+  "growth_creative": {
+    "title": "萌新入坑主力前后对照话题",
+    "hook": "以前的萌新入坑用的是玫兰莎，现在的萌新入坑用的是塔露拉。7年半了，大人，时代变了。",
+    "audience_need": "可能承接社区玩家对入坑经历与时代变化话题的表达需求，适合用于怀旧向互动讨论。",
+    "proposed_action": "发布一条新旧对照短帖：先用过去与现在的入坑主力对照开场，再接一句时代感叹，最后以开放问题邀请玩家分享自己的第一个主力；不设置奖励或额外入口。",
+    "copy_draft": "以前的萌新入坑用的是玫兰莎，现在的萌新入坑用的是塔露拉。7年半了，大人，时代变了。你入坑时用的第一个主力是谁？",
+    "preconditions": [
+      "确认“玫兰莎/塔露拉”的前后对照仅作为社区话题表达，不写成版本事实或强度结论。",
+      "确认“7年半了，大人，时代变了”仅作为时代感叹使用，不延伸为未给出的时间线或官方信息。",
+      "确认互动提问不附带奖励、入口或官方承诺。"
+    ],
+    "status": "draft_needs_operational_confirmation",
+    "quality": {
+      "checks": {
+        "required_fields": true,
+        "preconditions": true,
+        "copy_length": true,
+        "unsupported_numbers": true,
+        "patterns_recorded": true,
+        "references_recorded": true,
+        "no_reference_copy": true,
+        "status_declared": true
+      },
+      "passed": true,
+      "unsupported_numbers": [],
+      "reference_overlap": []
+    },
+    "schema": "growth-creative-model-v0.1",
+    "type": "growth_creative",
+    "used_patterns": [
+      "品牌联合叙事",
+      "新旧对比怀旧",
+      "具体体验追问",
+      "自嘲共鸣短句",
+      "资讯+玩家反应"
+    ],
+    "reference_samples": [
+      {
+        "ref_id": "moment_873288708546102212",
+        "url": "https://www.taptap.cn/moment/873288708546102212",
+        "title": "星布谷地×新华网｜云果和她的二十四个朋友",
+        "rights_status": "公开观察样本；引用/二创前需核查授权，仅迁移结构，不复用原文与画面。"
+      },
+      {
+        "ref_id": "moment_870609292590318997",
+        "url": "https://www.taptap.cn/moment/870609292590318997",
+        "title": "为什么还要从头到尾再玩一遍？",
+        "rights_status": "公开观察样本；引用/二创前需核查授权，仅迁移结构，不复用原文与画面。"
+      },
+      {
+        "ref_id": "moment_867764974578041752",
+        "url": "https://www.taptap.cn/moment/867764974578041752",
+        "title": "以前的萌新入坑用的是玫兰莎，现在的萌新入坑用的是塔露拉",
+        "rights_status": "公开观察样本；引用/二创前需核查授权，仅迁移结构，不复用原文与画面。"
+      },
+      {
+        "ref_id": "moment_855134160224783728",
+        "url": "https://www.taptap.cn/moment/855134160224783728",
+        "title": "你粥真是个神奇的游戏",
+        "rights_status": "公开观察样本；引用/二创前需核查授权，仅迁移结构，不复用原文与画面。"
+      },
+      {
+        "ref_id": "moment_873335949520538459",
+        "url": "https://www.taptap.cn/moment/873335949520538459",
+        "title": "全服就送五抽？燕云TGA提名",
+        "rights_status": "公开观察样本；引用/二创前需核查授权，仅迁移结构，不复用原文与画面。"
+      }
+    ],
+    "generator": "model",
+    "model": "hy4-flash-free",
+    "note": "模型生成草案，受参考结构约束；未做事实核验，引用/发布前核查授权。"
+  },
+  "evidence": {
+    "source_url": "https://www.taptap.cn/moment/867764974578041752",
+    "article_title": "以前的萌新入坑用的是玫兰莎，现在的萌新入坑用的是塔露拉",
+    "fetched_at": "2026-11-23T15:49:09+08:00"
+  },
+  "checks": {
+    "checks": {
+      "intelligence": true,
+      "material": true,
+      "growth_creative": true,
+      "all_types_present": true,
+      "facts_have_quotes": true,
+      "quote_support": true,
+      "unknowns_present": true,
+      "creative_has_boundary": true
+    },
+    "passed": true,
+    "quote_supported": 2,
+    "quote_total": 2
+  },
+  "reference_library": {
+    "schema": "taptap-reference-library-v0.1",
+    "samples": 5,
+    "patterns": 5
+  },
+  "creative_generation": {
+    "generator": "model",
+    "ok": true,
+    "model": "hy4-flash-free"
+  },
+  "status": "draft",
+  "note": "草稿交付包：三类型齐全，但未发布、未做独立事实核验；增长创意的入口与运营资源需确认。"
+}

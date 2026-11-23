@@ -1,0 +1,154 @@
+{
+  "schema": "v4-delivery-v0.1",
+  "event": {
+    "event_id": "xingbugudi_xinhua_farm",
+    "title": "星布谷地×新华网｜云果和她的二十四个朋友",
+    "url": "https://www.taptap.cn/moment/873288708546102212",
+    "source": "TapTap 发现页公开观察（2026-11-23 采集）",
+    "published_at": "2026-11-22T10:00:00+08:00"
+  },
+  "intelligence": {
+    "headline": "",
+    "one_line": "",
+    "summary": "TapTap 公开帖介绍：新华网与星布谷地共同推出、中国天气指导的助农主题动画短片《云果和她的二十四个朋友》正式上线；内容围绕二十四节气与农耕展开，口号为“应时而作，岁岁丰收”。",
+    "why_taptap": "判断：节气与助农主题适合做社区正向内容与品牌好感讨论；帖子未提供播放数据或游戏内活动，不能据此宣称传播效果。",
+    "watch_next": [
+      "官方是否发布制作特辑",
+      "短片播放数据与社区反馈",
+      "是否有游戏内联动内容"
+    ],
+    "facts": [
+      {
+        "text": "新华网与星布谷地共同推出中国天气指导的助农主题动画短片《云果和她的二十四个朋友》正式上线",
+        "quote": "由新华网与#星布谷地 共同推出，中国天气指导的助农主题动画短片《云果和她的二十四个朋友》正式上线。"
+      },
+      {
+        "text": "短片主题围绕二十四节气与农耕",
+        "quote": "这万物之声的韵律，我们称之为“节气”。"
+      },
+      {
+        "text": "表达“禾下乘凉”的助农愿景",
+        "quote": "禾下乘凉的愿景，此刻近在眼前。"
+      },
+      {
+        "text": "主题口号为应时而作、岁岁丰收",
+        "quote": "应时而作，岁岁丰收；"
+      }
+    ],
+    "unknowns": [
+      "短片时长、平台与播放数据未说明",
+      "是否有游戏内活动或奖励未说明",
+      "帖子为公开观察，非官方公告"
+    ]
+  },
+  "material": {
+    "title": "星布谷地×新华网：把二十四节气做成了动画短片",
+    "channel": "社区动态",
+    "draft": "星布谷地和新华网一起做了部二十四节气助农短片《云果和她的二十四个朋友》。应时而作，岁岁丰收——你最喜欢哪个节气？",
+    "usage_boundary": "只使用帖子已公开信息；不补写短片时长、播放数据、游戏内活动或官方后续。"
+  },
+  "growth_creative": {
+    "title": "星布谷地×新华网｜云果和她的二十四个朋友",
+    "hook": "以联合推出、中国天气指导、正式上线作为信息锚点，以二十四节气与农耕、“禾下乘凉”愿景和“应时而作，岁岁丰收”作为内容钩子。",
+    "audience_need": "拟承接社区用户对节气与农耕主题内容的表达需求：以“你最喜欢哪个节气”作为互动切口，引导用户说明理由。",
+    "proposed_action": "建议发布一条社区资讯互动帖：先陈述短片上线与主题信息，再引用“应时而作，岁岁丰收”，最后用节气偏好问题引导评论；不设置奖励、入口或官方承诺。",
+    "copy_draft": "由新华网与星布谷地共同推出、中国天气指导的助农主题动画短片《云果和她的二十四个朋友》正式上线。短片围绕二十四节气与农耕展开。这万物之声的韵律，我们称之为“节气”；禾下乘凉的愿景，此刻近在眼前。应时而作，岁岁丰收。你最喜欢哪个节气？为什么？",
+    "preconditions": [
+      "发布前确认短片名称、联合主体、指导方与“正式上线”表述与最终发布物料一致。",
+      "确认互动文案不附加奖励、入口、时间节点或官方承诺。",
+      "如使用配图或视频素材，需先确认可发布范围；评论引导不将节气偏好写成官方结论或效果数据。"
+    ],
+    "status": "draft_needs_operational_confirmation",
+    "quality": {
+      "checks": {
+        "required_fields": true,
+        "preconditions": true,
+        "copy_length": true,
+        "unsupported_numbers": true,
+        "patterns_recorded": true,
+        "references_recorded": true,
+        "no_reference_copy": true,
+        "status_declared": true
+      },
+      "passed": true,
+      "unsupported_numbers": [],
+      "reference_overlap": []
+    },
+    "schema": "growth-creative-model-v0.1",
+    "type": "growth_creative",
+    "used_patterns": [
+      "品牌联合叙事",
+      "新旧对比怀旧",
+      "具体体验追问",
+      "自嘲共鸣短句",
+      "资讯+玩家反应"
+    ],
+    "reference_samples": [
+      {
+        "ref_id": "moment_873288708546102212",
+        "url": "https://www.taptap.cn/moment/873288708546102212",
+        "title": "星布谷地×新华网｜云果和她的二十四个朋友",
+        "rights_status": "公开观察样本；引用/二创前需核查授权，仅迁移结构，不复用原文与画面。"
+      },
+      {
+        "ref_id": "moment_870609292590318997",
+        "url": "https://www.taptap.cn/moment/870609292590318997",
+        "title": "为什么还要从头到尾再玩一遍？",
+        "rights_status": "公开观察样本；引用/二创前需核查授权，仅迁移结构，不复用原文与画面。"
+      },
+      {
+        "ref_id": "moment_867764974578041752",
+        "url": "https://www.taptap.cn/moment/867764974578041752",
+        "title": "以前的萌新入坑用的是玫兰莎，现在的萌新入坑用的是塔露拉",
+        "rights_status": "公开观察样本；引用/二创前需核查授权，仅迁移结构，不复用原文与画面。"
+      },
+      {
+        "ref_id": "moment_855134160224783728",
+        "url": "https://www.taptap.cn/moment/855134160224783728",
+        "title": "你粥真是个神奇的游戏",
+        "rights_status": "公开观察样本；引用/二创前需核查授权，仅迁移结构，不复用原文与画面。"
+      },
+      {
+        "ref_id": "moment_873335949520538459",
+        "url": "https://www.taptap.cn/moment/873335949520538459",
+        "title": "全服就送五抽？燕云TGA提名",
+        "rights_status": "公开观察样本；引用/二创前需核查授权，仅迁移结构，不复用原文与画面。"
+      }
+    ],
+    "generator": "model",
+    "model": "hy4-flash-free",
+    "note": "模型生成草案，受参考结构约束；未做事实核验，引用/发布前核查授权。"
+  },
+  "evidence": {
+    "source_url": "https://www.taptap.cn/moment/873288708546102212",
+    "article_title": "星布谷地×新华网｜云果和她的二十四个朋友",
+    "fetched_at": "2026-11-23T15:49:09+08:00"
+  },
+  "checks": {
+    "checks": {
+      "intelligence": true,
+      "material": true,
+      "growth_creative": true,
+      "all_types_present": true,
+      "facts_have_quotes": true,
+      "quote_support": true,
+      "unknowns_present": true,
+      "creative_has_boundary": true
+    },
+    "passed": true,
+    "quote_supported": 4,
+    "quote_total": 4
+  },
+  "reference_library": {
+    "schema": "taptap-reference-library-v0.1",
+    "samples": 5,
+    "patterns": 5
+  },
+  "creative_generation": {
+    "generator": "model",
+    "ok": true,
+    "model": "hy4-flash-free"
+  },
+  "status": "draft",
+  "note": "草稿交付包：三类型齐全，但未发布、未做独立事实核验；增长创意的入口与运营资源需确认。"
+}

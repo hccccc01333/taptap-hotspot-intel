@@ -11,6 +11,8 @@ import json
 import re
 from typing import Any, Protocol
 
+from .creative_quality import evaluate_creative
+
 REQUIRED_FIELDS = ('title', 'hook', 'audience_need', 'proposed_action',
                    'copy_draft', 'preconditions', 'status')
 NUMBER_RE = re.compile(r'\d+(?:\.\d+)?%?|20\d{2}\s*年|\d{1,2}\s*月\s*\d{1,2}\s*日')
@@ -39,7 +41,8 @@ def _parse_json(text: str) -> dict[str, Any]:
 def build_prompt(event: dict[str, Any], intel: dict[str, Any], material: dict[str, Any],
                  facts: list[dict[str, Any]], library: dict[str, Any]) -> str:
     patterns = [
-        {'name': pattern.get('name'), 'structure': pattern.get('structure')}
+        {'name': pattern.get('name'), 'structure': pattern.get('structure'),
+         'use_when': pattern.get('use_when'), 'avoid': pattern.get('avoid')}
         for pattern in (library.get('patterns') or [])
     ]
     fact_lines = [f"- {fact.get('text')}｜引文：{fact.get('quote')}" for fact in facts]
@@ -101,6 +104,16 @@ def generate_with_model(event: dict[str, Any], intel: dict[str, Any],
         return {'ok': False, 'error': 'unsupported numeric atoms: ' + ','.join(bad_numbers),
                 'raw': str(result.get('content') or '')[:4000],
                 'model': result.get('model') or model}
+    quality = evaluate_creative({
+        **value, 'used_patterns': [pattern.get('name') for pattern in (library.get('patterns') or [])],
+        'reference_samples': [{'ref_id': sample.get('ref_id')} for sample in (library.get('samples') or [])[:5]],
+    }, facts, library, event_url=str(event.get('url') or ''))
+    if not quality['passed']:
+        return {'ok': False, 'error': 'quality_failed: ' + ','.join(
+            key for key, ok in quality['checks'].items() if not ok),
+                'raw': str(result.get('content') or '')[:4000],
+                'model': result.get('model') or model}
+    value['quality'] = quality
     value.update({
         'schema': 'growth-creative-model-v0.1',
         'type': 'growth_creative',
