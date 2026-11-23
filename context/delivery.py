@@ -100,17 +100,32 @@ def build_growth_creative(intel: dict[str, Any], material: dict[str, Any],
 def build_delivery(event: dict[str, Any], evidence: dict[str, Any],
                    final: dict[str, Any],
                    patterns: tuple[ReferencePattern, ...] = DEFAULT_PATTERNS,
-                   reference_library: dict[str, Any] | None = None) -> dict[str, Any]:
+                   reference_library: dict[str, Any] | None = None,
+                   creative_generator: Any = None) -> dict[str, Any]:
     parsed = final.get('parsed') if isinstance(final.get('parsed'), dict) else {}
     intel = parsed.get('intelligence') if isinstance(parsed.get('intelligence'), dict) else {}
     material = parsed.get('material') if isinstance(parsed.get('material'), dict) else {}
     facts = parsed.get('facts') if isinstance(parsed.get('facts'), list) else []
+    creative_generation: dict[str, Any] | None = None
     if reference_library:
         from .reference_library import build_creative_with_references
         creative = build_creative_with_references(intel, material, facts, event,
                                                   reference_library)
     else:
         creative = build_growth_creative(intel, material, facts, patterns)
+    if creative_generator is not None:
+        try:
+            generated = creative_generator(intel, material, facts, event,
+                                           reference_library)
+        except Exception as exc:
+            generated = {'ok': False, 'error': f'{type(exc).__name__}: {exc}'}
+        if generated.get('ok') and generated.get('creative'):
+            creative = generated['creative']
+            creative_generation = {'generator': 'model', 'ok': True,
+                                   'model': generated['creative'].get('model')}
+        else:
+            creative_generation = {'generator': 'model', 'ok': False,
+                                   'error': str(generated.get('error') or 'unknown')}
     quote_checks = final.get('quote_checks') if isinstance(final.get('quote_checks'), dict) else {}
     package = {
         'schema': DELIVERY_SCHEMA,
@@ -147,6 +162,7 @@ def build_delivery(event: dict[str, Any], evidence: dict[str, Any],
                                'samples': len(reference_library.get('samples') or []),
                                'patterns': len(reference_library.get('patterns') or [])}
                               if reference_library else None),
+        'creative_generation': creative_generation,
         'status': 'draft',
         'note': '草稿交付包：三类型齐全，但未发布、未做独立事实核验；'
                 '增长创意的入口与运营资源需确认。',

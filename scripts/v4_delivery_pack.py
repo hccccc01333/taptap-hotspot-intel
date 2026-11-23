@@ -30,7 +30,8 @@ def _read_final(folder: Path) -> dict:
 
 
 def build_pack(pack_dir: str | Path, out_dir: str | Path,
-               reference_library: dict | None = None) -> dict:
+               reference_library: dict | None = None,
+               creative_generator=None) -> dict:
     pack_dir = Path(pack_dir)
     out_dir = Path(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -50,7 +51,8 @@ def build_pack(pack_dir: str | Path, out_dir: str | Path,
         final = _read_final(folder)
         event = evidence.get('event') or {'event_id': event_id, 'title': item.get('title')}
         package = build_delivery(event, evidence, final,
-                                   reference_library=reference_library)
+                                   reference_library=reference_library,
+                                   creative_generator=creative_generator)
         target = out_dir / event_id
         target.mkdir(parents=True, exist_ok=True)
         (target / 'delivery.json').write_text(
@@ -104,9 +106,23 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument('--pack', required=True, help='已有事件包目录')
     parser.add_argument('--out', required=True, help='交付包输出目录')
     parser.add_argument('--references', default=None, help='可选：TapTap 参考库 JSON')
+    parser.add_argument('--creative-model', default=None,
+                        help='可选：用模型生成增长创意（如 hy4-flash-free）')
     args = parser.parse_args(argv)
     library = load_library(args.references) if args.references else None
-    result = build_pack(args.pack, args.out, reference_library=library)
+    generator = None
+    if args.creative_model:
+        from context.creative_model import generate_with_model
+        from scripts.business_event_pack import OpenCodeGoClient
+        client = OpenCodeGoClient()
+        def generator(intel, material, facts, event, refs):
+            if not refs:
+                return {'ok': False, 'error': 'model creative requires --references'}
+            return generate_with_model(event, intel, material, facts, refs, client,
+                                       model=args.creative_model,
+                                       session='v4-creative-mvp')
+    result = build_pack(args.pack, args.out, reference_library=library,
+                        creative_generator=generator)
     ok = sum(1 for item in result['events'] if item.get('preview'))
     print(json.dumps({'events': len(result['events']), 'previews': ok,
                       'out': result['out']}, ensure_ascii=False, indent=2))
