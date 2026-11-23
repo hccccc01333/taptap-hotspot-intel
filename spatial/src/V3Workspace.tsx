@@ -4,11 +4,12 @@ import {isPublicResults} from './lib/publicResults';
 import {HotspotWorkbench,GameCoverage,RiskNotice} from './V3Hotspots';
 import {Library,IntelligenceLibrary,materialGroups,growthGroups} from './V3Library';
 import {DeliveryActions,SourceReferences} from './V3Delivery';
+import V4Deliveries from './V4Deliveries';
 import ProviderDialog from './V3ProviderSettings';
 import './v2-app.css';
 import './v3-app.css';
 
-const views=[['discover','热点发现'],['tracking','事件跟踪'],['intelligence','情报档案'],['materials','素材库'],['growth','增长创意']] as const;
+const views=[['discover','热点发现'],['tracking','事件跟踪'],['intelligence','情报档案'],['materials','素材库'],['growth','增长创意'],['deliveries','V4 交付']] as const;
 type View=typeof views[number][0];
 const time=(v?:string)=>v?new Intl.DateTimeFormat('zh-CN',{timeZone:'Asia/Shanghai',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'}).format(new Date(v)):'未确认';
 const kind:Record<string,string>={...materialGroups};
@@ -40,6 +41,7 @@ export default function V3Workspace(){
   {view==='tracking'&&<><h2>事件跟踪</h2><p className="v2-muted">已有解读的事件持续补查，新增证据持续写入；后续进展保留独立事件，再通过有来源的关联连接。</p><HotspotWorkbench hotspots={tracked} candidates={[]} topic={topic} openTopic={id=>void openTopic(id,false)} Source={Source}/></>}
   {view==='intelligence'&&<section><h2>情报档案</h2><p className="v2-muted">面向 TapTap 内容与运营：游戏变化、玩家需求、社区创作及值得留意的风险。选择分类后打开详情。</p><IntelligenceLibrary items={data?.game_signals||[]} openTopic={id=>void openTopic(id)}/></section>}
   {view==='materials'&&<section><h2>素材库</h2><p className="v2-muted">按用途整理可编辑的文案、脚本、表达与游戏改编。每项保留适用场景、使用边界和来源。</p><Library items={materials} groups={materialGroups} category={m=>m.kind} id={m=>m.material_id} title={m=>m.title} summary={m=>m.application?.delivery?.body||m.content} empty="暂时没有符合条件的素材。主 Agent 会独立判断可用表达，并持续制作游戏内容。">{m=><Material item={m}/>}</Library></section>}
+  {view==='deliveries'&&<V4Deliveries/>}
   {view==='growth'&&<section><h2>增长创意</h2><p className="v2-muted">按目标归类的方案，包含人群、创意机制、传播路径、TapTap 承接动作和制作内容。效果尚未验证。</p><Library items={creatives} groups={growthGroups} category={i=>i.payload.category||'unclassified'} id={i=>i.creative_id} title={i=>i.payload.title} summary={i=>i.payload.hook} empty="暂时没有符合条件的增长创意。后台会继续寻找机会；负面、争议和证据不足的事件不会强行制作。">{i=><Creative item={i} openTopic={id=>void openTopic(id)}/>}</Library></section>}
   <footer className="v2-footer">V3 Alpha 18 · {isPublicResults?'网站每分钟检查成果更新；完整原文与研究截图在本地核查。':'后台自动处理，页面每15秒更新。'}公开来源有覆盖限制；事实与假设、来源表达与原创内容分别保留。V1 / V2 可独立查看。</footer>
  {settings&&!isPublicResults&&<ProviderDialog refresh={refresh} close={()=>setSettings(false)} returnFocus={settingsOpener.current}/>}

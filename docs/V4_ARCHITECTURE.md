@@ -367,7 +367,7 @@ embedder 单元测试，没有真实跨语言全文对。它不写 V3 生产表�
   未做独立事实核验。
 - 已完成第一个真实 TapTap 公开事件 MVP（鹅鸭杀×葫芦兄弟联动）：4 条事实、
   4/4 引文、3 类型交付、3 个参考模式/3 个来源，质量检查全过；共享前端 API
-  可读 `data/v4/deliveries/index.json`。
+  可读 `data/v4/deliveries/index.json`，共享前端新增「V4 交付」页签。
 
 ## 6. Agent 组织：动态 Agent + 能力模块
 

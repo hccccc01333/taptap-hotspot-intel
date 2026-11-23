@@ -178,6 +178,23 @@ export const api = {
 };
 
 /** V2 always reads the real backend; V1 synthetic mode remains a separate entry. */
+
+export type V4DeliverySummary = {
+  event_id: string; title: string; status: string; checks_passed: boolean;
+  delivery: string; preview?: string;
+};
+export type V4DeliveryIndex = { schema: string; deliveries: V4DeliverySummary[]; note?: string };
+
+export const v4Api = {
+  deliveries: (): Promise<V4DeliveryIndex> => isDemoMode
+    ? Promise.resolve({ schema: 'v4-delivery-index-v0.1', deliveries: [],
+        note: '演示模式没有接入 V4 交付 API。' })
+    : request<V4DeliveryIndex>('/api/v4/deliveries'),
+  delivery: (id: string): Promise<any> => isDemoMode
+    ? Promise.reject(new Error('演示模式没有接入 V4 交付 API。'))
+    : request<any>('/api/v4/deliveries/' + encodeURIComponent(id)),
+};
+
 export const v2Api = {
   login: async (actor: string, password: string) => {
     const result = await request<{token:string;actor:string;role:string}>("/api/login", {
