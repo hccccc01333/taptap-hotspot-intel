@@ -170,6 +170,8 @@ def build_delivery(event: dict[str, Any], evidence: dict[str, Any],
         'note': '草稿交付包：三类型齐全，但未发布、未做独立事实核验；'
                 '增长创意的入口与运营资源需确认。',
     }
+    from .delivery_review import review_package
+    review_package(package)
     return package
 
 
@@ -231,6 +233,9 @@ def render_html(package: dict[str, Any]) -> str:
     unknowns_html = ''.join(f'<li>{html.escape(str(item))}</li>' for item in unknowns)
     preconditions_html = ''.join(
         f'<li>{html.escape(str(item))}</li>' for item in (creative.get('preconditions') or []))
+    review = package.get('review') or {}
+    risks = review.get('risks') or []
+    review_html = ''.join(f'<li>{html.escape(str(item))}</li>' for item in risks)
     return f'''<!doctype html>
 <html lang="zh-CN"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -248,7 +253,8 @@ section.active{{display:block}}h2{{margin-top:0}}ul{{padding-left:20px}}.ok{{col
 pre{{white-space:pre-wrap;background:#101318;padding:14px;border-radius:10px;border:1px solid #262a33}}
 </style></head><body>
 <header><h1>{html.escape(str(event.get('title') or '事件'))}</h1>
-<div class="muted">来源：{html.escape(str(event.get('url') or ''))} · 状态：{html.escape(str(package.get('status') or ''))}</div></header>
+<div class="muted">来源：{html.escape(str(event.get('url') or ''))} · 状态：{html.escape(str(package.get('status') or ''))}</div>
+<div class="muted">审核风险：</div><ul>{review_html}</ul></header>
 <div class="tabs">
 <button class="active" data-tab="intel">情报</button>
 <button data-tab="material">素材</button>

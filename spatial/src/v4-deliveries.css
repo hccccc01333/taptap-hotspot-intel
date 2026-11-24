@@ -27,5 +27,10 @@
 .v4-checks{padding-left:18px}
 .v4-checks .ok{color:#45c486}
 .v4-checks .bad{color:#e07777}
+.v4-review{border-left:3px solid #d6a756;padding-left:8px}
+.v4-review-approved{border-color:#45c486}
+.v4-review-draft{border-color:#8d94a3}
+.v4-review-box{display:flex;flex-direction:column;gap:4px;border:1px solid #3a3f4b;border-radius:10px;background:#10141d;padding:12px;margin-top:10px}
+.v4-review-box span{color:#b8beca;font-size:13px}
 .v4-muted{color:#9aa0ad;font-size:13px}
 @media (max-width:860px){.v4-grid{grid-template-columns:1fr}}

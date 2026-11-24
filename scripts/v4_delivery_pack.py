@@ -36,7 +36,11 @@ def build_pack(pack_dir: str | Path, out_dir: str | Path,
     out_dir = Path(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
     summary = json.loads((pack_dir / 'summary.json').read_text(encoding='utf-8'))
-    rows = []
+    prior_index = out_dir / 'index.json'
+    existing = (json.loads(prior_index.read_text(encoding='utf-8')).get('deliveries') or []
+                if prior_index.is_file() else [])
+    rows = list(existing)
+    known = {row.get('event_id') for row in rows}
     for item in summary.get('events') or []:
         event_id = item.get('event_id')
         if not event_id:
@@ -53,15 +57,24 @@ def build_pack(pack_dir: str | Path, out_dir: str | Path,
         package = build_delivery(event, evidence, final,
                                    reference_library=reference_library,
                                    creative_generator=creative_generator)
+        previous_path = out_dir / event_id / 'delivery.json'
+        if previous_path.is_file():
+            from context.delivery_review import review_package
+            previous = json.loads(previous_path.read_text(encoding='utf-8'))
+            review_package(package, previous)
         target = out_dir / event_id
         target.mkdir(parents=True, exist_ok=True)
         (target / 'delivery.json').write_text(
             json.dumps(package, ensure_ascii=False, indent=2), encoding='utf-8')
         (target / 'preview.html').write_text(render_html(package), encoding='utf-8')
-        rows.append({'event_id': event_id, 'title': event.get('title'),
-                     'status': package['status'],
-                     'checks_passed': package['checks']['passed'],
-                     'preview': f'{event_id}/preview.html'})
+        row = {'event_id': event_id, 'title': event.get('title'),
+               'status': package['status'], 'checks_passed': package['checks']['passed'],
+               'preview': f'{event_id}/preview.html'}
+        if event_id in known:
+            rows = [old if old.get('event_id') != event_id else row for old in rows]
+        else:
+            rows.append(row)
+            known.add(event_id)
     index = ['<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">',
              '<meta name="viewport" content="width=device-width,initial-scale=1">',
              '<title>V4 交付包</title><style>body{margin:0;background:#0f1115;color:#e8eaed;',
@@ -81,17 +94,26 @@ def build_pack(pack_dir: str | Path, out_dir: str | Path,
                          f'{html.escape(str(row.get("error") or row.get("status")))}</div>')
     index.append('</body></html>')
     (out_dir / 'index.html').write_text('\n'.join(index), encoding='utf-8')
+    manifest_rows = []
+    for row in rows:
+        if not row.get('preview'):
+            continue
+        package_path = out_dir / row['event_id'] / 'delivery.json'
+        package = json.loads(package_path.read_text(encoding='utf-8')) if package_path.is_file() else {}
+        review = package.get('review') or {}
+        manifest_rows.append({
+            'event_id': row['event_id'], 'title': row.get('title'),
+            'status': package.get('status') or row.get('status'),
+            'checks_passed': row.get('checks_passed'),
+            'delivery': f"{row['event_id']}/delivery.json", 'preview': row.get('preview'),
+            'review_status': review.get('status'), 'review_risks': review.get('risks') or [],
+            'published_at': (package.get('event') or {}).get('published_at'),
+        })
     index_manifest = {
         'schema': 'v4-delivery-index-v0.1',
         'generated_at': __import__('time').strftime('%Y-%m-%dT%H:%M:%S%z'),
-        'deliveries': [
-            {'event_id': row['event_id'], 'title': row.get('title'),
-             'status': row.get('status'), 'checks_passed': row.get('checks_passed'),
-             'delivery': f"{row['event_id']}/delivery.json",
-             'preview': row.get('preview')}
-            for row in rows if row.get('preview')
-        ],
-        'note': '共享前端契约：/api/v4/deliveries 读取本 index；草稿未发布。',
+        'deliveries': manifest_rows,
+        'note': '共享前端契约：/api/v4/deliveries 读取本 index；自动检查不等于人工审核。',
     }
     (out_dir / 'index.json').write_text(
         json.dumps(index_manifest, ensure_ascii=False, indent=2), encoding='utf-8')

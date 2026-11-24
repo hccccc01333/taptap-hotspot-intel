@@ -8,6 +8,15 @@ type Tab = 'intelligence' | 'material' | 'creative' | 'checks';
 const labels: Record<Tab, string> = {
   intelligence: '情报', material: '素材', creative: '增长创意', checks: '质量检查',
 };
+const reviewLabels: Record<string, string> = {
+  draft: '草稿', needs_review: '待人工审核', approved: '已人工通过',
+};
+const riskLabels: Record<string, string> = {
+  independent_fact_check_pending: '独立事实核验待完成',
+  human_approval_pending: '人工审核待完成',
+};
+function reviewLabel(value?: string) { return reviewLabels[value || ''] || value || '草稿'; }
+function riskLabel(value: string) { return riskLabels[value] || value; }
 
 function FactList({ facts }: { facts: any[] }) {
   if (!facts?.length) return <p className="v4-muted">没有事实记录。</p>;
@@ -66,7 +75,7 @@ export default function V4Deliveries() {
       <div>
         <p className="v2-eyebrow">V4 DELIVERY / SHARED FRONTEND</p>
         <h2>V4 交付包</h2>
-        <p className="v2-muted">三类型成果：情报、素材、增长创意。前端共享读取，不归 V3 独占；当前为草稿，未发布。</p>
+        <p className="v2-muted">三类型成果：情报、素材、增长创意。自动检查不等于人工审核；已通过的审核记录可追溯。</p>
       </div>
       <span className="v4-badge">{index?.deliveries?.length ?? 0} 个交付</span>
     </div>
@@ -80,7 +89,10 @@ export default function V4Deliveries() {
           onClick={() => void open(item)}>
           <small>{item.event_id}</small>
           <b>{item.title || '未命名事件'}</b>
-          <span>{item.status} · {item.checks_passed ? '质量检查通过' : '待补检查'}</span>
+          <span className={'v4-review v4-review-' + (item.review_status || item.status)}>
+            {reviewLabel(item.review_status || item.status)} · {item.checks_passed ? '自动检查通过' : '自动检查待补'}
+          </span>
+          {(item.review_risks?.length || 0) > 0 && <small>风险：{item.review_risks!.map(riskLabel).join('、')}</small>}
         </button>)}
       </div>
       <article className="v4-detail">
@@ -90,7 +102,13 @@ export default function V4Deliveries() {
           <header className="v4-detail-head">
             <small>{pkg.event?.url}</small>
             <h3>{pkg.event?.title}</h3>
-            <p className="v4-muted">状态：{pkg.status} · 来源：{pkg.event?.source || '公开来源'}</p>
+            <p className="v4-muted">状态：{reviewLabel(pkg.review?.status || pkg.status)} · 来源：{pkg.event?.source || '公开来源'}</p>
+            <div className="v4-review-box" role="status">
+              <b>审核：{reviewLabel(pkg.review?.status || pkg.status)}</b>
+              <span>{pkg.review?.reviewer ? `审核人：${pkg.review.reviewer}` : '尚未人工审核'}</span>
+              {pkg.review?.note && <span>{pkg.review.note}</span>}
+              {(pkg.review?.risks?.length || 0) > 0 && <span>待处理：{pkg.review.risks.map(riskLabel).join('、')}</span>}
+            </div>
           </header>
           <nav className="v4-tabs" aria-label="交付类型">
             {(Object.keys(labels) as Tab[]).map((key) =>

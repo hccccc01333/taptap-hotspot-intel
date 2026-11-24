@@ -181,7 +181,8 @@ export const api = {
 
 export type V4DeliverySummary = {
   event_id: string; title: string; status: string; checks_passed: boolean;
-  delivery: string; preview?: string;
+  delivery: string; preview?: string; review_status?: string; review_risks?: string[];
+  published_at?: string;
 };
 export type V4DeliveryIndex = { schema: string; deliveries: V4DeliverySummary[]; note?: string };
 
