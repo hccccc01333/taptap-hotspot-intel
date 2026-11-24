@@ -1,6 +1,6 @@
 {
   "schema": "v4-delivery-index-v0.1",
-  "generated_at": "2026-11-24T23:44:28+0800",
+  "generated_at": "2026-11-25T01:04:19+0800",
   "deliveries": [
     {
       "event_id": "xingbugudi_xinhua_farm",
@@ -71,6 +71,34 @@
         "human_approval_pending"
       ],
       "published_at": "2026-11-21T21:14:08+08:00"
+    },
+    {
+      "event_id": "yanyun_recent_revenue",
+      "title": "燕云近期流水，新外观没氪爆",
+      "status": "needs_review",
+      "checks_passed": true,
+      "delivery": "yanyun_recent_revenue/delivery.json",
+      "preview": "yanyun_recent_revenue/preview.html",
+      "review_status": "needs_review",
+      "review_risks": [
+        "independent_fact_check_pending",
+        "human_approval_pending"
+      ],
+      "published_at": "2026-11-22T22:55:32+08:00"
+    },
+    {
+      "event_id": "feiyue_ban_selfreport",
+      "title": "不要看，我怕你会像我这样子封号",
+      "status": "needs_review",
+      "checks_passed": true,
+      "delivery": "feiyue_ban_selfreport/delivery.json",
+      "preview": "feiyue_ban_selfreport/preview.html",
+      "review_status": "needs_review",
+      "review_risks": [
+        "independent_fact_check_pending",
+        "human_approval_pending"
+      ],
+      "published_at": "2026-11-18T18:48:12+08:00"
     }
   ],
   "note": "公开静态交付索引；草稿，未发布。"

@@ -1,0 +1,147 @@
+{
+  "schema": "v4-delivery-v0.1",
+  "event": {
+    "event_id": "yanyun_recent_revenue",
+    "title": "燕云近期流水，新外观没氪爆",
+    "url": "https://www.taptap.cn/moment/873700920897045722",
+    "source": "TapTap 发现页公开观察（2026-11-23 采集，本地 CSV 回放）",
+    "published_at": "2026-11-22T22:55:32+08:00"
+  },
+  "intelligence": {
+    "headline": "《燕云十六声》近期榜单表现：玩家帖子转述的第三方数据",
+    "one_line": "TapTap 玩家帖子转述七麦数据，称《燕云十六声》总榜畅销榜第79、游戏畅销榜第43、角色扮演畅销榜第9。",
+    "summary": "TapTap 玩家帖子转述第三方平台七麦数据，称《燕云十六声》近期随版本活动与外观上新维持榜单表现：总榜畅销榜第79、游戏畅销榜第43、游戏角色扮演畅销榜第9。帖子提到鹅榜题名、奇鼠可居、金玉满堂等活动；采集正文在“外观方面上”处截断，排名口径未核实。",
+    "why_taptap": "判断：榜单表现与外观上新是 TapTap 社区常见讨论点，适合做数据口径提示与玩家体验讨论；但排名是玩家转述的第三方数据，未独立核实，不能当作官方数据发布。",
+    "watch_next": [
+      "七麦数据原文与统计口径",
+      "外观上新完整内容与玩家反馈",
+      "榜单排名后续变化"
+    ],
+    "facts": [
+      {
+        "text": "帖子称《燕云十六声》近期随版本活动与外观上新维持榜单表现",
+        "quote": "近期随版本活动与外观上新维持榜单表现"
+      },
+      {
+        "text": "帖子转述七麦数据：总榜畅销榜排名第79",
+        "quote": "总榜畅销榜排名第79"
+      },
+      {
+        "text": "帖子转述七麦数据：游戏畅销榜排名第43",
+        "quote": "游戏畅销榜排名第43"
+      },
+      {
+        "text": "帖子转述七麦数据：游戏角色扮演畅销榜排名第9",
+        "quote": "游戏角色扮演畅销榜排名第9"
+      },
+      {
+        "text": "帖子提到近期上线鹅榜题名、奇鼠可居、金玉满堂等活动",
+        "quote": "近期上线鹅榜题名、奇鼠可居、金玉满堂等活动"
+      }
+    ],
+    "unknowns": [
+      "排名数据来自玩家帖子转述的第三方平台七麦数据，未独立核实",
+      "采集正文在“外观方面上”处截断，外观上新具体内容缺失",
+      "榜单统计口径、更新时间与是否为官方数据未说明"
+    ]
+  },
+  "material": {
+    "title": "燕云十六声近期榜单表现：帖子转述的数据该怎么看",
+    "channel": "社区动态",
+    "draft": "有 TapTap 玩家在帖子中转述第三方平台七麦数据，称《燕云十六声》近期总榜畅销榜第79、游戏畅销榜第43、角色扮演畅销榜第9，并把表现与近期活动、外观上新联系起来。这里只转述帖子说法，排名口径与更新时间未核实；你怎么看？",
+    "usage_boundary": "只使用帖子公开文本；排名为玩家转述的第三方数据，未独立核实；采集正文在“外观方面上”处截断，不得补写外观内容。"
+  },
+  "growth_creative": {
+    "title": "燕云榜单表现讨论：活动与外观上新怎么看",
+    "hook": "玩家转述的畅销榜排名，和近期活动、外观上新放在一起看，你会怎么判断？",
+    "audience_need": "假设关注榜单表现、版本活动与外观上新的玩家，希望看到可表达观点的社区讨论话题；该判断需运营确认。",
+    "proposed_action": "发布一条社区讨论帖，围绕玩家帖子转述的七麦数据排名与近期活动、外观上新发起观点征集；文案中明确标注来源表述与未核实信息。",
+    "copy_draft": "看到有 TapTap 玩家在帖子中转述七麦数据称，《燕云十六声》近期总榜畅销榜排名第79、游戏畅销榜排名第43、游戏角色扮演畅销榜排名第9，并把榜单表现与近期版本活动、外观上新联系起来。帖子还提到近期上线鹅榜题名、奇鼠可居、金玉满堂等活动。排名口径与更新时间未核实，这里只做社区讨论：你更关注榜单表现，还是活动与外观上新本身？如果是你，会怎么评价这波表现？",
+    "preconditions": [
+      "发布前确认是否保留“玩家帖子转述七麦数据”的来源表述，避免写成官方数据。",
+      "发布前确认排名口径与更新时间是否需要在文案中继续标注未核实。",
+      "文案不得新增流水金额、时间节点、入口、奖励或官方承诺。",
+      "互动提问只征集观点，不引导消费结论或强度结论。"
+    ],
+    "status": "draft_needs_operational_confirmation",
+    "used_pattern_ids": [
+      "complaint_question"
+    ],
+    "quality": {
+      "checks": {
+        "required_fields": true,
+        "preconditions": true,
+        "copy_length": true,
+        "unsupported_numbers": true,
+        "patterns_recorded": true,
+        "references_recorded": true,
+        "no_reference_copy": true,
+        "status_declared": true
+      },
+      "passed": true,
+      "unsupported_numbers": [],
+      "reference_overlap": []
+    },
+    "schema": "growth-creative-model-v0.1",
+    "type": "growth_creative",
+    "used_patterns": [
+      "具体体验追问"
+    ],
+    "reference_samples": [
+      {
+        "ref_id": "moment_870609292590318997",
+        "url": "https://www.taptap.cn/moment/870609292590318997",
+        "title": "为什么还要从头到尾再玩一遍？",
+        "rights_status": "公开观察样本；引用/二创前需核查授权，仅迁移结构，不复用原文与画面。"
+      }
+    ],
+    "generator": "model",
+    "model": "hy4-flash-free",
+    "note": "模型生成草案，受参考结构约束；未做事实核验，引用/发布前核查授权。"
+  },
+  "evidence": {
+    "source_url": "https://www.taptap.cn/moment/873700920897045722",
+    "article_title": "燕云近期流水，新外观没氪爆",
+    "fetched_at": "2026-11-23T18:14:54+08:00"
+  },
+  "checks": {
+    "checks": {
+      "intelligence": true,
+      "material": true,
+      "growth_creative": true,
+      "all_types_present": true,
+      "facts_have_quotes": true,
+      "quote_support": true,
+      "creative_quality": true,
+      "unknowns_present": true,
+      "creative_has_boundary": true
+    },
+    "passed": true,
+    "quote_supported": 5,
+    "quote_total": 5
+  },
+  "reference_library": {
+    "schema": "taptap-reference-library-v0.1",
+    "samples": 7,
+    "patterns": 7
+  },
+  "creative_generation": {
+    "generator": "model",
+    "ok": true,
+    "model": "hy4-flash-free"
+  },
+  "status": "needs_review",
+  "note": "草稿交付包：三类型齐全，但未发布、未做独立事实核验；增长创意的入口与运营资源需确认。",
+  "review": {
+    "status": "needs_review",
+    "reviewer": null,
+    "note": "自动检查通过不等于人工审核通过。",
+    "reviewed_at": null,
+    "risks": [
+      "independent_fact_check_pending",
+      "human_approval_pending"
+    ],
+    "content_hash": "a6f0b6297c9cd9aff5997e7609d0320abbd5a74290ba82e72d666693fc4c3484"
+  },
+  "review_history": []
+}

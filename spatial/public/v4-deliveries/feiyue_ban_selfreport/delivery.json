@@ -1,0 +1,147 @@
+{
+  "schema": "v4-delivery-v0.1",
+  "event": {
+    "event_id": "feiyue_ban_selfreport",
+    "title": "不要看，我怕你会像我这样子封号",
+    "url": "https://www.taptap.cn/moment/872189126596624961",
+    "source": "TapTap 发现页公开观察（2026-11-23 采集，本地 CSV 回放）",
+    "published_at": "2026-11-18T18:48:12+08:00"
+  },
+  "intelligence": {
+    "headline": "《绯月絮语》玩家自述封号经历：内部号说法未核实",
+    "one_line": "TapTap 玩家发帖自述跨服聊天提到新区战力榜第一“内部号”后账号断线并被永久封号。",
+    "summary": "TapTap《绯月絮语》玩家发帖自述：跨服聊天时聊到新区战力榜第一“内部号”的属性称号，随后提到2个月买号换钱、继续去新区搞新内部号发了出去，之后突然断线并被永久封号。全文为玩家自述，未附处罚通知或运营方公告。",
+    "why_taptap": "判断：这类“封号自述”在 TapTap 社区容易引发对账号安全与处罚规则的讨论，适合做风险提示型内容；但“内部号”“买号换钱”均为玩家说法，未独立核实，不能写成事实或运营结论。",
+    "watch_next": [
+      "运营方是否发布处罚公告",
+      "账号交易与封号规则的官方说明",
+      "评论区可核验的补充证据"
+    ],
+    "facts": [
+      {
+        "text": "玩家自述跨服聊天时聊到新区战力榜第一的内部号属性称号",
+        "quote": "跨服聊天，不小心聊到新区战力榜第一内部号属性称号"
+      },
+      {
+        "text": "玩家自述2个月买号换钱",
+        "quote": "2个月买号换钱"
+      },
+      {
+        "text": "玩家自述继续去新区搞新内部号并发了出去",
+        "quote": "继续去新区搞新内部号发了出去"
+      },
+      {
+        "text": "玩家自述突然断线并被永久封号",
+        "quote": "突然断线永久封号"
+      }
+    ],
+    "unknowns": [
+      "封号原因与“内部号”说法未独立核实，仅为玩家自述",
+      "游戏运营方是否发布过相关处罚公告未确认",
+      "账号交易与“买号换钱”过程没有第三方证据"
+    ]
+  },
+  "material": {
+    "title": "玩家自述封号经历：先把“说法”和“事实”分开",
+    "channel": "社区动态",
+    "draft": "有《绯月絮语》玩家在 TapTap 发帖自述：跨服聊天提到新区战力榜第一的内部号属性称号，之后账号断线并被永久封号。这里只转述玩家说法，封号原因和所谓内部号都没有独立核实。你怎么看这类社区自述？",
+    "usage_boundary": "只使用帖子公开文本；封号原因、内部号、买号换钱均为玩家自述，未独立核实；不得写成官方规则或确认结论。"
+  },
+  "growth_creative": {
+    "title": "玩家自述“内部号”与封号：这类社区自述怎么聊？",
+    "hook": "玩家自述：跨服聊天聊到“新区战力榜第一内部号属性称号”后，突然断线并被永久封号。封号原因和所谓内部号都未独立核实——你会怎么判断这类社区自述？",
+    "audience_need": "可能面向看到这类封号自述后，想讨论“内部号说法是否可信、封号原因是否能判断”的玩家；这是运营假设，不代表已证实需求。",
+    "proposed_action": "以社区内容形式转述玩家自述中的经历节点，并抛出判断类互动问题；全程保留“玩家自述/未独立核实”边界，不把封号原因写成结论。",
+    "copy_draft": "看到这条自述，最抓人的不是结论，而是玩家给出的几段说法：跨服聊天时聊到“新区战力榜第一内部号属性称号”，自述“2个月买号换钱”，又说“继续去新区搞新内部号发了出去”，随后自述“突然断线永久封号”。这里只转述玩家说法，封号原因和所谓内部号都没有独立核实。你会把这类帖子看作个人经历分享、封号原因讨论，还是需要谨慎看待的信息？如果是你，会先追问哪一处细节？",
+    "preconditions": [
+      "发布前确认文案持续标注“玩家自述”与“未独立核实”。",
+      "不将“聊到内部号属性称号”写成封号原因。",
+      "不新增未给出的时间、数字、入口、奖励或官方承诺。",
+      "互动引导只讨论对自述的判断，不引导公开个人账号信息或传播未核实证据。"
+    ],
+    "status": "draft_needs_operational_confirmation",
+    "used_pattern_ids": [
+      "complaint_question"
+    ],
+    "unknowns": [
+      "封号原因未独立核实。",
+      "所谓内部号未独立核实。"
+    ],
+    "quality": {
+      "checks": {
+        "required_fields": true,
+        "preconditions": true,
+        "copy_length": true,
+        "unsupported_numbers": true,
+        "patterns_recorded": true,
+        "references_recorded": true,
+        "no_reference_copy": true,
+        "status_declared": true
+      },
+      "passed": true,
+      "unsupported_numbers": [],
+      "reference_overlap": []
+    },
+    "schema": "growth-creative-model-v0.1",
+    "type": "growth_creative",
+    "used_patterns": [
+      "具体体验追问"
+    ],
+    "reference_samples": [
+      {
+        "ref_id": "moment_870609292590318997",
+        "url": "https://www.taptap.cn/moment/870609292590318997",
+        "title": "为什么还要从头到尾再玩一遍？",
+        "rights_status": "公开观察样本；引用/二创前需核查授权，仅迁移结构，不复用原文与画面。"
+      }
+    ],
+    "generator": "model",
+    "model": "hy4-flash-free",
+    "note": "模型生成草案，受参考结构约束；未做事实核验，引用/发布前核查授权。"
+  },
+  "evidence": {
+    "source_url": "https://www.taptap.cn/moment/872189126596624961",
+    "article_title": "不要看，我怕你会像我这样子封号",
+    "fetched_at": "2026-11-23T18:14:54+08:00"
+  },
+  "checks": {
+    "checks": {
+      "intelligence": true,
+      "material": true,
+      "growth_creative": true,
+      "all_types_present": true,
+      "facts_have_quotes": true,
+      "quote_support": true,
+      "creative_quality": true,
+      "unknowns_present": true,
+      "creative_has_boundary": true
+    },
+    "passed": true,
+    "quote_supported": 4,
+    "quote_total": 4
+  },
+  "reference_library": {
+    "schema": "taptap-reference-library-v0.1",
+    "samples": 7,
+    "patterns": 7
+  },
+  "creative_generation": {
+    "generator": "model",
+    "ok": true,
+    "model": "hy4-flash-free"
+  },
+  "status": "needs_review",
+  "note": "草稿交付包：三类型齐全，但未发布、未做独立事实核验；增长创意的入口与运营资源需确认。",
+  "review": {
+    "status": "needs_review",
+    "reviewer": null,
+    "note": "自动检查通过不等于人工审核通过。",
+    "reviewed_at": null,
+    "risks": [
+      "independent_fact_check_pending",
+      "human_approval_pending"
+    ],
+    "content_hash": "4591aef576871df836128dd5d400f6e7c6f50619a2f5c2c1a34e058e5f8e7679"
+  },
+  "review_history": []
+}
