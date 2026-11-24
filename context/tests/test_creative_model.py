@@ -71,6 +71,18 @@ class CreativeModelTests(unittest.TestCase):
         self.assertFalse(result['ok'])
         self.assertIn('unsupported numeric', result['error'])
 
+    def test_delivery_uses_top_level_headline_and_one_line(self):
+        parsed = {'headline': '顶层标题', 'one_line': '顶层一句话',
+                  'facts': FACTS, 'unknowns': ['入口未确认'],
+                  'intelligence': {'summary': INTEL['summary'], 'why_taptap': '判断'},
+                  'material': {**MATERIAL, 'title': '标题', 'channel': '社区动态'}}
+        package = delivery.build_delivery(
+            {**EVENT, 'url': 'https://example.com/e1'}, {'article': {}},
+            {'parsed': parsed, 'quote_checks': {'facts_supported': 2, 'facts_total': 2}},
+            reference_library=LIB)
+        self.assertEqual(package['intelligence']['headline'], '顶层标题')
+        self.assertEqual(package['intelligence']['one_line'], '顶层一句话')
+
     def test_delivery_falls_back_when_model_fails(self):
         def broken_generator(*args):
             return {'ok': False, 'error': 'model down'}

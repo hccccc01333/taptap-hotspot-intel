@@ -104,6 +104,9 @@ def build_delivery(event: dict[str, Any], evidence: dict[str, Any],
                    creative_generator: Any = None) -> dict[str, Any]:
     parsed = final.get('parsed') if isinstance(final.get('parsed'), dict) else {}
     intel = parsed.get('intelligence') if isinstance(parsed.get('intelligence'), dict) else {}
+    intel = {**intel,
+             'headline': intel.get('headline') or parsed.get('headline') or event.get('title'),
+             'one_line': intel.get('one_line') or parsed.get('one_line') or intel.get('summary')}
     material = parsed.get('material') if isinstance(parsed.get('material'), dict) else {}
     facts = parsed.get('facts') if isinstance(parsed.get('facts'), list) else []
     creative_generation: dict[str, Any] | None = None
