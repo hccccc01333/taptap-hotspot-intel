@@ -34,30 +34,39 @@ def load_library(path: str | Path) -> dict[str, Any]:
     return data
 
 
-def _pattern(library: dict[str, Any], pattern_id: str) -> dict[str, Any] | None:
-    for pattern in library.get('patterns') or []:
-        if pattern.get('id') == pattern_id:
-            return pattern
-    return None
+def select_patterns(library: dict[str, Any], event: dict[str, Any],
+                    intel: dict[str, Any], material: dict[str, Any],
+                    limit: int = 3) -> list[dict[str, Any]]:
+    """Rank patterns by declared applicability and keep the strongest matches.
+
+    The event's own sample may inform structure because excerpts are never sent
+    to the model; literal-copy checking is handled separately. If a library has
+    no applicability metadata, preserve its declared order.
+    """
+    patterns = library.get('patterns') or []
+    candidates = list(enumerate(patterns))
+    text = ' '.join(str(item or '') for item in (
+        event.get('title'), event.get('objective'), intel.get('one_line'),
+        intel.get('summary'), material.get('title'), material.get('draft')))
+    ranked = []
+    for index, pattern in candidates:
+        keywords = pattern.get('apply_keywords') or []
+        score = sum(1 for keyword in keywords if keyword and keyword in text)
+        ranked.append((-score, index, pattern))
+    ranked.sort(key=lambda row: (row[0], row[1]))
+    if ranked and ranked[0][0] < 0:
+        ranked = [row for row in ranked if row[0] == ranked[0][0]]
+    return [row[2] for row in ranked[:max(1, limit)]]
 
 
 def build_creative_with_references(intel: dict[str, Any], material: dict[str, Any],
-                                   facts: list[dict[str, Any]],
-                                   event: dict[str, Any],
-                                   library: dict[str, Any]) -> dict[str, Any]:
-    """Deterministic creative draft using a small set of TapTap structure patterns."""
+                                    facts: list[dict[str, Any]],
+                                    event: dict[str, Any],
+                                    library: dict[str, Any]) -> dict[str, Any]:
+    """Deterministic creative draft using selected TapTap structure patterns."""
     one_line = str(intel.get('one_line') or intel.get('summary') or '')[:160]
-    summary = str(intel.get('summary') or '')[:400]
     fact_texts = [str(fact.get('text') or '') for fact in facts if fact.get('text')]
-    preferred_ids = ('official_3items', 'official_brand_story', 'nostalgia_hook',
-                     'news_reaction', 'player_contrast', 'community_emotion',
-                     'community_question', 'complaint_question')
-    available = {pattern.get('id'): pattern for pattern in (library.get('patterns') or [])}
-    used = [available[pattern_id] for pattern_id in preferred_ids
-            if pattern_id in available][:3]
-    if not used:
-        used = list(library.get('patterns') or [])[:3]
-    pattern_names = [pattern.get('name') for pattern in used]
+    used = select_patterns(library, event, intel, material)
     refs = []
     for pattern in used:
         for ref in pattern.get('source_refs') or []:
@@ -68,14 +77,10 @@ def build_creative_with_references(intel: dict[str, Any], material: dict[str, An
                                  'title': sample.get('title'),
                                  'rights_status': sample.get('rights_status')})
     boundary = str(material.get('usage_boundary') or '')
-    copy_draft = (
-        f"【标题】{one_line}\n\n"
-        f"【开头·童年记忆/官宣节奏】{summary[:220]}\n\n"
-        f"【三项信息速览】\n" +
-        '\n'.join(f"- {text}" for text in fact_texts[:3]) +
-        f"\n\n【互动问题】如果联动真的落地，你最想先看到哪个角色能力进入对局？\n\n"
-        f"【边界】{boundary or '不补写未确认信息，不复制参考原文与画面，不承诺联动内容之外的东西。'}"
-    )
+    fact_lines = '\n'.join(f'- {text}' for text in fact_texts[:3])
+    question = str(material.get('draft') or '').strip()
+    if not question or question == '文案':
+        question = '关于这条消息，你最想继续确认或讨论哪一点？'
     creative = {
         'schema': 'growth-creative-reference-v0.1',
         'type': 'growth_creative',
@@ -83,10 +88,12 @@ def build_creative_with_references(intel: dict[str, Any], material: dict[str, An
         'hook': one_line,
         'audience_need': str(intel.get('why_taptap') or
                              '待验证：需要站内讨论样本确认玩家需求。'),
-        'proposed_action': ('在 TapTap 对应游戏社区发起“最期待哪个能力进入对局”的讨论；'
-                            '入口与运营资源待确认。'),
-        'copy_draft': copy_draft,
-        'used_patterns': pattern_names,
+        'proposed_action': '在 TapTap 对应游戏社区发起与事件直接相关的讨论；入口与运营资源待确认。',
+        'copy_draft': (f"【标题】{one_line}\n\n【事实速览】\n{fact_lines}\n\n"
+                       f"【互动问题】{question}\n\n"
+                       f"【边界】{boundary or '不补写未确认信息，不复制参考原文与画面，不承诺未公布内容。'}"),
+        'used_patterns': [pattern.get('name') for pattern in used],
+        'used_pattern_ids': [pattern.get('id') for pattern in used],
         'reference_samples': refs,
         'preconditions': [
             '确认 TapTap 游戏页/社区话题与可发布位置',

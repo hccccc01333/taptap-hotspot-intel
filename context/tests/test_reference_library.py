@@ -81,6 +81,16 @@ class ReferenceLibraryTests(unittest.TestCase):
                              for sample in library_payload()['samples']))
         self.assertEqual(creative['status'], 'draft_needs_operational_confirmation')
 
+    def test_pattern_routing_uses_only_the_strongest_matches(self):
+        lib = library_payload()
+        lib['patterns'][0]['apply_keywords'] = ['提名']
+        lib['patterns'][1]['apply_keywords'] = ['提名']
+        lib['patterns'][2]['apply_keywords'] = ['其他']
+        selected = reference_library.select_patterns(
+            lib, {'title': 'TGA提名公布'}, {'summary': ''}, {'draft': ''})
+        self.assertEqual([p['id'] for p in selected],
+                         ['official_3items', 'nostalgia_hook'])
+
     def test_delivery_with_reference_library_records_metadata(self):
         package = delivery.build_delivery(
             {'event_id': 'e1', 'title': '合成事件', 'url': 'https://example.com/e1'},

@@ -12,6 +12,7 @@ import re
 from typing import Any, Protocol
 
 from .creative_quality import evaluate_creative
+from .reference_library import select_patterns
 
 REQUIRED_FIELDS = ('title', 'hook', 'audience_need', 'proposed_action',
                    'copy_draft', 'preconditions', 'status')
@@ -40,11 +41,13 @@ def _parse_json(text: str) -> dict[str, Any]:
 
 def build_prompt(event: dict[str, Any], intel: dict[str, Any], material: dict[str, Any],
                  facts: list[dict[str, Any]], library: dict[str, Any]) -> str:
+    selected = select_patterns(library, event, intel, material)
     patterns = [
-        {'name': pattern.get('name'), 'structure': pattern.get('structure'),
+        {'id': pattern.get('id'), 'name': pattern.get('name'), 'structure': pattern.get('structure'),
          'use_when': pattern.get('use_when'), 'avoid': pattern.get('avoid')}
-        for pattern in (library.get('patterns') or [])
+        for pattern in selected
     ]
+    pattern_ids = [pattern.get('id') for pattern in selected]
     fact_lines = [f"- {fact.get('text')}｜引文：{fact.get('quote')}" for fact in facts]
     return f'''你是 TapTap 内容运营助手。根据事件、事实、已有情报和素材，生成一个**增长创意草案**。
 
@@ -58,7 +61,8 @@ def build_prompt(event: dict[str, Any], intel: dict[str, Any], material: dict[st
 
 要求：
 - 只输出合法 JSON，不要 Markdown 代码围栏，不要解释；
-- 字段：title, hook, audience_need, proposed_action, copy_draft, preconditions, status；
+- 字段：title, hook, audience_need, proposed_action, copy_draft, preconditions, status, used_pattern_ids；
+- used_pattern_ids 从下列已选模式 id 中选择 1-3 个，不得自行新增模式；
 - 不得编造事实未给出的时间、数字、入口、奖励或官方承诺；
 - 不得把“玩家需求/效果”写成已证实；
 - preconditions 至少 2 条；
@@ -81,6 +85,8 @@ def generate_with_model(event: dict[str, Any], intel: dict[str, Any],
                         model: str = 'hy4-flash-free', max_tokens: int = 8000,
                         session: str = 'v4-creative') -> dict[str, Any]:
     prompt = build_prompt(event, intel, material, facts, library)
+    selected = select_patterns(library, event, intel, material)
+    pattern_ids = [pattern.get('id') for pattern in selected]
     result = client.complete(prompt, model=model, max_tokens=max_tokens,
                              event_id=str(event.get('event_id') or 'creative'),
                              session=session)
@@ -104,9 +110,25 @@ def generate_with_model(event: dict[str, Any], intel: dict[str, Any],
         return {'ok': False, 'error': 'unsupported numeric atoms: ' + ','.join(bad_numbers),
                 'raw': str(result.get('content') or '')[:4000],
                 'model': result.get('model') or model}
+    chosen_ids = value.get('used_pattern_ids')
+    if (not isinstance(chosen_ids, list) or not chosen_ids or
+            len(chosen_ids) > 3 or any(item not in pattern_ids for item in chosen_ids)):
+        return {'ok': False, 'error': 'used_pattern_ids must select 1-3 offered ids',
+                'raw': str(result.get('content') or '')[:4000],
+                'model': result.get('model') or model}
+    chosen = [pattern for pattern in selected if pattern.get('id') in chosen_ids]
+    refs = []
+    for pattern in chosen:
+        for ref in pattern.get('source_refs') or []:
+            sample = next((s for s in (library.get('samples') or [])
+                           if s.get('ref_id') == ref), None)
+            if sample and ref not in [item.get('ref_id') for item in refs]:
+                refs.append({'ref_id': ref, 'url': sample.get('url'),
+                             'title': sample.get('title'),
+                             'rights_status': sample.get('rights_status')})
     quality = evaluate_creative({
-        **value, 'used_patterns': [pattern.get('name') for pattern in (library.get('patterns') or [])],
-        'reference_samples': [{'ref_id': sample.get('ref_id')} for sample in (library.get('samples') or [])[:5]],
+        **value, 'used_patterns': [pattern.get('name') for pattern in chosen],
+        'reference_samples': refs,
     }, facts, library, event_url=str(event.get('url') or ''))
     if not quality['passed']:
         return {'ok': False, 'error': 'quality_failed: ' + ','.join(
@@ -117,12 +139,8 @@ def generate_with_model(event: dict[str, Any], intel: dict[str, Any],
     value.update({
         'schema': 'growth-creative-model-v0.1',
         'type': 'growth_creative',
-        'used_patterns': [pattern.get('name') for pattern in (library.get('patterns') or [])],
-        'reference_samples': [
-            {'ref_id': sample.get('ref_id'), 'url': sample.get('url'),
-             'title': sample.get('title'), 'rights_status': sample.get('rights_status')}
-            for sample in (library.get('samples') or [])[:5]
-        ],
+        'used_patterns': [pattern.get('name') for pattern in chosen],
+        'reference_samples': refs,
         'generator': 'model',
         'model': result.get('model') or model,
         'usage': result.get('usage') or {},

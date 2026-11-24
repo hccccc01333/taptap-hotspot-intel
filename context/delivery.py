@@ -189,6 +189,8 @@ def validate_delivery(package: dict[str, Any]) -> dict[str, Any]:
                                  ('intelligence', 'material', 'growth_creative')),
         'facts_have_quotes': bool(facts) and all(_clean(fact.get('quote')) for fact in facts),
         'quote_support': total > 0 and supported == total,
+        'creative_quality': bool(creative.get('quality') is None or
+                                 creative.get('quality', {}).get('passed')),
         'unknowns_present': bool(intel.get('unknowns') or creative.get('preconditions')),
         'creative_has_boundary': bool(_clean(creative.get('status'))),
     }

@@ -37,6 +37,13 @@ class QualityTests(unittest.TestCase):
         self.assertFalse(result['passed'])
         self.assertEqual(result['reference_overlap'], ['r1'])
 
+    def test_supported_fact_overlap_is_not_reference_copying(self):
+        excerpt = '官方宣布联动定档10月29日正式开启，欢迎参与。'
+        lib = {'samples': [{'ref_id': 'r2', 'excerpt': excerpt}]}
+        result = creative_quality.evaluate_creative(
+            creative(copy_draft='联动定档10月29日正式开启，你会参加吗？'), FACTS, lib)
+        self.assertTrue(result['checks']['no_reference_copy'], result)
+
     def test_missing_preconditions_fails(self):
         result = creative_quality.evaluate_creative(
             creative(preconditions=['only one']), FACTS, LIB)

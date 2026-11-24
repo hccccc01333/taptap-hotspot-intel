@@ -37,6 +37,7 @@ def valid_payload():
         'copy_draft': '联动定档10月29日，你最期待哪个能力进入对局？',
         'preconditions': ['确认入口', '核查素材授权'],
         'status': 'draft_needs_operational_confirmation',
+        'used_pattern_ids': ['official_3items'],
     }
 
 

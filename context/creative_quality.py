@@ -29,11 +29,14 @@ def _windows(text: str, size: int = WINDOW) -> set[str]:
 
 def reference_overlap(copy_text: str, library: dict[str, Any] | None,
                       min_window: int = WINDOW,
-                      event_url: str = '') -> list[str]:
+                      event_url: str = '',
+                      facts: list[dict[str, Any]] | None = None) -> list[str]:
     """Return reference ids whose long literal windows appear in the copy."""
     if not library:
         return []
     copy_windows = _windows(copy_text, min_window)
+    fact_windows = _windows(' '.join(
+        f"{fact.get('text') or ''} {fact.get('quote') or ''}" for fact in facts), min_window)
     if not copy_windows:
         return []
     hits = []
@@ -43,7 +46,10 @@ def reference_overlap(copy_text: str, library: dict[str, Any] | None,
         excerpt = str(sample.get('excerpt') or '')
         if len(_norm(excerpt)) < min_window:
             continue
-        if copy_windows & _windows(excerpt, min_window):
+        overlap = copy_windows & _windows(excerpt, min_window)
+        if facts:
+            overlap -= fact_windows
+        if overlap:
             hits.append(str(sample.get('ref_id')))
     return hits
 
@@ -61,10 +67,12 @@ def evaluate_creative(creative: dict[str, Any], facts: list[dict[str, Any]],
         'unsupported_numbers': len(unsupported_numbers(copy_text, facts)) == 0,
         'patterns_recorded': bool(creative.get('used_patterns')),
         'references_recorded': bool(creative.get('reference_samples')),
-        'no_reference_copy': not reference_overlap(copy_text, library, event_url=event_url),
+        'no_reference_copy': not reference_overlap(
+            copy_text, library, event_url=event_url, facts=facts),
         'status_declared': str(creative.get('status') or '') ==
                            'draft_needs_operational_confirmation',
     }
     return {'checks': checks, 'passed': all(checks.values()),
             'unsupported_numbers': unsupported_numbers(copy_text, facts),
-            'reference_overlap': reference_overlap(copy_text, library, event_url=event_url)}
+            'reference_overlap': reference_overlap(
+                copy_text, library, event_url=event_url, facts=facts)}
