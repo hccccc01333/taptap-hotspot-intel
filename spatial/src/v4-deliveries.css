@@ -1,19 +1,22 @@
+/* V4 交付页样式。按钮类选择器统一挂在 .agentv2 下：
+   全局 `.agentv2 button`（类+元素）优先级高于裸 `.v4-*`（类），
+   不挂父级时未选中的交付卡片会被全局青绿色按钮样式覆盖。 */
 .v4-deliveries{display:flex;flex-direction:column;gap:16px}
 .v4-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap}
 .v4-head h2{margin:4px 0 6px}
 .v4-badge{border:1px solid #343a46;border-radius:999px;padding:6px 12px;color:#aeb4c0;font-size:12px;white-space:nowrap}
 .v4-grid{display:grid;grid-template-columns:minmax(220px,320px) minmax(0,1fr);gap:16px;align-items:start}
 .v4-list{display:flex;flex-direction:column;gap:10px}
-.v4-item{display:flex;flex-direction:column;gap:4px;text-align:left;padding:12px;border:1px solid #2b303a;border-radius:12px;background:#141820;color:inherit;cursor:pointer}
-.v4-item:hover,.v4-item.active{border-color:#7c5cff;background:#191d29}
+.agentv2 .v4-item{display:flex;flex-direction:column;gap:4px;text-align:left;padding:12px;border:1px solid #2b303a;border-radius:12px;background:#141820;color:inherit;cursor:pointer}
+.agentv2 .v4-item:hover,.agentv2 .v4-item.active{border-color:#7c5cff;background:#191d29}
 .v4-item small{color:#8d94a3;font-size:11px;word-break:break-all}
 .v4-item span{color:#9aa0ad;font-size:12px}
 .v4-detail{min-width:0;border:1px solid #2b303a;border-radius:14px;background:#141820;padding:18px}
 .v4-detail-head h3{margin:6px 0}
 .v4-detail-head small{color:#8d94a3;word-break:break-all}
 .v4-tabs{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0;border-bottom:1px solid #2b303a;padding-bottom:10px}
-.v4-tabs button{border:1px solid #343a46;border-radius:999px;background:#1b202b;color:inherit;padding:6px 12px;cursor:pointer}
-.v4-tabs button.active{background:#7c5cff;border-color:#7c5cff;color:#fff}
+.agentv2 .v4-tabs button{border:1px solid #343a46;border-radius:999px;background:#1b202b;color:inherit;padding:6px 12px;cursor:pointer}
+.agentv2 .v4-tabs button.active{background:#7c5cff;border-color:#7c5cff;color:#fff}
 .v4-stack{display:flex;flex-direction:column;gap:10px}
 .v4-lede{font-size:16px;line-height:1.55;color:#eef0f4}
 .v4-copy{white-space:pre-wrap;background:#0f1218;border:1px solid #2b303a;border-radius:10px;padding:14px;line-height:1.65}
