@@ -8,13 +8,18 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
+from .file_io import atomic_write_json, atomic_write_text, output_lock
+
 REVIEW_STATUSES = ('draft', 'needs_review', 'approved')
 DEFAULT_RISKS = ['independent_fact_check_pending', 'human_approval_pending']
 
 
 def _content_hash(package: dict[str, Any]) -> str:
     content = {key: package.get(key) for key in
-               ('event', 'intelligence', 'material', 'growth_creative')}
+               ('event', 'intelligence', 'material', 'growth_creative', 'checks')}
+    evidence = dict(package.get('evidence') or {})
+    evidence.pop('fetched_at', None)
+    content['evidence'] = evidence
     creative = dict(content['growth_creative'] or {})
     creative.pop('quality', None)
     creative.pop('usage', None)
@@ -29,17 +34,18 @@ def review_package(package: dict[str, Any], previous: dict[str, Any] | None = No
     history = list(previous.get('review_history') or [])
     approved = previous.get('review', {}).get('status') == 'approved'
     current_hash = _content_hash(package)
-    stale = bool(previous.get('review', {}).get('content_hash') and
-                 previous['review']['content_hash'] != current_hash)
+    previous_hash = previous.get('review', {}).get('content_hash')
+    stale = not previous_hash or previous_hash != current_hash
+    next_status = 'needs_review' if package.get('checks', {}).get('passed') else 'draft'
     if approved and (not package.get('checks', {}).get('passed') or stale):
-        history.append({'previous_status': 'approved', 'status': 'needs_review',
+        history.append({'previous_status': 'approved', 'status': next_status,
                         'reviewer': 'system', 'note': '内容或自动检查变化，原审核失效。',
                         'reviewed_at': datetime.now(timezone.utc).isoformat()})
         approved = False
     review = dict(previous.get('review') or {})
     if not approved:
         review = {
-            'status': 'needs_review' if package.get('checks', {}).get('passed') else 'draft',
+            'status': next_status,
             'reviewer': None,
             'note': '自动检查通过不等于人工审核通过。',
             'reviewed_at': None,
@@ -58,42 +64,42 @@ def review_package(package: dict[str, Any], previous: dict[str, Any] | None = No
 
 def record_review(root: str | Path, event_id: str, status: str, reviewer: str,
                   note: str) -> dict[str, Any]:
-    """Append a human review decision and update package/index atomically."""
+    """Append a human review decision under the shared output lock."""
     if status not in REVIEW_STATUSES:
         raise ValueError(f'unsupported review status: {status}')
     if not re.fullmatch(r'[A-Za-z0-9_.-]{1,120}', event_id):
         raise ValueError('invalid event_id')
     if not reviewer.strip() or not note.strip():
         raise ValueError('reviewer and note are required')
-    if not re.fullmatch(r'[A-Za-z0-9_.-]{1,120}', event_id):
-        raise ValueError('invalid event_id')
     root = Path(root)
     path = root / event_id / 'delivery.json'
-    package = json.loads(path.read_text(encoding='utf-8'))
-    if status == 'approved' and not package.get('checks', {}).get('passed'):
-        raise ValueError('cannot approve a delivery with failed automatic checks')
-    now = datetime.now(timezone.utc).isoformat()
-    previous = package.get('review') or {}
-    risks = [risk for risk in (previous.get('risks') or []) if risk not in DEFAULT_RISKS]
-    review = {'status': status, 'reviewer': reviewer.strip(), 'note': note.strip(),
-              'reviewed_at': now, 'risks': risks, 'content_hash': _content_hash(package)}
-    history = list(package.get('review_history') or [])
-    history.append({'previous_status': previous.get('status'), **review})
-    package['status'] = status
-    package['review'] = review
-    package['review_history'] = history[-50:]
-    _atomic_json(path, package)
-    from .delivery import render_html
-    (root / event_id / 'preview.html').write_text(render_html(package), encoding='utf-8')
-    index_path = root / 'index.json'
-    index = json.loads(index_path.read_text(encoding='utf-8')) if index_path.is_file() else {}
-    for item in index.get('deliveries') or []:
-        if item.get('event_id') == event_id:
-            item['status'] = status
-            item['review_status'] = status
-            item['review_risks'] = risks
-    _atomic_json(index_path, index)
-    return review
+    with output_lock(root):
+        package = json.loads(path.read_text(encoding='utf-8'))
+        if status == 'approved' and not package.get('checks', {}).get('passed'):
+            raise ValueError('cannot approve a delivery with failed automatic checks')
+        now = datetime.now(timezone.utc).isoformat()
+        previous = package.get('review') or {}
+        risks = [risk for risk in (previous.get('risks') or []) if risk not in DEFAULT_RISKS]
+        review = {'status': status, 'reviewer': reviewer.strip(), 'note': note.strip(),
+                  'reviewed_at': now, 'risks': risks, 'content_hash': _content_hash(package)}
+        history = list(package.get('review_history') or [])
+        history.append({'previous_status': previous.get('status'), **review})
+        package['status'] = status
+        package['review'] = review
+        package['review_history'] = history[-50:]
+        from .delivery import render_html
+        preview = render_html(package)
+        index_path = root / 'index.json'
+        index = json.loads(index_path.read_text(encoding='utf-8')) if index_path.is_file() else {}
+        for item in index.get('deliveries') or []:
+            if item.get('event_id') == event_id:
+                item['status'] = status
+                item['review_status'] = status
+                item['review_risks'] = risks
+        atomic_write_text(root / event_id / 'preview.html', preview)
+        atomic_write_json(path, package)
+        atomic_write_json(index_path, index)
+        return review
 
 
 def _atomic_json(path: Path, value: dict[str, Any]) -> None:

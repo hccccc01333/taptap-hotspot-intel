@@ -54,6 +54,8 @@ def build_prompt(event: dict[str, Any], intel: dict[str, Any], material: dict[st
 事件标题：{event.get('title')}
 已有情报：{intel.get('one_line')}
 素材草案：{material.get('draft')}
+素材使用边界：{material.get('usage_boundary')}
+未知项：{json.dumps(intel.get('unknowns') or [], ensure_ascii=False)}
 事实（只能使用这些，不得补写未给出的信息）：
 {chr(10).join(fact_lines)}
 参考结构（只迁移结构和节奏，不要复制任何参考原文或画面）：
@@ -65,6 +67,8 @@ def build_prompt(event: dict[str, Any], intel: dict[str, Any], material: dict[st
 - used_pattern_ids 从下列已选模式 id 中选择 1-3 个，不得自行新增模式；
 - 不得编造事实未给出的时间、数字、入口、奖励或官方承诺；
 - 不得把“玩家需求/效果”写成已证实；
+- copy_draft 只能以素材草案为基础做轻微改写，不得扩展事实细节；
+- 对玩家自述、未核实指控只做最低限度转述，不得把指控细节作为钩子或在正文中反复复述；
 - preconditions 至少 2 条；
 - status 固定为 draft_needs_operational_confirmation；
 - copy_draft 用中文，包含可互动的提问，但不承诺奖励或入口。'''

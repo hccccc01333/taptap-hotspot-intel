@@ -10,6 +10,7 @@ from __future__ import annotations
 import argparse
 import html
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -18,6 +19,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from context.delivery import DELIVERY_TYPES, build_delivery, render_html  # noqa: E402
+from context.file_io import atomic_write_json, atomic_write_text, output_lock  # noqa: E402
 from context.reference_library import load_library  # noqa: E402
 
 
@@ -31,7 +33,17 @@ def _read_final(folder: Path) -> dict:
 
 def build_pack(pack_dir: str | Path, out_dir: str | Path,
                reference_library: dict | None = None,
-               creative_generator=None) -> dict:
+               creative_generator=None, *, lock_output: bool = True) -> dict:
+    out_dir = Path(out_dir)
+    if not lock_output:
+        return _build_pack(pack_dir, out_dir, reference_library, creative_generator)
+    with output_lock(out_dir):
+        return _build_pack(pack_dir, out_dir, reference_library, creative_generator)
+
+
+def _build_pack(pack_dir: str | Path, out_dir: str | Path,
+                reference_library: dict | None = None,
+                creative_generator=None) -> dict:
     pack_dir = Path(pack_dir)
     out_dir = Path(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -43,7 +55,9 @@ def build_pack(pack_dir: str | Path, out_dir: str | Path,
     known = {row.get('event_id') for row in rows}
     for item in summary.get('events') or []:
         event_id = item.get('event_id')
-        if not event_id:
+        if not event_id or not re.fullmatch(r'[A-Za-z0-9_.-]{1,120}', event_id):
+            rows.append({'event_id': event_id, 'status': 'skipped',
+                         'error': 'invalid event_id'})
             continue
         folder = pack_dir / event_id
         evidence_path = folder / 'evidence.json'
@@ -64,9 +78,8 @@ def build_pack(pack_dir: str | Path, out_dir: str | Path,
             review_package(package, previous)
         target = out_dir / event_id
         target.mkdir(parents=True, exist_ok=True)
-        (target / 'delivery.json').write_text(
-            json.dumps(package, ensure_ascii=False, indent=2), encoding='utf-8')
-        (target / 'preview.html').write_text(render_html(package), encoding='utf-8')
+        atomic_write_json(target / 'delivery.json', package)
+        atomic_write_text(target / 'preview.html', render_html(package))
         row = {'event_id': event_id, 'title': event.get('title'),
                'status': package['status'], 'checks_passed': package['checks']['passed'],
                'preview': f'{event_id}/preview.html'}
@@ -115,11 +128,9 @@ def build_pack(pack_dir: str | Path, out_dir: str | Path,
         'deliveries': manifest_rows,
         'note': '共享前端契约：/api/v4/deliveries 读取本 index；自动检查不等于人工审核。',
     }
-    (out_dir / 'index.json').write_text(
-        json.dumps(index_manifest, ensure_ascii=False, indent=2), encoding='utf-8')
+    atomic_write_json(out_dir / 'index.json', index_manifest)
     result = {'pack': str(pack_dir), 'out': str(out_dir), 'events': rows}
-    (out_dir / 'summary.json').write_text(
-        json.dumps(result, ensure_ascii=False, indent=2), encoding='utf-8')
+    atomic_write_json(out_dir / 'summary.json', result)
     return result
 
 
@@ -145,10 +156,13 @@ def main(argv: list[str] | None = None) -> int:
                                        session='v4-creative-mvp')
     result = build_pack(args.pack, args.out, reference_library=library,
                         creative_generator=generator)
-    ok = sum(1 for item in result['events'] if item.get('preview'))
+    ok = sum(1 for item in result['events']
+             if item.get('preview') and item.get('checks_passed'))
+    failed = sum(1 for item in result['events']
+                 if not item.get('preview') or not item.get('checks_passed'))
     print(json.dumps({'events': len(result['events']), 'previews': ok,
-                      'out': result['out']}, ensure_ascii=False, indent=2))
-    return 0 if ok else 1
+                      'failed': failed, 'out': result['out']}, ensure_ascii=False, indent=2))
+    return 0 if ok and not failed else 1
 
 
 if __name__ == '__main__':

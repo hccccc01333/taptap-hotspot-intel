@@ -1,5 +1,6 @@
 """Incremental delivery and review-state tests (offline)."""
 import csv
+import copy
 import json
 import tempfile
 import unittest
@@ -86,6 +87,106 @@ class DailyDeliveryTests(unittest.TestCase):
             make_pack(packs, 'event100', '100')
             second = run_daily(root / 'posts.csv', packs, out, state, now=NOW)
             self.assertEqual(len(second['delivered']), 1)
+
+    def test_duplicate_moment_rows_are_deduplicated(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp); csv_path = root / 'posts.csv'; make_csv(csv_path)
+            with csv_path.open('a', encoding='utf-8-sig', newline='') as handle:
+                writer = csv.DictWriter(handle, fieldnames=['moment_id', 'title', 'summary', 'publish_time'])
+                writer.writerow({'moment_id': '100', 'title': '重复事件', 'summary': '公开事件摘要' * 10,
+                                 'publish_time': str(int(NOW.timestamp()) - 7200)})
+            candidates, _ = select_candidates(csv_path, root / 'out', root / 'state.json', now=NOW)
+            self.assertEqual(len(candidates), 1)
+            self.assertEqual(candidates[0]['title'], '新事件')
+
+    def test_corrupt_pack_does_not_block_other_candidates(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp); packs = root / 'packs'
+            make_pack(packs, 'event100', '100'); make_pack(packs, 'event101', '101')
+            (packs / 'event101' / 'final.json').write_text('{bad json', encoding='utf-8')
+            with (root / 'posts.csv').open('w', encoding='utf-8-sig', newline='') as handle:
+                writer = csv.DictWriter(handle, fieldnames=['moment_id', 'title', 'summary', 'publish_time'])
+                writer.writeheader()
+                for mid in ('100', '101'):
+                    writer.writerow({'moment_id': mid, 'title': '事件' + mid,
+                                     'summary': '公开事件摘要' * 10,
+                                     'publish_time': str(int(NOW.timestamp()) - 3600)})
+            report = run_daily(root / 'posts.csv', packs, root / 'out', root / 'state.json', now=NOW)
+            self.assertEqual([item['event_id'] for item in report['delivered']], ['event100'])
+            self.assertEqual(report['failed'][0]['moment_id'], '101')
+            self.assertIn('JSONDecodeError', report['failed'][0]['error'])
+            self.assertTrue((root / 'out' / 'event100' / 'delivery.json').is_file())
+            self.assertFalse((root / 'out' / '.daily-staging').exists())
+
+    def test_missing_output_is_rebuilt_from_state(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp); packs = root / 'packs'; make_pack(packs, 'event100', '100')
+            make_csv(root / 'posts.csv'); out = root / 'out'; state = root / 'state.json'
+            run_daily(root / 'posts.csv', packs, out, state, now=NOW)
+            (out / 'event100' / 'delivery.json').unlink()
+            report = run_daily(root / 'posts.csv', packs, out, state, now=NOW)
+            self.assertEqual(len(report['delivered']), 1)
+            self.assertTrue((out / 'event100' / 'delivery.json').is_file())
+
+    def test_failed_checks_are_retried_not_promoted_to_delivered(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp); packs = root / 'packs'; make_pack(packs, 'event100', '100')
+            payload = final_payload(); payload['parsed']['material'] = {}
+            (packs / 'event100' / 'final.json').write_text(json.dumps(payload), encoding='utf-8')
+            make_csv(root / 'posts.csv'); out = root / 'out'; state = root / 'state.json'
+            first = run_daily(root / 'posts.csv', packs, out, state, now=NOW)
+            second = run_daily(root / 'posts.csv', packs, out, state, now=NOW)
+            self.assertEqual(first['delivered'], [])
+            self.assertEqual(second['delivered'], [])
+            self.assertEqual(second['failed'][0]['moment_id'], '100')
+            ledger = json.loads(state.read_text(encoding='utf-8'))
+            self.assertNotIn('100', ledger['delivered'])
+            self.assertEqual(ledger['failed']['100']['attempts'], 2)
+
+    def test_missing_newest_pack_does_not_starve_older_delivery(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp); packs = root / 'packs'; make_pack(packs, 'event101', '101')
+            with (root / 'posts.csv').open('w', encoding='utf-8-sig', newline='') as handle:
+                writer = csv.DictWriter(handle, fieldnames=['moment_id', 'title', 'summary', 'publish_time'])
+                writer.writeheader()
+                for mid, seconds in (('100', 3600), ('101', 7200)):
+                    writer.writerow({'moment_id': mid, 'title': '事件' + mid,
+                                     'summary': '公开事件摘要' * 10,
+                                     'publish_time': str(int(NOW.timestamp()) - seconds)})
+            report = run_daily(root / 'posts.csv', packs, root / 'out', root / 'state.json',
+                               now=NOW, limit=1)
+            self.assertEqual([item['moment_id'] for item in report['delivered']], ['101'])
+            self.assertEqual(report['failed'][0]['moment_id'], '100')
+
+    def test_approved_legacy_package_without_hash_is_invalidated(self):
+        package = delivery.build_delivery({'event_id': 'e', 'title': '事件'},
+                                          {'article': {}}, final_payload())
+        package['review'] = {'status': 'approved', 'reviewer': '旧审核人',
+                             'note': '旧审核', 'risks': []}
+        previous = copy.deepcopy(package)
+        package['material']['draft'] = '内容已变化'
+        delivery_review.review_package(package, previous)
+        self.assertEqual(package['status'], 'needs_review')
+        self.assertEqual(package['review_history'][-1]['reviewer'], 'system')
+
+    def test_evidence_or_check_change_invalidates_approval(self):
+        for mutate in ('evidence', 'checks'):
+            with self.subTest(mutate=mutate):
+                package = delivery.build_delivery({'event_id': 'e', 'title': '事件'},
+                                                  {'article': {}}, final_payload())
+                package['review']['status'] = 'approved'
+                package['review']['content_hash'] = delivery_review._content_hash(package)
+                previous = copy.deepcopy(package)
+                if mutate == 'evidence':
+                    package['evidence']['source_url'] = 'https://example.com/changed'
+                else:
+                    package['checks']['quote_supported'] = 0
+                delivery_review.review_package(package, previous)
+                self.assertEqual(package['status'], 'needs_review')
+
+    def test_invalid_windows_are_rejected(self):
+        with self.assertRaises(ValueError):
+            select_candidates('/not-used', '/not-used', '/not-used', days=0)
 
     def test_incremental_pack_preserves_existing_index_rows(self):
         with tempfile.TemporaryDirectory() as tmp:

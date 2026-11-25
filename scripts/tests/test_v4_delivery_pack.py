@@ -87,6 +87,20 @@ class DeliveryPackTests(unittest.TestCase):
             self.assertEqual(index['deliveries'][0]['event_id'], event_id)
             self.assertTrue(index['deliveries'][0]['checks_passed'])
 
+    def test_cli_returns_nonzero_when_checks_fail(self):
+        from scripts.v4_delivery_pack import main
+        with tempfile.TemporaryDirectory(prefix='v4-delivery-') as tmp:
+            root = Path(tmp); folder = root / 'pack' / 'e1'; folder.mkdir(parents=True)
+            (folder / 'evidence.json').write_text(json.dumps({
+                'event': {'event_id': 'e1', 'title': '合成事件', 'url': 'https://example.com/e1'},
+                'article': {'body': 'x' * 300, 'url': 'https://example.com/e1'}},
+                ensure_ascii=False), encoding='utf-8')
+            payload = final_payload(); payload['parsed']['material'] = {}
+            (folder / 'final.json').write_text(json.dumps(payload, ensure_ascii=False), encoding='utf-8')
+            (root / 'pack' / 'summary.json').write_text(json.dumps(
+                {'events': [{'event_id': 'e1'}]}, ensure_ascii=False), encoding='utf-8')
+            self.assertEqual(main(['--pack', str(root / 'pack'), '--out', str(root / 'out')]), 1)
+
     def test_missing_index_returns_empty_manifest(self):
         index = load_delivery_index('/path/does/not/exist')
         self.assertEqual(index['deliveries'], [])

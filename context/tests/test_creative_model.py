@@ -50,6 +50,8 @@ class CreativeModelTests(unittest.TestCase):
         self.assertEqual(creative['generator'], 'model')
         self.assertEqual(creative['status'], 'draft_needs_operational_confirmation')
         self.assertNotIn('这是不应出现的样本原文', client.calls[0]['prompt'])
+        self.assertIn('素材使用边界：不补写未确认信息', client.calls[0]['prompt'])
+        self.assertIn('不得扩展事实细节', client.calls[0]['prompt'])
 
     def test_invalid_json_and_missing_fields_fail(self):
         result = creative_model.generate_with_model(
